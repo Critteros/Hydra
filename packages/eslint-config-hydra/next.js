@@ -4,5 +4,5 @@
  * @type {import("eslint").Linter.Config}
  */
 module.exports = {
-  extends: ["next", "next/core-web-vitals", "./react.js"],
+  extends: ['next', 'next/core-web-vitals', './react.js'],
 };

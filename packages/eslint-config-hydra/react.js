@@ -5,13 +5,13 @@
  */
 module.exports = {
   extends: [
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:jsx-a11y/strict",
-    "plugin:jest-dom/recommended",
-    "plugin:testing-library/react",
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:jsx-a11y/strict',
+    'plugin:jest-dom/recommended',
+    'plugin:testing-library/react',
   ],
-  plugins: ["jsx-a11y", "react-hooks", "jest-dom", "testing-library"],
+  plugins: ['jsx-a11y', 'react-hooks', 'jest-dom', 'testing-library'],
   env: {
     browser: true,
     node: false,

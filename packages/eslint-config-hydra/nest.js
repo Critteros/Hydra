@@ -4,5 +4,5 @@
  * @type {import("eslint").Linter.Config}
  */
 module.exports = {
-  extends: ["./node.js"],
+  extends: ['./node.js'],
 };
