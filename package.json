@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "hydra-ipxe",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -8,11 +9,16 @@
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",
-    "eslint": "^7.32.0",
-    "eslint-config-custom": "workspace:*",
-    "prettier": "^2.5.1",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "eslint": "^8.50.0",
+    "eslint-config-hydra": "workspace:*",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-turbo": "^1.9.3",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-unicorn": "^48.0.1",
+    "prettier": "^2.8.8",
     "turbo": "latest"
   },
-  "packageManager": "pnpm@8.6.10",
-  "name": "Hydra"
+  "packageManager": "pnpm@8.6.10"
 }
