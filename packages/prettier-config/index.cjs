@@ -11,4 +11,13 @@ module.exports = {
   tabWidth: 2,
   useTabs: false,
   importOrderSeparation: true,
+  importOrderParserPlugins: ['typescript', 'decorators-legacy', 'jsx'],
+  importOrder: [
+    '^(next/(.*)$)|^(next$)',
+    '^(react/(.*)$)|^(react$)',
+    '^(@nestjs/(.*)$)|^(@nestjs$)',
+    '<BUILTIN_MODULES>',
+    '',
+    '<THIRD_PARTY_MODULES>',
+  ],
 };
