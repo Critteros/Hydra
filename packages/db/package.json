@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/package",
+  "name": "@hydra-ipxe/db",
+  "version": "0.0.0",
+  "author": "Szymon Kozioł <contact@critteros.dev>",
+  "description": "Database client for Hydra iPXE",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push --skip-generate"
+  },
+  "dependencies": {
+    "@prisma/client": "latest"
+  },
+  "devDependencies": {
+    "@hydra-ipxe/tsconfig": "workspace:*",
+    "@tsconfig/recommended": "^1.0.3",
+    "@types/node": "latest",
+    "prisma": "^5.3.1"
+  }
+}

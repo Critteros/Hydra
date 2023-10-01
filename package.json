@@ -6,19 +6,23 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "sort": "sort-package-json {apps,packages}/*/package.json"
+    "sort": "sort-package-json {apps,packages}/*/package.json",
+    "db:generate": "turbo run db:generate",
+    "db:migrate": "turbo run db:migrate",
+    "db:push": "dotenv -- turbo run db:push"
   },
   "devDependencies": {
+    "@hydra-ipxe/prettier-config": "workspace:*",
     "@turbo/gen": "^1.10.14",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
+    "dotenv-cli": "^7.3.0",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-turbo": "^1.10.14",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-unicorn": "^48.0.1",
     "prettier": "^3.0.3",
-    "@hydra-ipxe/prettier-config": "workspace:*",
     "sort-package-json": "^2.6.0",
     "turbo": "latest"
   },
