@@ -1,13 +1,16 @@
 {
-  "name": "tsconfig",
+  "$schema": "https://json.schemastore.org/package",
+  "name": "@hydra-ipxe/tsconfig",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
+  "description": "TypeScript configuration for Hydra iPXE project",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
+  "author": "Szymon Kozioł <contact@critteros.dev>",
   "dependencies": {
     "@tsconfig/next": "^2.0.0",
     "@tsconfig/recommended": "^1.0.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "name": "eslint-config-hydra",
-  "type": "commonjs",
+  "$schema": "https://json.schemastore.org/package",
+  "name": "@hydra-ipxe/eslint-config-hydra",
   "version": "0.0.0",
+  "private": false,
+  "description": "ESLint config for Hydra project",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
+  "author": "Szymon Kozioł <contact@critteros.dev>",
+  "type": "commonjs",
   "dependencies": {
     "eslint-config-next": "^13.5.3",
     "eslint-config-turbo": "^1.10.14",
@@ -14,5 +15,11 @@
     "eslint-plugin-react": "7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-testing-library": "^6.0.2"
+  },
+  "peerDependencies": {
+    "eslint": "^8.50.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

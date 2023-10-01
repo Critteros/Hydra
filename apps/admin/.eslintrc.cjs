@@ -1,4 +1,4 @@
 /** @type {import("eslint").Linter.Config} **/
 module.exports = {
-  extends: ['hydra/next'],
+  extends: ['@hydra-ipxe/hydra/next'],
 };

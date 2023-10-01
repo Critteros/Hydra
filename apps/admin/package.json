@@ -1,28 +1,31 @@
 {
-  "name": "admin",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@hydra-ipxe/admin",
+  "version": "0.0.0",
+  "private": false,
+  "description": "Admin panel for Hydra iPXE",
+  "license": "MIT",
+  "author": "Szymon Kozioł <contact@critteros.dev>",
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start"
   },
   "dependencies": {
+    "next": "latest",
     "react": "latest",
-    "react-dom": "latest",
-    "next": "latest"
+    "react-dom": "latest"
   },
   "devDependencies": {
-    "typescript": "latest",
-    "@types/react": "latest",
+    "@hydra-ipxe/eslint-config-hydra": "workspace:*",
+    "@hydra-ipxe/tsconfig": "workspace:*",
     "@types/node": "latest",
+    "@types/react": "latest",
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
+    "eslint": "latest",
     "postcss": "latest",
     "tailwindcss": "latest",
-    "eslint": "latest",
-    "eslint-config-hydra": "workspace:*",
-    "tsconfig": "workspace:*"
+    "typescript": "latest"
   }
 }
