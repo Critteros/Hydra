@@ -11,4 +11,5 @@ module.exports = {
   tabWidth: 2,
   useTabs: false,
   importOrderSeparation: true,
+  importOrderParserPlugins: ['typescript', 'decorators-legacy', 'jsx'],
 };

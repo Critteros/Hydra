@@ -1,3 +1,4 @@
 .eslintrc.js
 .eslintrc.cjs
 index.cjs
+packages/eslint-config-hydra
