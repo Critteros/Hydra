@@ -22,6 +22,7 @@
     "postcss": "latest",
     "tailwindcss": "latest",
     "eslint": "latest",
-    "eslint-config-hydra": "workspace:*"
+    "eslint-config-hydra": "workspace:*",
+    "tsconfig": "workspace:*"
   }
 }
