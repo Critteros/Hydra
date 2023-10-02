@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package",
-  "name": "@hydra-ipxe/db",
+  "name": "@hydra-ipxe/models",
   "version": "0.0.0",
   "author": "Szymon Kozioł <contact@critteros.dev>",
   "description": "Database client for Hydra iPXE",
