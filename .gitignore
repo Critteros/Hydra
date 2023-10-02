@@ -13,6 +13,9 @@ node_modules
 # testing
 coverage
 
+# nest
+dist
+
 # next.js
 .next/
 out/

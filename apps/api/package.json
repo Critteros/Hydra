@@ -1,8 +1,8 @@
 {
-  "name": "@hydra-ipxe/core",
+  "name": "@hydra-ipxe/api",
   "version": "0.0.0",
   "private": false,
-  "description": "Core Hydra iPXE server",
+  "description": "Hydra iPXE server",
   "license": "MIT",
   "author": "Szymon Kozioł <contact@critteros.dev>",
   "scripts": {
