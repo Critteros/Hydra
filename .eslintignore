@@ -1,4 +1,4 @@
-.eslintrc.js
+apps/api/.eslintrc.cjs
 .eslintrc.cjs
 index.cjs
 packages/eslint-config-hydra
