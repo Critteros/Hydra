@@ -1,0 +1,16 @@
+x-db-credentials: &db-credentials
+  POSTGRES_USER: ${DB_USER:-postgres}
+  POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+  POSTGRES_DB: ${DB_NAME:-postgres}
+
+services:
+  db:
+    image: postgres:16
+    ports:
+      - 5432:5432
+    environment: *db-credentials
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
