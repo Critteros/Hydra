@@ -9,7 +9,7 @@
     "build": "docusaurus build",
     "clear": "docusaurus clear",
     "deploy": "docusaurus deploy",
-    "dev": "docusaurus start --port 9000",
+    "dev": "docusaurus start --port 9000 --no-open",
     "docusaurus": "docusaurus",
     "serve": "docusaurus serve",
     "swizzle": "docusaurus swizzle",
