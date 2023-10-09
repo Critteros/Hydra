@@ -18,7 +18,6 @@ Create a file at `src/pages/my-react-page.js`:
 import React from 'react';
 
 import Layout from '@theme/Layout';
-
 export default function MyReactPage() {
   return (
     <Layout>
