@@ -1,7 +1,7 @@
 /** @type {import("prettier").Config} */
 module.exports = {
   plugins: [
-    require.resolve('prettier-plugin-tailwindcss'),
+    // require.resolve('prettier-plugin-tailwindcss'),
     require.resolve('@trivago/prettier-plugin-sort-imports'),
   ],
   semi: true,
@@ -17,7 +17,9 @@ module.exports = {
     '^(react/(.*)$)|^(react$)',
     '^(@nestjs/(.*)$)|^(@nestjs$)',
     '<BUILTIN_MODULES>',
-    '',
     '<THIRD_PARTY_MODULES>',
+    '^~/',
+    '^[.][.]/',
+    '^[.]/',
   ],
 };

@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 
 import type { ReactNode } from 'react';
 
-import './globals.css';
 import { ChakraContext } from '@hydra-ipxe/ui/providers';
+
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
