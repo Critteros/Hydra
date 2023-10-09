@@ -2,10 +2,15 @@ const { PHASE_DEVELOPMENT_SERVER } = require('next/constants');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = (phase, { defaultConfig }) => {
+  const commonConfig = {
+    transpilePackages: ['@hydra-ipxe/*'],
+  };
+
   // For development, proxy requests to the API server
   if (phase === PHASE_DEVELOPMENT_SERVER) {
     return {
       ...defaultConfig,
+      ...commonConfig,
       async rewrites() {
         return [
           {
@@ -16,6 +21,11 @@ const nextConfig = (phase, { defaultConfig }) => {
       },
     };
   }
+
+  return {
+    ...defaultConfig,
+    ...commonConfig,
+  };
 };
 
 module.exports = nextConfig;
