@@ -16,7 +16,7 @@ export function ChakraContext({ children, cookies }: { children: ReactNode; cook
     <CacheProvider>
       <ChakraProvider
         theme={customTheme}
-        colorModeManager={storeManager(cookies ?? (document && document.cookie))}
+        // colorModeManager={storeManager(cookies ?? (document && document.cookie))}
         resetCSS
       >
         {children}

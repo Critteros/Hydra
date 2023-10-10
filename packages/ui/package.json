@@ -4,16 +4,19 @@
   "description": "UI library for Hydra project",
   "author": "Szymon Kozioł <contact@critteros.dev>",
   "license": "MIT",
+  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "dev": "tsup ./src --dts --clean --watch --external react react-dom",
-    "build": "tsup ./src --dts --clean --external react react-dom"
+    "dev": "tsup --watch",
+    "build": "tsup"
   },
   "files": [
     "dist",
     "*.js",
-    "*.d.ts"
+    "*.d.ts",
+    "*.d.mts",
+    "*.mjs"
   ],
   "devDependencies": {
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",

@@ -3,8 +3,9 @@ import { cookies } from 'next/headers';
 
 import type { ReactNode } from 'react';
 
-import { ColorModeScript, STORAGE_KEY, initialColorMode } from '@hydra-ipxe/ui';
+import { ColorModeScript } from '@hydra-ipxe/ui';
 import { ChakraContext } from '@hydra-ipxe/ui/providers';
+import { STORAGE_KEY, initialColorMode } from '@hydra-ipxe/ui/theme';
 
 import { makeCookieString } from '~/utils/cookies';
 
