@@ -4,6 +4,8 @@
   "description": "UI library for Hydra project",
   "author": "Szymon Kozioł <contact@critteros.dev>",
   "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "devDependencies": {
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",
@@ -18,9 +20,5 @@
     "framer-motion": "^10.16.4",
     "react": "^18.0.2",
     "react-dom": "^18.0.2"
-  },
-  "exports": {
-    ".": "./src/index.ts",
-    "./providers": "./src/providers/index.ts"
   }
 }
