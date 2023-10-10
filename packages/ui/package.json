@@ -6,10 +6,20 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "tsup ./src --dts --clean --watch --external react react-dom",
+    "build": "tsup ./src --dts --clean --external react react-dom"
+  },
+  "files": [
+    "dist",
+    "*.js",
+    "*.d.ts"
+  ],
   "devDependencies": {
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",
-    "@types/react": "^18"
+    "@types/react": "^18",
+    "tsup": "^7.2.0"
   },
   "peerDependencies": {
     "@chakra-ui/next-js": "^2.1.5",
