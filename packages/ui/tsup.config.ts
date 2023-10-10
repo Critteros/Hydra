@@ -2,7 +2,6 @@ import { defineConfig, type Options } from 'tsup';
 
 export default defineConfig((options: Options) => ({
   banner: {},
-  // treeshake: true,
   splitting: false,
   entry: ['src/**/*.tsx', 'src/**/*.ts'],
   format: ['esm'],
