@@ -5,6 +5,7 @@
   "description": "Admin panel for Hydra iPXE",
   "license": "MIT",
   "author": "Szymon Kozioł <contact@critteros.dev>",
+  "type": "module",
   "scripts": {
     "build": "next build",
     "dev": "next dev -p 3000",
@@ -12,14 +13,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "@hydra-ipxe/ui": "workspace:*",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest",
-    "@hydra-ipxe/ui": "workspace:*"
+    "react-dom": "latest"
   },
   "devDependencies": {
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",
+    "@next/bundle-analyzer": "^13.5.4",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",

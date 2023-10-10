@@ -1,10 +1,13 @@
-const { PHASE_DEVELOPMENT_SERVER } = require('next/constants');
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js';
+
+const withBundleAnalyzer = (await import('@next/bundle-analyzer')).default({
+  enabled: true,
+  openAnalyzer: true,
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = (phase, { defaultConfig }) => {
-  const commonConfig = {
-    transpilePackages: ['@hydra-ipxe/*'],
-  };
+  const commonConfig = {};
 
   // For development, proxy requests to the API server
   if (phase === PHASE_DEVELOPMENT_SERVER) {
@@ -22,10 +25,10 @@ const nextConfig = (phase, { defaultConfig }) => {
     };
   }
 
-  return {
+  return withBundleAnalyzer({
     ...defaultConfig,
     ...commonConfig,
-  };
+  });
 };
 
-module.exports = nextConfig;
+export default nextConfig;

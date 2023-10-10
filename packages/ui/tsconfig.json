@@ -1,10 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@hydra-ipxe/tsconfig/react-library.json",
-  "exclude": ["dist", "node_modules", "build"],
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"]
     }
-  }
+  },
+  "exclude": ["dist", "node_modules", "build"]
 }
