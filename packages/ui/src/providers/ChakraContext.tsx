@@ -3,14 +3,24 @@
 import type { ReactNode } from 'react';
 
 import { CacheProvider } from '@chakra-ui/next-js';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, createCookieStorageManager } from '@chakra-ui/react';
 
-import customTheme from '../theme';
+import customTheme, { STORAGE_KEY } from '../theme';
 
-export function ChakraContext({ children }: { children: ReactNode }) {
+const storeManager = (cookies?: string) => {
+  return createCookieStorageManager(STORAGE_KEY, cookies);
+};
+
+export function ChakraContext({ children, cookies }: { children: ReactNode; cookies?: string }) {
   return (
     <CacheProvider>
-      <ChakraProvider theme={customTheme}>{children}</ChakraProvider>
+      <ChakraProvider
+        theme={customTheme}
+        colorModeManager={storeManager(cookies ?? (document && document.cookie))}
+        resetCSS
+      >
+        {children}
+      </ChakraProvider>
     </CacheProvider>
   );
 }
