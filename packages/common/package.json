@@ -11,6 +11,34 @@
     "dev": "tsup --watch",
     "build": "tsup"
   },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": [
+      "./dist/*.js",
+      "./dist/*/index.js"
+    ]
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*",
+        "src/*/index"
+      ]
+    }
+  },
+  "publishConfig": {
+    "typesVersions": {
+      "*": {
+        "*": [
+          "dist/*.d.ts",
+          "dist/*/index.d.ts"
+        ]
+      }
+    }
+  },
   "devDependencies": {
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",

@@ -6,6 +6,9 @@
   "description": "TypeScript configuration for Hydra iPXE project",
   "license": "MIT",
   "author": "Szymon Kozioł <contact@critteros.dev>",
+  "files": [
+    "*.json"
+  ],
   "dependencies": {
     "@tsconfig/next": "^2.0.0",
     "@tsconfig/recommended": "^1.0.3"
