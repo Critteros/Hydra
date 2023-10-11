@@ -7,6 +7,9 @@
   "license": "MIT",
   "author": "Szymon Kozioł <contact@critteros.dev>",
   "type": "commonjs",
+  "files": [
+    "*.js"
+  ],
   "dependencies": {
     "eslint-config-next": "^13.5.3",
     "eslint-config-turbo": "^1.10.14",
