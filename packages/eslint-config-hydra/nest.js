@@ -1,5 +1,5 @@
 /**
- * Configuration usef for Nest.js apps and packages
+ * Configuration used for Nest.js apps and packages
  *
  * @type {import("eslint").Linter.Config}
  */
@@ -11,5 +11,6 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-extraneous-class': 'off',
+    '@typescript-eslint/require-await': 'off',
   },
 };
