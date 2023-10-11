@@ -1,0 +1,22 @@
+{
+  "name": "@hydra-ipxe/common",
+  "version": "0.0.0",
+  "description": "Common code used between the hydra-ipxe server and web",
+  "author": "Szymon Kozioł <contact@critteros.dev>",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "@hydra-ipxe/eslint-config-hydra": "workspace:*",
+    "@hydra-ipxe/tsconfig": "workspace:*",
+    "tsup": "^7.2.0"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
+}
