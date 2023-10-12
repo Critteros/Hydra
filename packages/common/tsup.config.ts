@@ -4,7 +4,7 @@ export default defineConfig((options: Options) => ({
   banner: {},
   splitting: false,
   entry: ['src/**/*.tsx', 'src/**/*.ts'],
-  format: ['esm'],
+  format: ['esm', 'cjs'],
   dts: true,
   sourcemap: true,
   minify: false,
