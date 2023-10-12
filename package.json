@@ -7,8 +7,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "sort": "sort-package-json {apps,packages}/*/package.json",
-    "db:generate": "turbo run db:generate",
-    "db:migrate": "turbo run db:migrate",
+    "db:generate": "dotenv  -- turbo run db:generate",
+    "db:migrate": "dotenv -- turbo run db:migrate",
     "db:push": "dotenv -- turbo run db:push"
   },
   "devDependencies": {
@@ -28,5 +28,8 @@
     "turbo": "latest"
   },
   "packageManager": "pnpm@8.6.10",
-  "prettier": "@hydra-ipxe/prettier-config"
+  "prettier": "@hydra-ipxe/prettier-config",
+  "prisma": {
+    "schema": "packages/core/prisma/schema.prisma"
+  }
 }

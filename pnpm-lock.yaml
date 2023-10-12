@@ -69,6 +69,9 @@ importers:
       '@hydra-ipxe/eslint-config-hydra':
         specifier: workspace:*
         version: link:../../packages/eslint-config-hydra
+      '@hydra-ipxe/prettier-config':
+        specifier: workspace:*
+        version: link:../../packages/prettier-config
       '@hydra-ipxe/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
@@ -121,6 +124,9 @@ importers:
       '@hydra-ipxe/eslint-config-hydra':
         specifier: workspace:*
         version: link:../../packages/eslint-config-hydra
+      '@hydra-ipxe/prettier-config':
+        specifier: workspace:*
+        version: link:../../packages/prettier-config
       '@hydra-ipxe/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
@@ -315,6 +321,9 @@ importers:
       '@hydra-ipxe/eslint-config-hydra':
         specifier: workspace:*
         version: link:../../packages/eslint-config-hydra
+      '@hydra-ipxe/prettier-config':
+        specifier: workspace:*
+        version: link:../../packages/prettier-config
       '@tsconfig/docusaurus':
         specifier: ^2.0.1
         version: 2.0.1
@@ -337,6 +346,9 @@ importers:
       '@hydra-ipxe/eslint-config-hydra':
         specifier: workspace:*
         version: link:../eslint-config-hydra
+      '@hydra-ipxe/prettier-config':
+        specifier: workspace:*
+        version: link:../prettier-config
       '@hydra-ipxe/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -349,10 +361,16 @@ importers:
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.2.6(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@prisma/client':
+        specifier: 5.4.2
+        version: 5.4.2(prisma@5.4.2)
     devDependencies:
       '@hydra-ipxe/eslint-config-hydra':
         specifier: workspace:*
         version: link:../eslint-config-hydra
+      '@hydra-ipxe/prettier-config':
+        specifier: workspace:*
+        version: link:../prettier-config
       '@hydra-ipxe/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -392,6 +410,9 @@ importers:
       jest:
         specifier: ^29.5.0
         version: 29.7.0(@types/node@20.8.3)(ts-node@10.9.1)
+      prisma:
+        specifier: ^5.4.2
+        version: 5.4.2
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
@@ -514,6 +535,9 @@ importers:
       '@hydra-ipxe/eslint-config-hydra':
         specifier: workspace:*
         version: link:../eslint-config-hydra
+      '@hydra-ipxe/prettier-config':
+        specifier: workspace:*
+        version: link:../prettier-config
       '@hydra-ipxe/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -5489,12 +5513,30 @@ packages:
       prisma: 5.3.1
     dev: false
 
+  /@prisma/client@5.4.2(prisma@5.4.2):
+    resolution: {integrity: sha512-2xsPaz4EaMKj1WS9iW6MlPhmbqtBsXAOeVttSePp8vTFTtvzh2hZbDgswwBdSCgPzmmwF+tLB259QzggvCmJqA==}
+    engines: {node: '>=16.13'}
+    requiresBuild: true
+    peerDependencies:
+      prisma: '*'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+    dependencies:
+      '@prisma/engines-version': 5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574
+      prisma: 5.4.2
+    dev: false
+
   /@prisma/engines-version@5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574:
     resolution: {integrity: sha512-wvupDL4AA1vf4TQNANg7kR7y98ITqPsk6aacfBxZKtrJKRIsWjURHkZCGcQliHdqCiW/hGreO6d6ZuSv9MhdAA==}
     dev: false
 
   /@prisma/engines@5.3.1:
     resolution: {integrity: sha512-6QkILNyfeeN67BNEPEtkgh3Xo2tm6D7V+UhrkBbRHqKw9CTaz/vvTP/ROwYSP/3JT2MtIutZm/EnhxUiuOPVDA==}
+    requiresBuild: true
+
+  /@prisma/engines@5.4.2:
+    resolution: {integrity: sha512-fqeucJ3LH0e1eyFdT0zRx+oETLancu5+n4lhiYECyEz6H2RDskPJHJYHkVc0LhkU4Uv7fuEnppKU3nVKNzMh8g==}
     requiresBuild: true
 
   /@rushstack/eslint-patch@1.5.0:
@@ -14304,6 +14346,14 @@ packages:
     requiresBuild: true
     dependencies:
       '@prisma/engines': 5.3.1
+
+  /prisma@5.4.2:
+    resolution: {integrity: sha512-GDMZwZy7mysB2oXU+angQqJ90iaPFdD0rHaZNkn+dio5NRkGLmMqmXs31//tg/qXT3iB0cTQwnGGQNuirhSTZg==}
+    engines: {node: '>=16.13'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@prisma/engines': 5.4.2
 
   /prismjs@1.29.0:
     resolution: {integrity: sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==}
