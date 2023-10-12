@@ -40,5 +40,17 @@ module.exports = {
     ],
     '@typescript-eslint/consistent-type-exports': 'error',
     'prettier/prettier': 'off',
+    'import/no-unresolved': [
+      'error',
+      {
+        commonjs: true,
+      },
+    ],
+  },
+  settings: {
+    'import/resolver': {
+      typescript: true,
+      node: true,
+    },
   },
 };
