@@ -1,0 +1,26 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  uid         String      @id @default(cuid())
+  email       String      @unique @db.VarChar(255)
+  password    String      @db.VarChar(512)
+  name        String?     @db.VarChar(255)
+  accountType AccountType @default(STANDARD) @map("account_type")
+
+  @@index(fields: [email], name: "email_idx")
+}
+
+enum AccountType {
+  STANDARD
+  ADMIN
+}
