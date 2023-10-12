@@ -19,6 +19,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:watch": "jest --watch"
   },
+  "prettier": "@hydra-ipxe/prettier-config",
   "jest": {
     "collectCoverageFrom": [
       "**/*.(t|j)s"
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
+    "@hydra-ipxe/prettier-config": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",

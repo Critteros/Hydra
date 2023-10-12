@@ -12,6 +12,7 @@
     "lint": "next lint",
     "start": "next start"
   },
+  "prettier": "@hydra-ipxe/prettier-config",
   "dependencies": {
     "@hydra-ipxe/ui": "workspace:*",
     "next": "latest",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
+    "@hydra-ipxe/prettier-config": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",
     "@next/bundle-analyzer": "^13.5.4",
     "@types/node": "latest",

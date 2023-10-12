@@ -2,10 +2,10 @@
   "$schema": "https://json.schemastore.org/package",
   "name": "@hydra-ipxe/core",
   "version": "0.0.0",
-  "description": "Hydra iPXE Core package",
-  "author": "Szymon Kozioł <contact@critteros.dev>",
-  "license": "MIT",
   "private": true,
+  "description": "Hydra iPXE Core package",
+  "license": "MIT",
+  "author": "Szymon Kozioł <contact@critteros.dev>",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -16,6 +16,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:watch": "jest --watch"
   },
+  "prettier": "@hydra-ipxe/prettier-config",
   "jest": {
     "collectCoverageFrom": [
       "**/*.(t|j)s"
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
+    "@hydra-ipxe/prettier-config": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",

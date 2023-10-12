@@ -2,16 +2,9 @@
   "name": "@hydra-ipxe/ui",
   "version": "0.0.0",
   "description": "UI library for Hydra project",
-  "author": "Szymon Kozioł <contact@critteros.dev>",
   "license": "MIT",
+  "author": "Szymon Kozioł <contact@critteros.dev>",
   "type": "module",
-  "scripts": {
-    "dev": "tsup --watch",
-    "build": "tsup"
-  },
-  "files": [
-    "dist"
-  ],
   "exports": {
     ".": "./dist/index.js",
     "./*": [
@@ -27,6 +20,31 @@
       ]
     }
   },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "prettier": "@hydra-ipxe/prettier-config",
+  "devDependencies": {
+    "@hydra-ipxe/eslint-config-hydra": "workspace:*",
+    "@hydra-ipxe/prettier-config": "workspace:*",
+    "@hydra-ipxe/tsconfig": "workspace:*",
+    "tsup": "^7.2.0"
+  },
+  "peerDependencies": {
+    "@chakra-ui/next-js": "^2.1.5",
+    "@chakra-ui/react": "^2.8.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@types/react": "latest",
+    "eslint": "^8.51.0",
+    "framer-motion": "^10.16.4",
+    "react": "latest",
+    "react-dom": "latest"
+  },
   "publishConfig": {
     "typesVersions": {
       "*": {
@@ -36,21 +54,5 @@
         ]
       }
     }
-  },
-  "devDependencies": {
-    "@hydra-ipxe/eslint-config-hydra": "workspace:*",
-    "@hydra-ipxe/tsconfig": "workspace:*",
-    "tsup": "^7.2.0"
-  },
-  "peerDependencies": {
-    "@chakra-ui/next-js": "^2.1.5",
-    "@chakra-ui/react": "^2.8.1",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "eslint": "^8.51.0",
-    "framer-motion": "^10.16.4",
-    "react": "latest",
-    "react-dom": "latest",
-    "@types/react": "latest"
   }
 }
