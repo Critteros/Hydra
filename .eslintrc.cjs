@@ -46,7 +46,17 @@ module.exports = {
         commonjs: true,
       },
     ],
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    'import/no-named-as-default-member': 'off',
   },
+  overrides: [
+    {
+      files: ['*.spec.ts'],
+      rules: {
+        '@typescript-eslint/no-unsafe-return': 'off',
+      },
+    },
+  ],
   settings: {
     'import/resolver': {
       typescript: true,
