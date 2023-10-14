@@ -26,7 +26,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint --ext .ts,.tsx src"
+    "lint": "eslint --ext .ts,.tsx src",
+    "clean": "rimraf dist"
   },
   "prettier": "@hydra-ipxe/prettier-config",
   "devDependencies": {

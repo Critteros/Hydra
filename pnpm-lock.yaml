@@ -44,6 +44,9 @@ importers:
       prettier:
         specifier: ^3.0.3
         version: 3.0.3
+      rimraf:
+        specifier: ^3.0.2
+        version: 3.0.2
       sort-package-json:
         specifier: ^2.6.0
         version: 2.6.0

@@ -11,6 +11,7 @@
     "deploy": "docusaurus deploy",
     "dev": "docusaurus start --port 9000 --no-open",
     "docusaurus": "docusaurus",
+    "clean": "rimraf build",
     "serve": "docusaurus serve",
     "swizzle": "docusaurus swizzle",
     "typecheck": "tsc",

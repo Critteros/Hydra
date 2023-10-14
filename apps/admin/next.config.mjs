@@ -2,7 +2,7 @@ import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js';
 
 const withBundleAnalyzer = (await import('@next/bundle-analyzer')).default({
   enabled: true,
-  openAnalyzer: true,
+  openAnalyzer: false,
 });
 
 /** @type {import('next').NextConfig} */
