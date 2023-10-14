@@ -5,9 +5,10 @@
     "build": "turbo run build",
     "dev": "turbo run dev --concurrency 20",
     "lint": "turbo run lint",
+    "test": "turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "sort": "sort-package-json {apps,packages}/*/package.json",
-    "db:generate": "dotenv  -- turbo run db:generate",
+    "db:generate": "turbo run db:generate",
     "db:migrate": "dotenv -- turbo run db:migrate",
     "db:push": "dotenv -- turbo run db:push"
   },
