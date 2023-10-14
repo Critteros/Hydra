@@ -1,2 +1,1 @@
-export * from './core.module';
-export * from './core.service';
+export { HydraCoreModule } from './core.module';
