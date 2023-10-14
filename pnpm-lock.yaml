@@ -345,6 +345,9 @@ importers:
       '@pnpm/find-workspace-dir':
         specifier: ^6.0.2
         version: 6.0.2
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.0
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -367,6 +370,9 @@ importers:
       '@types/jest':
         specifier: ^29.5.5
         version: 29.5.5
+      '@types/js-yaml':
+        specifier: ^4.0.7
+        version: 4.0.7
       '@types/mock-fs':
         specifier: ^4.13.2
         version: 4.13.2
@@ -6259,6 +6265,10 @@ packages:
     dependencies:
       expect: 29.7.0
       pretty-format: 29.7.0
+    dev: true
+
+  /@types/js-yaml@4.0.7:
+    resolution: {integrity: sha512-RJZP9WAMMr1514KbdSXkLRrKvYQacjr1+HWnY8pui/uBTBoSgD9ZGR17u/d4nb9NpERp0FkdLBe7hq8NIPBgkg==}
     dev: true
 
   /@types/json-schema@7.0.12:

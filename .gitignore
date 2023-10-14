@@ -5,6 +5,9 @@
 # I prefer to ingore this directory
 .idea
 
+
+hydra.sock
+
 # dependencies
 node_modules
 .pnp
