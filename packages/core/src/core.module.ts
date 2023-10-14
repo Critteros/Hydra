@@ -1,10 +1,17 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
-import { CoreService } from './core.service';
+import { loadConfiguration } from './config';
 import { PrismaService } from './prisma.service';
 
 @Module({
-  providers: [CoreService, PrismaService],
-  exports: [CoreService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [loadConfiguration],
+    }),
+  ],
+  providers: [PrismaService],
+  exports: [],
 })
 export class HydraCoreModule {}
