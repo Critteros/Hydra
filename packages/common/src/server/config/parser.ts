@@ -1,6 +1,7 @@
 import { FileNotFound, makeCustomError } from '@/server/errors';
 import { load } from 'js-yaml';
 import { readFile } from 'node:fs/promises';
+import { resolve, dirname } from 'node:path';
 
 import { defaultConfig } from './default';
 import { configSchema, type Config } from './schema';
@@ -20,9 +21,21 @@ export class HydraConfig {
 
     try {
       const loaded = load(contents);
-      return new this(await configSchema.parseAsync(loaded));
+      return new this(await this.buildSchema(path).parseAsync(loaded));
     } catch (e) {
       throw new BadConfigFormat(path);
     }
+  }
+
+  private static buildSchema(path: string) {
+    return configSchema.transform(
+      ({ socket: { path: inputPath, ...socketOptions }, ...other }) => ({
+        socket: {
+          path: resolve(dirname(path), inputPath),
+          ...socketOptions,
+        },
+        ...other,
+      }),
+    );
   }
 }

@@ -1,5 +1,7 @@
 import { FileNotFound } from '@/server/errors';
 import mock from 'mock-fs';
+import { resolve } from 'node:path';
+import { cwd } from 'node:process';
 
 import { defaultConfig } from '../default';
 import { HydraConfig, BadConfigFormat } from '../parser';
@@ -67,5 +69,42 @@ describe('Test HydraConfig', () => {
     await expect(() => HydraConfig.fromFile('hydra-config.yaml')).rejects.toThrowError(
       BadConfigFormat,
     );
+  });
+
+  it('transforms socket path from relative', async () => {
+    const contents = `
+    socket:
+      path: hydra.sock
+    `;
+    mock({
+      config: {
+        'hydra-config.yml': contents,
+      },
+    });
+    const {
+      config: {
+        socket: { path },
+      },
+    } = await HydraConfig.fromFile('config/hydra-config.yml');
+    expect(path).toBe(resolve(cwd(), 'config/hydra.sock'));
+  });
+
+  it('absolute socket path is not transformed', async () => {
+    const contents = `
+    socket:
+      path: /run/hydra.sock
+    `;
+    mock({
+      config: {
+        'hydra-config.yml': contents,
+      },
+    });
+    const {
+      config: {
+        socket: { path },
+      },
+    } = await HydraConfig.fromFile('config/hydra-config.yml');
+
+    expect(path).toBe('/run/hydra.sock');
   });
 });
