@@ -1,5 +1,5 @@
 import { findWorkspaceDir } from '@pnpm/find-workspace-dir';
-import { access, constants } from 'node:fs/promises';
+import { access, constants, unlink, lstat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 /**
@@ -17,11 +17,38 @@ export async function resolveAccessibleFilePaths(paths: string[]): Promise<Array
     try {
       await access(path, mask);
       return path;
-    } catch (e) {
+    } catch {
       return null;
     }
   });
   const results = await Promise.all(promises);
   const readablePaths = results.filter(Boolean) as string[];
   return readablePaths.map((path) => resolve(path));
+}
+
+export class UnixSocket {
+  constructor(public path: string) {}
+
+  /**
+   * Obtains the socket file by deleting it if it exists
+   * Will throw an error if the path exists but is not a socket file
+   * WARNING: This method does not create the socket file
+   */
+  async obtain() {
+    const stat = await lstat(this.path).catch(() => null);
+    if (stat?.isDirectory()) {
+      throw new Error('Expected socket file but found directory');
+    }
+
+    if (stat?.isFile() && !stat.isSocket()) {
+      throw new Error('Expected socket file but found regular file');
+    }
+    // Delete the socket file if it exists
+    stat &&
+      (await unlink(this.path).catch(() => {
+        throw new Error('Could not delete socket file');
+      }));
+
+    return this;
+  }
 }
