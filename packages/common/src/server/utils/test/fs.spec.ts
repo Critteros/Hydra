@@ -27,13 +27,23 @@ describe('Test UnixSocket', () => {
     });
 
     it('throws error when path is a directory', async () => {
-      mock({ '/tmp': { 'test.sock': mock.directory() } });
+      mock(
+        { '/tmp/': { 'test.sock': mock.directory() } },
+        {
+          createTmp: false,
+        },
+      );
       const socket = new UnixSocket('/tmp/test.sock');
       await expect(() => socket.obtain()).rejects.toThrowError(Error);
     });
 
     it('throws error when path is a regular file', async () => {
-      mock({ '/tmp': { 'test.sock': 'test' } });
+      mock(
+        { '/tmp/': { 'test.sock': 'test' } },
+        {
+          createTmp: false,
+        },
+      );
       const socket = new UnixSocket('/tmp/test.sock');
       await expect(() => socket.obtain()).rejects.toThrowError(Error);
     });
