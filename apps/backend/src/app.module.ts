@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { loadConfiguration } from './config';
 import { PrismaService } from './prisma.service';
+import { ManagementModule } from './management/management.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { PrismaService } from './prisma.service';
       isGlobal: true,
       load: [loadConfiguration],
     }),
+    ManagementModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
