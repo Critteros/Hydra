@@ -19,11 +19,13 @@
   "exports": {
     ".": {
       "types": "./dist/*.d.ts",
+      "dev": "./src/index.ts",
       "require": "./dist/index.cjs",
       "import": "./dist/index.js"
     },
     "./*": {
       "types": "./dist/*.d.ts",
+      "dev": "./src/*.ts",
       "require": [
         "./dist/*.cjs",
         "./dist/*/index.cjs"
@@ -37,8 +39,8 @@
   "typesVersions": {
     "*": {
       "*": [
-        "src/*",
-        "src/*/index"
+        "dist/*.d.ts",
+        "dist/*/index.d.ts"
       ]
     }
   },
@@ -102,15 +104,5 @@
     "mock-fs": "^5.2.0",
     "tsconfig-paths": "^4.2.0",
     "tsup": "^7.2.0"
-  },
-  "publishConfig": {
-    "typesVersions": {
-      "*": {
-        "*": [
-          "dist/*.d.ts",
-          "dist/*/index.d.ts"
-        ]
-      }
-    }
   }
 }

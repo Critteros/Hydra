@@ -9,6 +9,8 @@
 hydra.sock
 *.local.*
 
+.swc
+
 # dependencies
 node_modules
 .pnp

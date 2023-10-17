@@ -40,12 +40,7 @@ module.exports = {
     ],
     '@typescript-eslint/consistent-type-exports': 'error',
     'prettier/prettier': 'off',
-    'import/no-unresolved': [
-      'error',
-      {
-        commonjs: true,
-      },
-    ],
+    'import/no-unresolved': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     'import/no-named-as-default-member': 'off',
   },
