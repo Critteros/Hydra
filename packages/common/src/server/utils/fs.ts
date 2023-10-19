@@ -1,6 +1,6 @@
 import { findWorkspaceDir } from '@pnpm/find-workspace-dir';
 import { access, constants, unlink, lstat } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { resolve, basename, extname } from 'node:path';
 
 /**
  * Finds the monorepo root directory
@@ -52,3 +52,8 @@ export class UnixSocket {
     return this;
   }
 }
+export function getModuleName(filename: string) {
+  return basename(filename, extname(filename));
+}
+
+export const m = getModuleName;
