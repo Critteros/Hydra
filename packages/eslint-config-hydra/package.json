@@ -11,13 +11,13 @@
     "*.js"
   ],
   "dependencies": {
-    "eslint-config-next": "^13.5.3",
-    "eslint-config-turbo": "^1.10.14",
+    "eslint-config-next": "^13.5.6",
+    "eslint-config-turbo": "^1.10.16",
     "eslint-plugin-jest-dom": "^5.1.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-testing-library": "^6.0.2"
+    "eslint-plugin-testing-library": "^6.1.0"
   },
   "peerDependencies": {
     "eslint": "^8.50.0"
