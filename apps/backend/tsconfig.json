@@ -2,8 +2,7 @@
   "extends": "@hydra-ipxe/tsconfig/nestjs.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "baseUrl": "./",
-    "moduleResolution": "node"
+    "baseUrl": "./"
   },
   "exclude": ["node_modules", "dist"]
 }
