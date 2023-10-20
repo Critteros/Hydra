@@ -20,7 +20,7 @@ async function setupManagementApi(socketPath: string) {
   const logger = new Logger('setupManagementApi');
   logger.log(`Setting up management API on socket ${socketPath}`);
 
-  const { ManagementModule } = await import('./management.module');
+  const { ManagementModule } = await import('./management/management.module');
   const { UnixSocket } = await import('@hydra-ipxe/common/server/utils/fs');
   const { path } = await new UnixSocket(socketPath).obtain();
   const app = await NestFactory.create(ManagementModule);
