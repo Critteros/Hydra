@@ -10,7 +10,6 @@
     "*.json"
   ],
   "dependencies": {
-    "@tsconfig/next": "^2.0.0",
     "@tsconfig/recommended": "^1.0.3"
   },
   "publishConfig": {
