@@ -79,8 +79,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/tsconfig
       '@next/bundle-analyzer':
-        specifier: ^13.5.4
-        version: 13.5.4
+        specifier: ^13.5.6
+        version: 13.5.6
       '@types/node':
         specifier: latest
         version: 20.8.7
@@ -4954,8 +4954,8 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@next/bundle-analyzer@13.5.4:
-    resolution: {integrity: sha512-2vgmkuSKyTiyI7NorL+zYerxQRvzmSGbCDr2/kVrbKX28a4UNhbYn8/cQW8z6pvx0EncEFpd0GCUA5r9aRLhJg==}
+  /@next/bundle-analyzer@13.5.6:
+    resolution: {integrity: sha512-4P5YVpR3N/B5+p0TQ/rPAr+9fsjkdfCVTGzJhKwE7XHqS+QME4gYxAYeGKkfkHEkP2A3GKXs8QSp0LjIvWLI3g==}
     dependencies:
       webpack-bundle-analyzer: 4.7.0
     transitivePeerDependencies:

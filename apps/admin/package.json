@@ -23,7 +23,7 @@
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
     "@hydra-ipxe/prettier-config": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",
-    "@next/bundle-analyzer": "^13.5.4",
+    "@next/bundle-analyzer": "^13.5.6",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
