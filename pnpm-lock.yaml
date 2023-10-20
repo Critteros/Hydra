@@ -416,11 +416,11 @@ importers:
         specifier: ^8.50.0
         version: 8.50.0
       eslint-config-next:
-        specifier: ^13.5.3
-        version: 13.5.3(eslint@8.50.0)(typescript@5.2.2)
+        specifier: ^13.5.6
+        version: 13.5.6(eslint@8.50.0)(typescript@5.2.2)
       eslint-config-turbo:
-        specifier: ^1.10.14
-        version: 1.10.14(eslint@8.50.0)
+        specifier: ^1.10.16
+        version: 1.10.16(eslint@8.50.0)
       eslint-plugin-jest-dom:
         specifier: ^5.1.0
         version: 5.1.0(eslint@8.50.0)
@@ -434,8 +434,8 @@ importers:
         specifier: ^4.6.0
         version: 4.6.0(eslint@8.50.0)
       eslint-plugin-testing-library:
-        specifier: ^6.0.2
-        version: 6.0.2(eslint@8.50.0)(typescript@5.2.2)
+        specifier: ^6.1.0
+        version: 6.1.0(eslint@8.50.0)(typescript@5.2.2)
 
   packages/prettier-config:
     dependencies:
@@ -4967,8 +4967,8 @@ packages:
     resolution: {integrity: sha512-Yac/bV5sBGkkEXmAX5FWPS9Mmo2rthrOPRQQNfycJPkjUAUclomCPH7QFVCDQ4Mp2k2K1SSM6m0zrxYrOwtFQw==}
     dev: false
 
-  /@next/eslint-plugin-next@13.5.3:
-    resolution: {integrity: sha512-lbZOoEjzSuTtpk9UgV9rOmxYw+PsSfNR+00mZcInqooiDMZ1u+RqT1YQYLsEZPW1kumZoQe5+exkCBtZ2xn0uw==}
+  /@next/eslint-plugin-next@13.5.6:
+    resolution: {integrity: sha512-ng7pU/DDsxPgT6ZPvuprxrkeew3XaRf4LAT4FabaEO/hAbvVx4P7wqnqdbTdDn1kgTvsI4tpIgT4Awn/m0bGbg==}
     dependencies:
       glob: 7.1.7
     dev: false
@@ -8748,8 +8748,8 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-config-next@13.5.3(eslint@8.50.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-VN2qbCpq2DMWgs7SVF8KTmc8bVaWz3s4nmcFqRLs7PNBt5AXejOhJuZ4zg2sCEHOvz5RvqdwLeI++NSCV6qHVg==}
+  /eslint-config-next@13.5.6(eslint@8.50.0)(typescript@5.2.2):
+    resolution: {integrity: sha512-o8pQsUHTo9aHqJ2YiZDym5gQAMRf7O2HndHo/JZeY7TDD+W4hk6Ma8Vw54RHiBeb7OWWO5dPirQB+Is/aVQ7Kg==}
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
       typescript: '>=3.3.1'
@@ -8757,7 +8757,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@next/eslint-plugin-next': 13.5.3
+      '@next/eslint-plugin-next': 13.5.6
       '@rushstack/eslint-patch': 1.5.0
       '@typescript-eslint/parser': 6.8.0(eslint@8.50.0)(typescript@5.2.2)
       eslint: 8.50.0
@@ -8798,6 +8798,16 @@ packages:
     dependencies:
       eslint: 8.50.0
       eslint-plugin-turbo: 1.10.14(eslint@8.50.0)
+    dev: true
+
+  /eslint-config-turbo@1.10.16(eslint@8.50.0):
+    resolution: {integrity: sha512-O3NQI72bQHV7FvSC6lWj66EGx8drJJjuT1kuInn6nbMLOHdMBhSUX/8uhTAlHRQdlxZk2j9HtgFCIzSc93w42g==}
+    peerDependencies:
+      eslint: '>6.6.0'
+    dependencies:
+      eslint: 8.50.0
+      eslint-plugin-turbo: 1.10.16(eslint@8.50.0)
+    dev: false
 
   /eslint-import-resolver-node@0.3.7:
     resolution: {integrity: sha512-gozW2blMLJCeFpBwugLTGyvVjNoeo1knonXAcatC6bjPBZitotxdWf7Gimr25N4c0AAOo4eOUfaG82IJPDpqCA==}
@@ -9019,8 +9029,8 @@ packages:
       string.prototype.matchall: 4.0.8
     dev: false
 
-  /eslint-plugin-testing-library@6.0.2(eslint@8.50.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-3BV6FWtLbpKFb4Y1obSdt8PC9xSqz6T+7EHB/6pSCXqVjKPoS67ck903feKMKQphd5VhrX+N51yHuVaPa7elsw==}
+  /eslint-plugin-testing-library@6.1.0(eslint@8.50.0)(typescript@5.2.2):
+    resolution: {integrity: sha512-r7kE+az3tbp8vyRwfyAGZ6V/xw+XvdWFPicIo6jbOPZoossOFDeHizARqPGV6gEkyF8hyCFhhH3mlQOGS3N5Sg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0, npm: '>=6'}
     peerDependencies:
       eslint: ^7.5.0 || ^8.0.0
@@ -9039,6 +9049,7 @@ packages:
     dependencies:
       dotenv: 16.0.3
       eslint: 8.50.0
+    dev: true
 
   /eslint-plugin-turbo@1.10.15(eslint@8.50.0):
     resolution: {integrity: sha512-Tv4QSKV/U56qGcTqS/UgOvb9HcKFmWOQcVh3HEaj7of94lfaENgfrtK48E2CckQf7amhKs1i+imhCsNCKjkQyA==}
@@ -9048,6 +9059,15 @@ packages:
       dotenv: 16.0.3
       eslint: 8.50.0
     dev: true
+
+  /eslint-plugin-turbo@1.10.16(eslint@8.50.0):
+    resolution: {integrity: sha512-ZjrR88MTN64PNGufSEcM0tf+V1xFYVbeiMeuIqr0aiABGomxFLo4DBkQ7WI4WzkZtWQSIA2sP+yxqSboEfL9MQ==}
+    peerDependencies:
+      eslint: '>6.6.0'
+    dependencies:
+      dotenv: 16.0.3
+      eslint: 8.50.0
+    dev: false
 
   /eslint-plugin-unicorn@48.0.1(eslint@8.50.0):
     resolution: {integrity: sha512-FW+4r20myG/DqFcCSzoumaddKBicIPeFnTrifon2mWIzlfyvzwyqZjqVP7m4Cqr/ZYisS2aiLghkUWaPg6vtCw==}
