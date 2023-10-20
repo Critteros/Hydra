@@ -1,5 +1,5 @@
 {
-  "name": "@hydra-ipxe/admin",
+  "name": "@hydra-ipxe/web",
   "version": "0.0.0",
   "private": false,
   "description": "Admin panel for Hydra iPXE",
