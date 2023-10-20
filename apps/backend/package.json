@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "dev": "nest start --watch",
+    "repl": "nest start --entryFile repl --watch",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "clean": "rimraf dist",
