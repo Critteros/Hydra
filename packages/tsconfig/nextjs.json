@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": ["./base.json", "@tsconfig/next/tsconfig.json"],
+  "extends": ["./base.json"],
   "compilerOptions": {
     "declaration": false,
     "declarationMap": false,
@@ -9,9 +9,10 @@
     "module": "esnext",
     "noEmit": true,
     "resolveJsonModule": true,
-    "strict": false,
-    "target": "es5",
+    "target": "es2022",
     "forceConsistentCasingInFileNames": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
     "moduleResolution": "node"
   }
 }
