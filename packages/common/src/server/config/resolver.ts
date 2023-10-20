@@ -72,7 +72,7 @@ export class ConfigResolver {
       const option = hierarchy.shift();
 
       if (option == undefined || cleanHierarchy.includes(option)) {
-        let el = defaultHierarchy[cleanHierarchy.length];
+        let el = defaultHierarchy[cleanHierarchy.length]!;
 
         if (cleanHierarchy.includes(el)) {
           // Add first element that matches

@@ -19,7 +19,7 @@ export async function loadConfiguration() {
   }
   logger.log(`Using ${paths[0]} as the primary configuration file`);
 
-  return (await HydraConfig.fromFile(paths[0])).config;
+  return (await HydraConfig.fromFile(paths[0]!)).config;
 }
 
 export default loadConfiguration;
