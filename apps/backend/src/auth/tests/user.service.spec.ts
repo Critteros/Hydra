@@ -1,11 +1,11 @@
 import { Test } from '@nestjs/testing';
 
-import { PrismaService } from '@/prisma.service';
+import { PrismaService } from '@/db/prisma.service';
 import { createMockDB, type StartedPostgreSqlContainer, prismaTruncateDB } from '@/utils/test';
 import type { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-import { UserService } from './user.service';
+import { UserService } from '../user.service';
 
 jest.mock('bcrypt');
 

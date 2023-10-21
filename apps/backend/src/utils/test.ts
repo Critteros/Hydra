@@ -1,4 +1,4 @@
-import type { PrismaService } from '@/prisma.service';
+import type { PrismaService } from '@/db/prisma.service';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
