@@ -13,7 +13,7 @@
       "dependsOn": ["db:generate", "^build"]
     },
     "test": {
-      "dependsOn": ["^build", "^test"],
+      "dependsOn": ["^build", "^test", "db:generate"],
       "outputs": ["coverage/**"]
     },
     "dev": {
