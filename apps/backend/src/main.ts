@@ -1,8 +1,11 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import type { Config } from '@hydra-ipxe/common/server/config';
+
+import { version } from '../package.json';
 
 import { AppModule } from './app.module';
 
@@ -11,6 +14,15 @@ async function setupApi() {
   logger.log('Setting up API server');
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
+
+  const openApiConfig = new DocumentBuilder()
+    .setTitle('Hydra iPXE REST API')
+    .setDescription('The Hydra iPXE REST API description')
+    .setVersion(version)
+    .build();
+  const document = SwaggerModule.createDocument(app, openApiConfig);
+  SwaggerModule.setup('api/docs', app, document);
+
   await app.listen(8000);
   logger.log('API server listening on port 8000');
   return app;
