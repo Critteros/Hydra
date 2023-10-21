@@ -17,7 +17,7 @@ export class AccountsController {
     });
 
     return {
-      success: true,
+      message: 'success',
     };
   }
 
@@ -29,7 +29,7 @@ export class AccountsController {
     });
 
     return {
-      success: true,
+      message: 'success',
     };
   }
 }
