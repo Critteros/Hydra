@@ -3,10 +3,10 @@ import { Test } from '@nestjs/testing';
 import { PrismaService } from '@/db/prisma.service';
 import { createMockDB, type StartedPostgreSqlContainer, prismaTruncateDB } from '@/utils/test';
 import { faker } from '@faker-js/faker';
-import { type User, Prisma } from '@prisma/client';
+import type { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-import { UserService } from '../user.service';
+import { UserService, UserAlreadyExistsError, UserNotFound } from '../user.service';
 
 jest.mock('bcrypt');
 
@@ -158,26 +158,41 @@ describe('Test UserService', () => {
       },
     });
 
-    try {
-      await userService.createUser(
+    const exec = () => {
+      return userService.createUser(
         {
           email: user.email,
           password: faker.internet.password(),
         },
         false,
       );
-    } catch (e) {
-      console.log(e);
-    }
+    };
 
-    // await expect(
-    //   userService.createUser(
-    //     {
-    //       email: user.email,
-    //       password: faker.internet.password(),
-    //     },
-    //     false,
-    //   ),
-    // ).rejects.toThrowError(Prisma.PrismaClientKnownRequestError);
+    await expect(exec).rejects.toThrowError(UserAlreadyExistsError);
+  });
+
+  it('fails to update user that does not exists', async () => {
+    const exec = () => {
+      return userService.updateUser({
+        where: {
+          uid: faker.string.uuid(),
+        },
+        data: {
+          email: faker.internet.email(),
+        },
+      });
+    };
+
+    await expect(exec).rejects.toThrowError(UserNotFound);
+  });
+
+  it('fails to delete user that does not exists', async () => {
+    const exec = () => {
+      return userService.deleteUser({
+        uid: faker.string.uuid(),
+      });
+    };
+
+    await expect(exec).rejects.toThrowError(UserNotFound);
   });
 });

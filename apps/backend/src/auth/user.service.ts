@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@/db/prisma.service';
-import type { Prisma, User } from '@prisma/client';
+import { PrismaErrorCode, remapPrismaError } from '@/utils/prisma/errors';
+import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
+import { Prisma, type User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+
+export const UserAlreadyExistsError = makeCustomError('UserAlreadyExistsError');
+export const UserNotFound = makeCustomError('UserNotFound');
 
 @Injectable()
 export class UserService {
@@ -35,13 +40,22 @@ export class UserService {
     if (hashPassword) {
       password = await bcrypt.hash(password, 10);
     }
-
-    return this.prisma.user.create({
-      data: {
-        ...data,
-        password,
-      },
-    });
+    try {
+      return await this.prisma.user.create({
+        data: {
+          ...data,
+          password,
+        },
+      });
+    } catch (error) {
+      throw remapPrismaError({
+        error,
+        toMatchError: Prisma.PrismaClientKnownRequestError,
+        code: PrismaErrorCode.UniqueConstraintViolation,
+        field: 'email',
+        throw: new UserAlreadyExistsError(`User with email ${data.email} already exists`),
+      });
+    }
   }
 
   async updateUser(params: {
@@ -49,15 +63,33 @@ export class UserService {
     data: Prisma.UserUpdateInput;
   }): Promise<User> {
     const { where, data } = params;
-    return this.prisma.user.update({
-      data,
-      where,
-    });
+    try {
+      return await this.prisma.user.update({
+        data,
+        where,
+      });
+    } catch (error) {
+      throw remapPrismaError({
+        error,
+        toMatchError: Prisma.PrismaClientKnownRequestError,
+        code: PrismaErrorCode.RecordsNotFound,
+        throw: new UserNotFound(`User with query ${JSON.stringify(where)} is not found`),
+      });
+    }
   }
 
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
-    return this.prisma.user.delete({
-      where,
-    });
+    try {
+      return await this.prisma.user.delete({
+        where,
+      });
+    } catch (error) {
+      throw remapPrismaError({
+        error,
+        toMatchError: Prisma.PrismaClientKnownRequestError,
+        code: PrismaErrorCode.RecordsNotFound,
+        throw: new UserNotFound(`User with query ${JSON.stringify(where)} is not found`),
+      });
+    }
   }
 }
