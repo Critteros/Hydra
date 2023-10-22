@@ -11,25 +11,18 @@ type PrismaErrors =
   | Constructor<Prisma.PrismaClientUnknownRequestError>;
 
 /**
- * Remaps a Prisma error based on provided parameters. Throws an error if the original error does
- * not match the specified Prisma error type, code, or field.
+ * Remaps a Prisma error based on specific conditions and throws a new error if necessary. If the
+ * original error does not match any of the specified conditions, it is returned as-is.
  *
- * @example
- *   remapPrismaError({
- *     error: new Prisma.PrismaClientInitializationError('Prisma client initialization failed'),
- *     code: 'P2002',
- *     throw: new Error('Custom error message'),
- *   });
- *
- * @param {object} params - The parameters for the remap operation.
- * @param {unknown} params.error - The original error to be remapped.
- * @param {PrismaErrors} [params.toMatchError] - The specific Prisma error type to match against.
- *   Default is `Prisma.PrismaClientKnownRequestError`.
- * @param {PrismaErrorCode} [params.code] - The specific error code to match against.
- * @param {string} [params.field] - The specific field name to match against.
- * @param {Error} params.throw - The error to be thrown if remapping is successful.
- * @throws {Error} - Throws the original error if it does not match the specified Prisma error type,
- *   code, or field.
+ * @param {object} params - The parameters for the remapPrismaError function
+ * @param {unknown} params.error - The original error to be remapped
+ * @param {PrismaErrors} [params.toMatchError] - The specific Prisma error class to match (default:
+ *   Prisma.PrismaClientKnownRequestError)
+ * @param {PrismaErrorCode} [params.code] - The specific error code to match
+ * @param {string} [params.field] - The specific field to match
+ * @param {Error} params.throw - The error to be thrown if the original error matches the specified
+ *   conditions
+ * @returns {unknown} - The remapped error or the original error if it does not match any conditions
  */
 export function remapPrismaError(params: {
   error: unknown;
@@ -37,7 +30,7 @@ export function remapPrismaError(params: {
   code?: PrismaErrorCode;
   field?: string;
   throw: Error;
-}) {
+}): unknown {
   const {
     error: originalError,
     toMatchError = Prisma.PrismaClientKnownRequestError,
@@ -47,44 +40,44 @@ export function remapPrismaError(params: {
   } = params;
 
   if (!(originalError instanceof Error)) {
-    throw originalError;
+    return originalError;
   }
 
   if (!(originalError instanceof toMatchError)) {
-    throw originalError;
+    return originalError;
   }
 
   switch (originalError.constructor) {
     case Prisma.PrismaClientInitializationError: {
       const typedError = originalError as Prisma.PrismaClientInitializationError;
       if (code && typedError.errorCode !== (code as string)) {
-        throw originalError;
+        return originalError;
       }
-      throw throwError;
+      return throwError;
     }
     case Prisma.PrismaClientValidationError: {
-      throw throwError;
+      return throwError;
     }
     case Prisma.PrismaClientRustPanicError: {
-      throw throwError;
+      return throwError;
     }
     case Prisma.PrismaClientKnownRequestError: {
       const typedError = originalError as Prisma.PrismaClientKnownRequestError;
       if (code && typedError.code !== (code as string)) {
-        throw originalError;
+        return originalError;
       }
       if (
         field &&
         !(typedError.meta as { target: string[] } | undefined)?.target?.includes(field)
       ) {
-        throw originalError;
+        return originalError;
       }
-      throw throwError;
+      return throwError;
     }
     case Prisma.PrismaClientUnknownRequestError: {
-      throw throwError;
+      return throwError;
     }
   }
 
-  throw originalError;
+  return originalError;
 }

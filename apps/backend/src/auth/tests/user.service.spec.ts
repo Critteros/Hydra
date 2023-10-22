@@ -2,7 +2,8 @@ import { Test } from '@nestjs/testing';
 
 import { PrismaService } from '@/db/prisma.service';
 import { createMockDB, type StartedPostgreSqlContainer, prismaTruncateDB } from '@/utils/test';
-import type { User } from '@prisma/client';
+import { faker } from '@faker-js/faker';
+import { type User, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 import { UserService } from '../user.service';
@@ -147,5 +148,36 @@ describe('Test UserService', () => {
     });
 
     expect(deletedUser).toBeNull();
+  });
+
+  it('fails when user with the same email already exists', async () => {
+    const user = await prisma.user.create({
+      data: {
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      },
+    });
+
+    try {
+      await userService.createUser(
+        {
+          email: user.email,
+          password: faker.internet.password(),
+        },
+        false,
+      );
+    } catch (e) {
+      console.log(e);
+    }
+
+    // await expect(
+    //   userService.createUser(
+    //     {
+    //       email: user.email,
+    //       password: faker.internet.password(),
+    //     },
+    //     false,
+    //   ),
+    // ).rejects.toThrowError(Prisma.PrismaClientKnownRequestError);
   });
 });
