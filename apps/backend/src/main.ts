@@ -36,6 +36,7 @@ async function setupManagementApi(socketPath: string) {
   const { UnixSocket } = await import('@hydra-ipxe/common/server/utils/fs');
   const { path } = await new UnixSocket(socketPath).obtain();
   const app = await NestFactory.create(ManagementModule);
+
   await app.listen(path);
   logger.log(`Management API is listening on ${path}`);
   return app;
