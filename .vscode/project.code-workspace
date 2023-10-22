@@ -1,0 +1,55 @@
+{
+    "folders": [
+        {
+            "name": "ROOT",
+            "path": "../"
+        }, 
+        {
+            "name": "apps/web",
+            "path": "../apps/web"
+        },
+        {
+            "name": "apps/backend",
+            "path": "../apps/backend"
+        },
+        {
+            "name": "apps/cli",
+            "path": "../apps/cli"
+        },
+        {
+            "name": "apps/docs",
+            "path": "../apps/docs"
+        },
+        {
+            "name": "packages/common",
+            "path": "../packages/common"
+        },
+        {
+            "name": "packages/eslint-config-hydra",
+            "path": "../packages/eslint-config-hydra"
+        },
+        {
+            "name": "packages/prettier-config",
+            "path": "../packages/prettier-config"
+        },
+        {
+            "name": "packages/tsconfig",
+            "path": "../packages/tsconfig"
+        },
+        {
+            "name": "packages/ui",
+            "path": "../packages/ui"
+        }
+    ],
+    "settings": {
+        "jest.disabledWorkspaceFolders": [
+            "packages/tsconfig",
+            "packages/ui",
+            "apps/docs",
+            "ROOT",
+            "apps/web",
+            "packages/prettier-config",
+            "packages/eslint-config-hydra"
+        ]
+    }
+}
