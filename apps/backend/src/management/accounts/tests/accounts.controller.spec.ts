@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import { AuthModule } from '@/auth/auth.module';
 import { PrismaService } from '@/db/prisma.service';
 import { prismaTruncateDB, createMockDB, type StartedPostgreSqlContainer } from '@/utils/test';
+import { faker } from '@faker-js/faker';
 import ms from 'ms';
 import request from 'supertest';
 
@@ -41,7 +42,7 @@ describe('Test management AccountsController', () => {
     await app.close();
   });
 
-  describe('GET /accounts/create-admin-account', () => {
+  describe('POST /accounts/create-admin-account', () => {
     const url = '/accounts/create-admin-account';
 
     it('should return 200 and create account', async () => {
@@ -76,9 +77,24 @@ describe('Test management AccountsController', () => {
         email: 'user@example.com',
       });
     });
+
+    it('should return 409 if email is already used', async () => {
+      const user = await prisma.user.create({
+        data: {
+          email: faker.internet.email(),
+          password: faker.internet.password(),
+          accountType: 'ADMIN',
+        },
+      });
+
+      await request(app.getHttpServer())
+        .post(url)
+        .expect(HttpStatus.CONFLICT)
+        .send({ email: user.email, password: faker.internet.password() });
+    });
   });
 
-  describe('GET /accounts/create-standard-account', () => {
+  describe('POST /accounts/create-standard-account', () => {
     const url = '/accounts/create-standard-account';
 
     it('should return 200 and create account', async () => {
@@ -97,6 +113,21 @@ describe('Test management AccountsController', () => {
         accountType: 'STANDARD',
         name: null,
       });
+    });
+
+    it('should return 409 if email is already used', async () => {
+      const user = await prisma.user.create({
+        data: {
+          email: faker.internet.email(),
+          password: faker.internet.password(),
+          accountType: 'STANDARD',
+        },
+      });
+
+      await request(app.getHttpServer())
+        .post(url)
+        .expect(HttpStatus.CONFLICT)
+        .send({ email: user.email, password: faker.internet.password() });
     });
   });
 });

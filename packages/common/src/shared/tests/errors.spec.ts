@@ -39,6 +39,15 @@ describe('remapErrors', () => {
 
     expect(err.errorStack).toContain(baseError);
   });
+
+  it('remaps with function', () => {
+    const remapper = remapErrors({
+      if: Error,
+      then: () => new CustomError('error'),
+    });
+
+    expect(remapper(baseError)).toBeInstanceOf(CustomError);
+  });
 });
 
 describe('MapErrors', () => {
@@ -60,6 +69,16 @@ describe('MapErrors', () => {
       expect(this instanceof Test).toBe(true);
       throw new Error('error');
     }
+
+    @MapErrors({
+      if: Error,
+      then: () => new CustomError('error'),
+    })
+    async asyncMethod(): Promise<void> {
+      expect(this instanceof Test).toBe(true);
+      await Promise.resolve();
+      throw new Error('error');
+    }
   }
 
   it('remaps errors', () => {
@@ -70,5 +89,10 @@ describe('MapErrors', () => {
   it('does not remap errors if not valid mapping', () => {
     const test = new Test();
     expect(() => test.notValidMapping()).toThrowError(Error);
+  });
+
+  it('remaps async errors', async () => {
+    const test = new Test();
+    await expect(test.asyncMethod()).rejects.toThrowError(CustomError);
   });
 });

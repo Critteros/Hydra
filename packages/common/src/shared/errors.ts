@@ -28,7 +28,11 @@ export function remapErrors(mapping: RemapInput | Array<RemapInput>): (err: unkn
     if (!entry) {
       return error;
     }
-    const { then: mappedError } = entry;
+    let { then: mappedError } = entry;
+
+    if (mappedError instanceof Function) {
+      mappedError = mappedError();
+    }
 
     if (mappedError instanceof BaseError) {
       mappedError.errorStack.push(error);
@@ -72,7 +76,14 @@ export function MapErrors<FnT extends (...args: unknown[]) => unknown>(
 
     descriptor.value = function (...args: unknown[]) {
       try {
-        return originalFn?.(...args);
+        // @ts-expect-error Required call using .call method for not to loase this context
+        const res = originalFn?.call(this, ...args);
+
+        if (res instanceof Promise) {
+          return res.catch((e) => {
+            throw remapper(e);
+          });
+        }
       } catch (e) {
         throw remapper(e);
       }

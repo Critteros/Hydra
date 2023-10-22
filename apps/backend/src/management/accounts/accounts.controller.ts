@@ -1,7 +1,8 @@
-import { Controller, UsePipes, Body, Post } from '@nestjs/common';
+import { Controller, UsePipes, Body, Post, ConflictException } from '@nestjs/common';
 
-import { UserService } from '@/auth/user.service';
+import { UserService, UserAlreadyExistsError } from '@/auth/user.service';
 import { CreateAccountDto } from '@hydra-ipxe/common/server/internal/dto/accounts.dto';
+import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 import { ZodValidationPipe } from 'nestjs-zod';
 
 @Controller('accounts')
@@ -10,6 +11,10 @@ export class AccountsController {
   constructor(private readonly userService: UserService) {}
 
   @Post('create-admin-account')
+  @MapErrors({
+    if: UserAlreadyExistsError,
+    then: () => new ConflictException('User already exists'),
+  })
   async createAdminAccount(@Body() body: CreateAccountDto) {
     await this.userService.createUser({
       ...body,
@@ -22,6 +27,10 @@ export class AccountsController {
   }
 
   @Post('create-standard-account')
+  @MapErrors({
+    if: UserAlreadyExistsError,
+    then: () => new ConflictException('User already exists'),
+  })
   async createStandardAccount(@Body() body: CreateAccountDto) {
     await this.userService.createUser({
       ...body,
