@@ -8,4 +8,13 @@ module.exports = {
     ecmaVersion: 2023,
     sourceType: 'module',
   },
+  overrides: [
+    {
+      files: ['*.ts'],
+      rules: {
+        '@typescript-eslint/consistent-type-imports': 'off',
+        'import/named': 'off',
+      },
+    },
+  ],
 };

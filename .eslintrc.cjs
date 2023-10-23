@@ -1,7 +1,7 @@
 /**
  * Main root configuration file that is used by all packages
  *
- * @type {import("eslint").Linter.Config}
+ * @type {import('eslint').Linter.Config}
  */
 module.exports = {
   root: true,
@@ -49,6 +49,10 @@ module.exports = {
       files: ['*.spec.ts'],
       rules: {
         '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/no-unsafe-argument': 'off',
+        '@typescript-eslint/unbound-method': 'off',
       },
     },
   ],

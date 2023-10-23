@@ -6,6 +6,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "experimentalDecorators": true
   }
 }

@@ -1,7 +1,9 @@
-import { FileNotFound, makeCustomError } from '@/server/errors';
+import { FileNotFound } from '@/server/errors';
 import { load } from 'js-yaml';
 import { readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
+
+import { makeCustomError } from '../../shared/errors';
 
 import { defaultConfig } from './default';
 import { configSchema, type Config } from './schema';

@@ -13,7 +13,7 @@
       "dependsOn": ["db:generate", "^build"]
     },
     "test": {
-      "dependsOn": ["^build", "^test"],
+      "dependsOn": ["^build", "^test", "db:generate"],
       "outputs": ["coverage/**"]
     },
     "dev": {
@@ -34,5 +34,5 @@
       "cache": false
     }
   },
-  "globalEnv": ["DATABASE_URL"]
+  "globalEnv": ["DATABASE_URL", "DEBUG"]
 }

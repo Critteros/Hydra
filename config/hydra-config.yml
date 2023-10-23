@@ -1,0 +1,3 @@
+socket:
+  enable: true
+  path: ../hydra.sock
