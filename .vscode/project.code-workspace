@@ -46,6 +46,19 @@
             "apps/web",
             "packages/prettier-config",
             "packages/eslint-config-hydra"
+        ],
+        "remote.autoForwardPorts": false,
+        "remote.restoreForwardedPorts": false,
+        "sqltools.connections": [
+            {
+                "previewLimit": 50,
+                "server": "localhost",
+                "port": 5432,
+                "driver": "PostgreSQL",
+                "name": "Local DB",
+                "database": "postgres",
+                "username": "postgres"
+            }
         ]
     }
 }

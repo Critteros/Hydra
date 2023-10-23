@@ -2,8 +2,8 @@ import { QuestionSet, Question, ValidateFor } from 'nest-commander';
 
 import { CreateUserValidatorService } from './create-user-validator.service';
 
-@QuestionSet({ name: 'create-admin-user' })
-export class CreateAdminUserQuestion {
+@QuestionSet({ name: 'create-user' })
+export class CreateUserQuestion {
   constructor(private readonly validator: CreateUserValidatorService) {}
 
   @Question({

@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
 
-import { CreateAdminUserCommand } from './create-admin-user.command';
-import { CreateAdminUserQuestion } from './create-admin-user.question';
 import { CreateUserValidatorService } from './create-user-validator.service';
+import { CreateAdminUserCommand, CreateStandardUserCommand } from './create-user.command';
+import { CreateUserQuestion } from './create-user.question';
 
 @Module({
-  providers: [CreateAdminUserCommand, CreateAdminUserQuestion, CreateUserValidatorService],
+  providers: [
+    CreateAdminUserCommand,
+    CreateUserQuestion,
+    CreateUserValidatorService,
+    CreateStandardUserCommand,
+  ],
 })
 export class AuthModule {}

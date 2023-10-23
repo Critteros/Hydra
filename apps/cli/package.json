@@ -39,6 +39,9 @@
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "@/(.*)$": "<rootDir>/$1"
     }
   },
   "dependencies": {
@@ -56,6 +59,8 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@automock/jest": "^1.4.0",
+    "@faker-js/faker": "^8.2.0",
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
     "@hydra-ipxe/prettier-config": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",
