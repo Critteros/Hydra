@@ -43,7 +43,8 @@
     },
     "moduleNameMapper": {
       "@/(.*)$": "<rootDir>/$1"
-    }
+    },
+    "testTimeout": 60000
   },
   "dependencies": {
     "@hydra-ipxe/common": "workspace:*",

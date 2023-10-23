@@ -3,15 +3,12 @@ import { Test } from '@nestjs/testing';
 import { PrismaService } from '@/db/prisma.service';
 import { prismaTruncateDB, createMockDB, type StartedPostgreSqlContainer } from '@/utils/test';
 import type { User } from '@prisma/client';
-import ms from 'ms';
 
 import { AuthModule } from '../auth.module';
 import { AuthService } from '../auth.service';
 import { UserService } from '../user.service';
 
 describe('Test AuthService', () => {
-  jest.setTimeout(ms('30s'));
-
   let dbService: StartedPostgreSqlContainer;
   let prisma: PrismaService;
   let authService: AuthService;

@@ -5,14 +5,11 @@ import { AuthModule } from '@/auth/auth.module';
 import { PrismaService } from '@/db/prisma.service';
 import { prismaTruncateDB, createMockDB, type StartedPostgreSqlContainer } from '@/utils/test';
 import { faker } from '@faker-js/faker';
-import ms from 'ms';
 import request from 'supertest';
 
 import { AccountsController } from '../accounts.controller';
 
 describe('Test management AccountsController', () => {
-  jest.setTimeout(ms('30s'));
-
   let dbService: StartedPostgreSqlContainer;
   let prisma: PrismaService;
   let app: INestApplication;

@@ -11,8 +11,6 @@ import { UserService, UserAlreadyExistsError, UserNotFound } from '../user.servi
 jest.mock('bcrypt');
 
 describe('Test UserService', () => {
-  jest.setTimeout(60000);
-
   let postgresqlContainer: StartedPostgreSqlContainer;
   let userService: UserService;
   let prisma: PrismaService;

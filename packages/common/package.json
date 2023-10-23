@@ -81,7 +81,8 @@
     },
     "moduleNameMapper": {
       "@/(.*)$": "<rootDir>/$1"
-    }
+    },
+    "testTimeout": 60000
   },
   "prettier": "@hydra-ipxe/prettier-config",
   "dependencies": {
