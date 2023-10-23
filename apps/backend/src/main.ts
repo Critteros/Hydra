@@ -20,6 +20,7 @@ async function setupApi() {
   logger.log('Setting up API server');
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
+  await redisClient.connect();
   app.use(
     session({
       store: redisStore,
@@ -27,6 +28,7 @@ async function setupApi() {
       cookie: { secure: false },
       resave: false,
       saveUninitialized: false,
+      name: 'session',
     }),
   );
 
