@@ -6,6 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import type { Config } from '@hydra-ipxe/common/server/config';
 import RedisStore from 'connect-redis';
 import session from 'express-session';
+import passport from 'passport';
 import { createClient } from 'redis';
 
 import { version } from '../package.json';
@@ -31,6 +32,7 @@ async function setupApi() {
       name: 'session',
     }),
   );
+  app.use(passport.session());
 
   const openApiConfig = new DocumentBuilder()
     .setTitle('Hydra iPXE REST API')
