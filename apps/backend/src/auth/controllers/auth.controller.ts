@@ -4,8 +4,8 @@ import { ApiBody } from '@nestjs/swagger';
 import { User } from '@/decorators/user';
 import type { User as UserT } from '@prisma/client';
 
-import { UserLoginDto } from './dto/user-login.dto';
-import { LocalAuthGuard } from './local-auth.guard';
+import { UserLoginDto } from '../dto/user-login.dto';
+import { LocalAuthGuard } from '../guards/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
