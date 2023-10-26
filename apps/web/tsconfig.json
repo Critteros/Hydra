@@ -8,9 +8,7 @@
       }
     ],
     "paths": {
-      "~/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "moduleResolution": "node",
     "jsx": "preserve"
