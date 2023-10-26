@@ -1,6 +1,7 @@
+import { relative } from 'node:path';
+
 import * as pnpmLib from '@pnpm/find-workspace-dir';
 import mock from 'mock-fs';
-import { relative } from 'node:path';
 
 import { findWorkspaceRoot, UnixSocket } from '../fs';
 

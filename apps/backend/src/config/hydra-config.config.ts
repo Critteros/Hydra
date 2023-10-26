@@ -4,8 +4,8 @@ import { HydraConfig, ConfigResolver } from '@hydra-ipxe/common/server/config';
 import { m } from '@hydra-ipxe/common/server/utils/fs';
 
 /**
- * Resolves and loads the configuration for the application
- * If multiple file paths are found, the first one is used
+ * Resolves and loads the configuration for the application If multiple file paths are found, the
+ * first one is used
  */
 export async function loadConfiguration() {
   const logger = new Logger(`${m(__filename)}:${loadConfiguration.name}`);

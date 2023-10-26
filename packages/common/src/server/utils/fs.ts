@@ -1,10 +1,9 @@
-import { findWorkspaceDir } from '@pnpm/find-workspace-dir';
 import { access, constants, unlink, lstat } from 'node:fs/promises';
 import { resolve, basename, extname } from 'node:path';
 
-/**
- * Finds the monorepo root directory
- */
+import { findWorkspaceDir } from '@pnpm/find-workspace-dir';
+
+/** Finds the monorepo root directory */
 export async function findWorkspaceRoot() {
   const root = await findWorkspaceDir(__dirname);
   if (!root) throw new Error('Could not find workspace root');
@@ -30,9 +29,8 @@ export class UnixSocket {
   constructor(public path: string) {}
 
   /**
-   * Obtains the socket file by deleting it if it exists
-   * Will throw an error if the path exists but is not a socket file
-   * WARNING: This method does not create the socket file
+   * Obtains the socket file by deleting it if it exists Will throw an error if the path exists but
+   * is not a socket file WARNING: This method does not create the socket file
    */
   async obtain() {
     const stat = await lstat(this.path).catch(() => null);

@@ -3,11 +3,12 @@ import { Inter as FontSans } from 'next/font/google';
 
 import type { ReactNode } from 'react';
 
+import 'server-only';
+
 import { ThemeProvider } from '@/components/theme-provider';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
-import 'server-only';
 
 export const fontSans = FontSans({
   subsets: ['latin'],

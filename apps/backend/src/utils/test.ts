@@ -1,7 +1,9 @@
-import type { PrismaService } from '@/db/prisma.service';
-import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
+
+import { PostgreSqlContainer } from '@testcontainers/postgresql';
+
+import type { PrismaService } from '@/db/prisma.service';
 
 const execAsync = promisify(exec);
 

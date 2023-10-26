@@ -1,10 +1,11 @@
 import { Test } from '@nestjs/testing';
 
-import { PrismaService } from '@/db/prisma.service';
-import { createMockDB, type StartedPostgreSqlContainer, prismaTruncateDB } from '@/utils/test';
 import { faker } from '@faker-js/faker';
 import type { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+
+import { PrismaService } from '@/db/prisma.service';
+import { createMockDB, type StartedPostgreSqlContainer, prismaTruncateDB } from '@/utils/test';
 
 import { UserService, UserAlreadyExistsError, UserNotFound } from '../user.service';
 
