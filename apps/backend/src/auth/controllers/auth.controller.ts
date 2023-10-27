@@ -1,8 +1,9 @@
 import { Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
 
-import { User } from '@/decorators/user';
 import type { User as UserT } from '@prisma/client';
+
+import { User } from '@/decorators/user';
 
 import { UserLoginDto } from '../dto/user-login.dto';
 import { LocalAuthGuard } from '../guards/local-auth.guard';

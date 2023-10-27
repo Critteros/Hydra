@@ -1,8 +1,9 @@
 import { Test } from '@nestjs/testing';
 
+import type { User } from '@prisma/client';
+
 import { PrismaService } from '@/db/prisma.service';
 import { prismaTruncateDB, createMockDB, type StartedPostgreSqlContainer } from '@/utils/test';
-import type { User } from '@prisma/client';
 
 import { AuthModule } from '../../auth.module';
 import { AuthService } from '../auth.service';

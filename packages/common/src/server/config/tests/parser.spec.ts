@@ -1,7 +1,9 @@
-import { FileNotFound } from '@/server/errors';
-import mock from 'mock-fs';
 import { resolve } from 'node:path';
 import { cwd } from 'node:process';
+
+import mock from 'mock-fs';
+
+import { FileNotFound } from '@/server/errors';
 
 import { defaultConfig } from '../default';
 import { HydraConfig, BadConfigFormat } from '../parser';

@@ -1,13 +1,9 @@
-import { Card, CardBody, Text } from '@hydra-ipxe/ui';
+import { Typography } from '@/components/ui/typography';
 
 export default function Home() {
   return (
     <main>
-      <Card>
-        <CardBody>
-          <Text>View a summary of all your customers over the last month.</Text>
-        </CardBody>
-      </Card>
+      <Typography variant="h1">Test</Typography>
     </main>
   );
 }

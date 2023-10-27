@@ -1,10 +1,11 @@
+import { access, constants } from 'node:fs/promises';
+
 import { HttpModule } from '@nestjs/axios';
 import { Module, Global, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import type { Config } from '@hydra-ipxe/common/server/config';
 import chalk from 'chalk';
-import { access, constants } from 'node:fs/promises';
 
 import { ConfigModule } from './config/config.module';
 

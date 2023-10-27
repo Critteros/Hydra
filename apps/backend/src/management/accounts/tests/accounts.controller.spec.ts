@@ -1,11 +1,12 @@
 import { INestApplication, HttpStatus } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
+import { faker } from '@faker-js/faker';
+import request from 'supertest';
+
 import { AuthModule } from '@/auth/auth.module';
 import { PrismaService } from '@/db/prisma.service';
 import { prismaTruncateDB, createMockDB, type StartedPostgreSqlContainer } from '@/utils/test';
-import { faker } from '@faker-js/faker';
-import request from 'supertest';
 
 import { AccountsController } from '../accounts.controller';
 

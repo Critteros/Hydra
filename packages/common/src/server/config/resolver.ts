@@ -1,11 +1,12 @@
+import { homedir } from 'node:os';
+import { cwd } from 'node:process';
+
 import {
   YAML_CONFIG_HOME_SEARCH_PATHS,
   YAML_CONFIG_FILENAMES,
   YAML_CONFIG_SUPPORTED_EXTENSIONS,
 } from '@/server/constants';
 import { findWorkspaceRoot, resolveAccessibleFilePaths } from '@/server/utils/fs';
-import { homedir } from 'node:os';
-import { cwd } from 'node:process';
 
 type ConfigType = 'HIDDEN' | 'STANDARD' | 'LOCAL';
 
@@ -27,30 +28,31 @@ type PathMatrix = [string[], string[], string[]];
 const defaultHierarchy = ['LOCAL', 'HIDDEN', 'STANDARD'] as const;
 
 /**
- * @class
- * @name ConfigResolver
- * @description
- * This class is used to resolve config files.
- * It provides a default hierarchy, but it can be overwritten by passing a hierarchy array to the constructor.
- * The default hierarchy is:
+ * This class is used to resolve config files. It provides a default hierarchy, but it can be
+ * overwritten by passing a hierarchy array to the constructor. The default hierarchy is:
+ *
  * 1. LOCAL (e.g. hydra-config.local.yaml)
  * 2. HIDDEN (e.g .hydra-config.yaml)
- * 3. STANDARD (e.g. hydra-config.yaml)
- * LOCAL files are more important than HIDDEN files, which are more important than STANDARD files.
- * Each of those three categories is searched in the following places (in order):
- * 1. The current working directory
- * 2. The workspace root (if it exists)
- * 3. The home directory
+ * 3. STANDARD (e.g. hydra-config.yaml) LOCAL files are more important than HIDDEN files, which are
+ *    more important than STANDARD files. Each of those three categories is searched in the
+ *    following places (in order):
+ * 4. The current working directory
+ * 5. The workspace root (if it exists)
+ * 6. The home directory
+ *
+ * @example
+ *   const resolver = new ConfigResolver();
+ *   const paths = await resolver.run();
+ *   console.log(paths);
+ *
+ * @class
  * @param {ConfigResolverOptions} [options] - Options
  * @param {ConfigResolverOptions['search']} [options.search] - Search options
  * @param {boolean} [options.search.home] - Search home directory
  * @param {boolean} [options.search.cwd] - Search current working directory
  * @param {boolean} [options.search.workspaceRoot] - Search workspace root
  * @param {ConfigResolverOptions['hierarchy']} [options.hierarchy] - Hierarchy
- * @example
- * const resolver = new ConfigResolver();
- * const paths = await resolver.run();
- * console.log(paths);
+ * @name ConfigResolver
  */
 export class ConfigResolver {
   readonly searchOptions: Required<Exclude<ConfigResolverOptions['search'], undefined>>;

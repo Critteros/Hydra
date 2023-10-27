@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import { exclude } from '@/utils/objects';
 import type { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+
+import { exclude } from '@/utils/objects';
 
 import { UserService } from './user.service';
 

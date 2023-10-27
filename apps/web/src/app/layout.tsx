@@ -1,15 +1,19 @@
 import type { Metadata } from 'next';
-import { cookies } from 'next/headers';
+import { Inter as FontSans } from 'next/font/google';
 
 import type { ReactNode } from 'react';
 
-import { ColorModeScript } from '@hydra-ipxe/ui';
-import { ChakraContext } from '@hydra-ipxe/ui/providers';
-import { STORAGE_KEY, initialColorMode } from '@hydra-ipxe/ui/theme';
+import 'server-only';
 
-import { makeCookieString } from '~/utils/cookies';
+import { ThemeProvider } from '@/components/theme-provider';
+import { ModeToggle } from '@/components/ui/mode-toggle';
+import { cn } from '@/lib/utils';
+import '@/styles/globals.css';
 
-import './globals.css';
+export const fontSans = FontSans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
 
 export const metadata: Metadata = {
   title: 'Hydra Admin',
@@ -17,16 +21,13 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const cookie = cookies().get(STORAGE_KEY);
   return (
-    <html lang="en">
-      <body>
-        <ColorModeScript
-          initialColorMode={initialColorMode}
-          type={'cookie'}
-          storageKey={STORAGE_KEY}
-        />
-        <ChakraContext cookies={cookie && makeCookieString(cookie)}>{children}</ChakraContext>
+    <html lang="en" suppressHydrationWarning className="dark">
+      <body className={cn('min-h-screen bg-background font-sans antialiased')}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <ModeToggle />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

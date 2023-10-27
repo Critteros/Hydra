@@ -31,17 +31,11 @@
         {
             "name": "packages/tsconfig",
             "path": "../packages/tsconfig"
-        },
-        {
-            "name": "packages/ui",
-            "path": "../packages/ui"
         }
     ],
     "settings": {
         "jest.disabledWorkspaceFolders": [
             "packages/tsconfig",
-            "packages/ui",
-            "apps/docs",
             "ROOT",
             "apps/web",
             "packages/prettier-config",
@@ -59,6 +53,7 @@
                 "database": "postgres",
                 "username": "postgres"
             }
-        ]
+        ],
+        "terminal.integrated.persistentSessionReviveProcess": "never"
     }
 }

@@ -1,8 +1,10 @@
-import * as constants from '@/server/constants';
-import * as fsUtils from '@/server/utils/fs';
-import mock from 'mock-fs';
 import * as os from 'node:os';
 import { cwd } from 'node:process';
+
+import mock from 'mock-fs';
+
+import * as constants from '@/server/constants';
+import * as fsUtils from '@/server/utils/fs';
 
 import { ConfigResolver, type ConfigResolverOptions } from '../resolver';
 
