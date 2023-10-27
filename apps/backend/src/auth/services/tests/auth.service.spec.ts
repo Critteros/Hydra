@@ -3,11 +3,11 @@ import { Test } from '@nestjs/testing';
 import type { User } from '@prisma/client';
 
 import { PrismaService } from '@/db/prisma.service';
+import { UserService } from '@/user';
 import { prismaTruncateDB, createMockDB, type StartedPostgreSqlContainer } from '@/utils/test';
 
 import { AuthModule } from '../../auth.module';
 import { AuthService } from '../auth.service';
-import { UserService } from '../user.service';
 
 describe('Test AuthService', () => {
   let dbService: StartedPostgreSqlContainer;
