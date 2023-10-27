@@ -8,7 +8,7 @@
             "runOn": "folderOpen",
         },
         "presentation": {
-            "reveal": "silent",
+            "reveal": "never",
         },
     }]
 }

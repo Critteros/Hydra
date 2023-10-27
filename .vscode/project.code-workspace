@@ -53,6 +53,7 @@
                 "database": "postgres",
                 "username": "postgres"
             }
-        ]
+        ],
+        "terminal.integrated.persistentSessionReviveProcess": "never"
     }
 }
