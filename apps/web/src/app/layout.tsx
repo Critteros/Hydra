@@ -6,7 +6,6 @@ import type { ReactNode } from 'react';
 import 'server-only';
 
 import { ThemeProvider } from '@/components/theme-provider';
-import { ModeToggle } from '@/components/ui/mode-toggle';
 import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
 
@@ -23,9 +22,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className="dark">
-      <body className={cn('min-h-screen bg-background font-sans antialiased')}>
+      <body className={cn('min-h-screen bg-background font-sans antialiased flex flex-col')}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <ModeToggle />
           {children}
         </ThemeProvider>
       </body>
