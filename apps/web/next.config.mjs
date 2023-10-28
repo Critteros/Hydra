@@ -10,7 +10,17 @@ const withBundleAnalyzer = (await import('@next/bundle-analyzer')).default({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = (phase, { defaultConfig }) => {
-  const commonConfig = {};
+  const commonConfig = {
+    async redirects() {
+      return [
+        {
+          source: '/',
+          destination: '/dashboard',
+          permanent: true,
+        },
+      ];
+    },
+  };
 
   // For development, proxy requests to the API server
   if (phase === PHASE_DEVELOPMENT_SERVER) {

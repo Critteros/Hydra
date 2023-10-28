@@ -21,5 +21,6 @@ export function useHistory() {
     forward: () => router.forward(),
     historyLength,
     backOrDefault,
+    refresh: () => router.refresh(),
   } as const;
 }
