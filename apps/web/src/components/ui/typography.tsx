@@ -25,6 +25,5 @@ export function Typography({
   variant = 'p',
   as: As = variant,
 }: TypographyProops) {
-  console.log('rendered');
   return <As className={cn(styles[variant], className)}>{children}</As>;
 }

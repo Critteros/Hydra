@@ -34,5 +34,5 @@
       "cache": false
     }
   },
-  "globalPassThroughEnv": ["DATABASE_URL", "DEBUG", "COOKIE_SECRET"]
+  "globalPassThroughEnv": ["DATABASE_URL", "DEBUG", "COOKIE_SECRET", "BACKEND_BASE_URL"]
 }
