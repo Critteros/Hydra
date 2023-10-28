@@ -14,7 +14,7 @@ export const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: 'Hydra Admin',
+  title: 'Hydra',
   description: 'Hydra Admin website',
 };
 
