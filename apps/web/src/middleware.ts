@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 import { debug } from 'debug';
 
-import { isAuthorized } from '@/lib/auth';
+import { isAuthorized } from '@/lib/server/auth';
 
 const log = debug('web:middleware');
 
