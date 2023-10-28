@@ -1,9 +1,5 @@
-import { Typography } from '@/components/ui/typography';
+import { redirect } from 'next/navigation';
 
-export default function Home() {
-  return (
-    <main>
-      <Typography variant="h1">Test</Typography>
-    </main>
-  );
+export default function HomePage() {
+  redirect('/dashboard');
 }
