@@ -1,5 +1,8 @@
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js';
 
+// Ensure that the environment variables are loaded before anything else
+import './src/env.mjs';
+
 const withBundleAnalyzer = (await import('@next/bundle-analyzer')).default({
   enabled: true,
   openAnalyzer: false,

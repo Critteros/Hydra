@@ -1,9 +1,9 @@
 import { Typography } from '@/components/ui/typography';
 
-export default function LoginPage() {
+export default function DashboardPage() {
   return (
     <main>
-      <Typography>Login Page</Typography>
+      <Typography>Dashboard Page</Typography>
     </main>
   );
 }
