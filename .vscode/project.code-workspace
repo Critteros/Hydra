@@ -1,59 +1,59 @@
 {
-    "folders": [
-        {
-            "name": "ROOT",
-            "path": "../"
-        }, 
-        {
-            "name": "apps/web",
-            "path": "../apps/web"
-        },
-        {
-            "name": "apps/backend",
-            "path": "../apps/backend"
-        },
-        {
-            "name": "apps/cli",
-            "path": "../apps/cli"
-        },
-        {
-            "name": "packages/common",
-            "path": "../packages/common"
-        },
-        {
-            "name": "packages/eslint-config-hydra",
-            "path": "../packages/eslint-config-hydra"
-        },
-        {
-            "name": "packages/prettier-config",
-            "path": "../packages/prettier-config"
-        },
-        {
-            "name": "packages/tsconfig",
-            "path": "../packages/tsconfig"
-        }
-    ],
-    "settings": {
-        "jest.disabledWorkspaceFolders": [
-            "packages/tsconfig",
-            "ROOT",
-            "apps/web",
-            "packages/prettier-config",
-            "packages/eslint-config-hydra"
-        ],
-        "remote.autoForwardPorts": false,
-        "remote.restoreForwardedPorts": false,
-        "sqltools.connections": [
-            {
-                "previewLimit": 50,
-                "server": "localhost",
-                "port": 5432,
-                "driver": "PostgreSQL",
-                "name": "Local DB",
-                "database": "postgres",
-                "username": "postgres"
-            }
-        ],
-        "terminal.integrated.persistentSessionReviveProcess": "never"
+  "folders": [
+    {
+      "name": "ROOT",
+      "path": "../"
+    },
+    {
+      "name": "apps/web",
+      "path": "../apps/web"
+    },
+    {
+      "name": "apps/backend",
+      "path": "../apps/backend"
+    },
+    {
+      "name": "apps/cli",
+      "path": "../apps/cli"
+    },
+    {
+      "name": "packages/common",
+      "path": "../packages/common"
+    },
+    {
+      "name": "packages/eslint-config-hydra",
+      "path": "../packages/eslint-config-hydra"
+    },
+    {
+      "name": "packages/prettier-config",
+      "path": "../packages/prettier-config"
+    },
+    {
+      "name": "packages/tsconfig",
+      "path": "../packages/tsconfig"
     }
+  ],
+  "settings": {
+    "jest.disabledWorkspaceFolders": [
+      "packages/tsconfig",
+      "ROOT",
+      "apps/web",
+      "packages/prettier-config",
+      "packages/eslint-config-hydra"
+    ],
+    "remote.autoForwardPorts": false,
+    "remote.restoreForwardedPorts": false,
+    "sqltools.connections": [
+      {
+        "previewLimit": 50,
+        "server": "localhost",
+        "port": 5432,
+        "driver": "PostgreSQL",
+        "name": "Local DB",
+        "database": "postgres",
+        "username": "postgres"
+      }
+    ],
+    "terminal.integrated.persistentSessionReviveProcess": "onExitAndWindowClose"
+  }
 }
