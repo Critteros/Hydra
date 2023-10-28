@@ -3,8 +3,8 @@ import type { NextRequest } from 'next/server';
 
 import { env } from '$env';
 
-const sessionCookieName = 'session';
-const sessionEndpoint = new URL('/api/auth/session', env.BACKEND_BASE_URL).toString();
+export const sessionCookieName = 'session';
+export const sessionEndpoint = new URL('/api/auth/session', env.BACKEND_BASE_URL).toString();
 const publicRoutes = ['/login'];
 
 export function extractSessionCookie() {
