@@ -1,5 +1,5 @@
 import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo';
-import { Module } from '@nestjs/common';
+import { Module, type MiddlewareConsumer } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 
 import { resolve } from 'path';
@@ -9,7 +9,10 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
 import { DbModule } from './db/db.module';
+import { RedisModule } from './db/redis.module';
 import { ManagementModule } from './management/management.module';
+import { PassportMiddleware } from './middleware/passport.middleware';
+import { SessionMiddleware } from './middleware/session.middleware';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -48,8 +51,14 @@ import { UserModule } from './user/user.module';
     AuthModule,
     DbModule,
     UserModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(SessionMiddleware).forRoutes('*');
+    consumer.apply(PassportMiddleware).forRoutes('*');
+  }
+}
