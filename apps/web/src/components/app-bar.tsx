@@ -28,7 +28,7 @@ export async function AppBar() {
   const letter = (name?.[0] ?? email[0] ?? '?').toUpperCase();
 
   return (
-    <header className="flex w-full flex-row border-b p-2">
+    <header className="flex w-full grow-0 flex-row border-b p-2">
       <div className="container mr-auto flex h-12 items-center">
         <div className="mr-auto">
           <Link href="/" replace>
