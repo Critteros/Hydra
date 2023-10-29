@@ -1,4 +1,8 @@
+import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
+
+import { resolve } from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,7 +13,37 @@ import { ManagementModule } from './management/management.module';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [ManagementModule, ConfigModule, AuthModule, DbModule, UserModule],
+  imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: resolve(process.cwd(), 'schema.gql'),
+      formatError: (error) => {
+        const originalError = error.extensions?.originalError as
+          | { message: string; error: string; statusCode: number }
+          | undefined;
+
+        if (!originalError) {
+          return {
+            message: error.message,
+            code: error.extensions?.code,
+            path: error.path,
+          };
+        }
+
+        return {
+          message: originalError.message,
+          code: originalError.statusCode,
+          path: error.path,
+        };
+      },
+      path: '/api/graphql',
+    }),
+    ManagementModule,
+    ConfigModule,
+    AuthModule,
+    DbModule,
+    UserModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

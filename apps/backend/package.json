@@ -47,10 +47,13 @@
     "testTimeout": 60000
   },
   "dependencies": {
+    "@apollo/server": "^4.9.5",
     "@hydra-ipxe/common": "workspace:*",
+    "@nestjs/apollo": "^12.0.9",
     "@nestjs/common": "^10.2.7",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.2.7",
+    "@nestjs/graphql": "^12.0.9",
     "@nestjs/passport": "^10.0.2",
     "@nestjs/platform-express": "^10.2.7",
     "@nestjs/swagger": "^7.1.13",
@@ -60,6 +63,7 @@
     "connect-redis": "^7.1.0",
     "debug": "^4.3.4",
     "express-session": "^1.17.3",
+    "graphql": "^16.8.1",
     "ms": "^2.1.3",
     "nestjs-zod": "^3.0.0",
     "passport": "^0.6.0",
