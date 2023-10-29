@@ -37,6 +37,11 @@ import { UserModule } from './user/user.module';
         };
       },
       path: '/api/graphql',
+      playground: {
+        settings: {
+          'request.credentials': 'include',
+        },
+      },
     }),
     ManagementModule,
     ConfigModule,

@@ -1,10 +1,14 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UseGuards } from '@nestjs/common';
 import { Resolver, Query, Args, ID } from '@nestjs/graphql';
 
+import { UserAuthenticated } from '@/auth/guards';
+
+import { User as InjectUser } from '../decorators/user';
 import { User } from '../schemas/user.schems';
 import { UserService } from '../services/user.service';
 
 @Resolver(() => User)
+@UseGuards(UserAuthenticated)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
@@ -25,6 +29,11 @@ export class UserResolver {
 
     const user = await this.userService.find({ uid, email });
 
+    return user;
+  }
+
+  @Query(() => User, { name: 'me', description: 'Returns the current user' })
+  currentUser(@InjectUser() user: User) {
     return user;
   }
 }

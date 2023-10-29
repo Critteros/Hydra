@@ -25,4 +25,7 @@ enum AccountType {
 type Query {
   users: [User!]!
   user(uid: ID, email: String): User
+
+  """Returns the current user"""
+  me: User!
 }
