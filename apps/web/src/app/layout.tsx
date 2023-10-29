@@ -23,7 +23,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const currentTheme = cookies().get('theme')?.value ?? defaultTheme;
   return (
     <html lang="en" suppressHydrationWarning className={currentTheme}>
-      <body className={cn('flex min-h-screen flex-col bg-background font-sans antialiased')}>
+      <body
+        className={cn(
+          'flex max-h-screen min-h-screen flex-col bg-background font-sans antialiased',
+        )}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme={defaultTheme}
