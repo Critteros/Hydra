@@ -4,35 +4,16 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import type { Config } from '@hydra-ipxe/common/server/config';
-import RedisStore from 'connect-redis';
-import session from 'express-session';
-import passport from 'passport';
-import { createClient } from 'redis';
 
 import { version } from '../package.json';
 
 import { AppModule } from './app.module';
-
-const redisClient = createClient();
-const redisStore = new RedisStore({ client: redisClient, prefix: 'hydra-ipxe:' });
 
 async function setupApi() {
   const logger = new Logger('setupApi');
   logger.log('Setting up API server');
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
-  await redisClient.connect();
-  app.use(
-    session({
-      store: redisStore,
-      secret: process.env.COOKIE_SECRET ?? 'hydra-ipxe',
-      cookie: { secure: false },
-      resave: false,
-      saveUninitialized: false,
-      name: 'session',
-    }),
-  );
-  app.use(passport.session());
 
   const openApiConfig = new DocumentBuilder()
     .setTitle('Hydra iPXE REST API')

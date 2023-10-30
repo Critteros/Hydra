@@ -1,0 +1,31 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  """Unique identifier of the user"""
+  uid: ID!
+
+  """Email address of the user"""
+  email: String!
+
+  """Nickname for the user"""
+  name: String
+
+  """Type of the user account"""
+  accountType: AccountType!
+}
+
+"""Type of the user account"""
+enum AccountType {
+  STANDARD
+  ADMIN
+}
+
+type Query {
+  users: [User!]!
+  user(uid: ID, email: String): User
+
+  """Returns the current user"""
+  me: User!
+}
