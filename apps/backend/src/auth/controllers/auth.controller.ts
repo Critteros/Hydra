@@ -1,6 +1,6 @@
 import { promisify } from 'node:util';
 
-import { Controller, Get, Post, UseGuards, Session } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards, Session, HttpStatus, HttpCode } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
 
 import { User, type AuthenticatedUser } from '@/user';
@@ -15,6 +15,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @PublicRoute()
+  @HttpCode(HttpStatus.OK)
   @ApiBody({ type: UserLoginDto })
   async login(@User() user: AuthenticatedUser) {
     return {
