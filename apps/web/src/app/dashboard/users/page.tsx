@@ -1,15 +1,15 @@
 import 'server-only';
 
-import { Typography } from '@/components/ui/typography';
 import { getClient } from '@/lib/server/apollo-client';
 
+import { columns } from './columns';
 import * as queries from './queries';
+import { UsersTable } from './users-table';
 
 export default async function DashboardUsersPage() {
-  const { data, error } = await getClient().query({
+  const { data } = await getClient().query({
     query: queries.allUsers,
   });
 
-  console.log(data, error);
-  return <Typography>Dashboard Users Page</Typography>;
+  return <UsersTable columns={columns} data={data.users} />;
 }
