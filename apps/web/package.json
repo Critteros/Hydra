@@ -10,7 +10,9 @@
     "build": "dotenv -e .env -- next build",
     "dev": "dotenv -e .env -- next dev -p 3000",
     "lint": "eslint --ext .ts,.tsx src",
-    "start": "dotenv -e .env -- next start"
+    "start": "dotenv -e .env -- next start",
+    "codegen": "graphql-codegen",
+    "codegen:watch": "graphql-codegen --watch"
   },
   "prettier": "@hydra-ipxe/prettier-config",
   "dependencies": {
@@ -44,10 +46,14 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
     "@hydra-ipxe/prettier-config": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",
     "@next/bundle-analyzer": "^13.5.6",
+    "@parcel/watcher": "^2.3.0",
     "@types/debug": "^4.1.10",
     "@types/js-cookie": "^3.0.5",
     "@types/node": "latest",

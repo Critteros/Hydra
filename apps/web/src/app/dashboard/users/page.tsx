@@ -1,23 +1,15 @@
-import { gql } from '@apollo/client';
+import 'server-only';
 
 import { Typography } from '@/components/ui/typography';
 import { getClient } from '@/lib/server/apollo-client';
 
-const usersQuery = gql`
-  query Users {
-    users {
-      uid
-      email
-      name
-      accountType
-    }
-  }
-`;
+import * as queries from './queries';
 
 export default async function DashboardUsersPage() {
   const { data, error } = await getClient().query({
-    query: usersQuery,
+    query: queries.allUsers,
   });
+
   console.log(data, error);
   return <Typography>Dashboard Users Page</Typography>;
 }
