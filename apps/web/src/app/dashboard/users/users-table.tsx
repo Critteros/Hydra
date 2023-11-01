@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 
 import {
   type ColumnDef,
@@ -10,7 +10,6 @@ import {
   getPaginationRowModel,
 } from '@tanstack/react-table';
 
-import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -19,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { DataTablePagination } from '@/components/ui/table/data-table-pagination';
 
 import type { User } from './queries';
 
@@ -29,17 +29,7 @@ type UserTableProps = {
 
 export function UsersTable({ columns, data }: UserTableProps) {
   const tableContainerRef = useRef<HTMLDivElement>(null);
-  const {
-    getHeaderGroups,
-    getRowModel,
-    previousPage,
-    getCanPreviousPage,
-    nextPage,
-    getCanNextPage,
-    initialState,
-    setPageSize,
-    getPageCount,
-  } = useReactTable({
+  const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -50,38 +40,9 @@ export function UsersTable({ columns, data }: UserTableProps) {
       },
     },
   });
-  const headerGroups = getHeaderGroups();
-  const { rows } = getRowModel();
+  const headerGroups = table.getHeaderGroups();
+  const { rows } = table.getRowModel();
   const hasRows = rows.length > 0;
-  const haveMultiplePages = getPageCount() > 1;
-
-  useEffect(() => {
-    const getPageSize = () => {
-      const tableContainer = tableContainerRef.current;
-      const parentElement = tableContainer?.parentElement;
-
-      if (!tableContainer || !parentElement) {
-        return initialState.pagination.pageSize;
-      }
-
-      const { height } = parentElement.getBoundingClientRect();
-
-      const estimatedRowHeight = 56;
-      const estimatedHeaderHeight = 60;
-
-      return Math.floor((height - estimatedHeaderHeight) / estimatedRowHeight - 1);
-    };
-
-    const handleResize = () => {
-      setPageSize(getPageSize());
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [initialState.pagination.pageSize, setPageSize]);
 
   return (
     <div className="w-full rounded-md border" ref={tableContainerRef}>
@@ -124,26 +85,8 @@ export function UsersTable({ columns, data }: UserTableProps) {
           )}
         </TableBody>
       </Table>
-      {haveMultiplePages && (
-        <div className="flex items-center justify-end space-x-2 p-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => previousPage()}
-            disabled={!getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => nextPage()}
-            disabled={!getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      )}
+
+      <DataTablePagination table={table} />
     </div>
   );
 }

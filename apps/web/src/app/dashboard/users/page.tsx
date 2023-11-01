@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { AccountType } from '@/__generated__/graphql';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { getClient } from '@/lib/server/apollo-client';
 
 import { columns } from './columns';
@@ -23,8 +24,10 @@ export default async function DashboardUsersPage() {
   });
 
   return (
-    <main className="flex grow items-center justify-center">
-      <UsersTable columns={columns} data={mock_data} />
-    </main>
+    <ScrollArea className="flex min-h-0 grow">
+      <main className="flex grow items-center justify-center pr-4">
+        <UsersTable columns={columns} data={mock_data} />
+      </main>
+    </ScrollArea>
   );
 }
