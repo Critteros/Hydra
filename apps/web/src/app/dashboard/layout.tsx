@@ -33,7 +33,7 @@ export default function DashboardLoayout({ children }: { children: ReactNode }) 
       <AppBar />
       <div className="container relative my-2 mb-5 flex h-full min-h-0 grow gap-4 pt-5">
         <SidebarNavigation items={sidebarConfig} />
-        <main>{children}</main>
+        {children}
       </div>
     </>
   );
