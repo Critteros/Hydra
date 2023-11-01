@@ -1,6 +1,14 @@
 'use client';
 
-import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useRef } from 'react';
+
+import {
+  type ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+  getPaginationRowModel,
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -10,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { DataTablePagination } from '@/components/ui/table/data-table-pagination';
 
 import type { User } from './queries';
 
@@ -19,23 +28,30 @@ type UserTableProps = {
 };
 
 export function UsersTable({ columns, data }: UserTableProps) {
-  const { getHeaderGroups, getRowModel } = useReactTable({
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
   });
-  const headerGroups = getHeaderGroups();
-  const { rows } = getRowModel();
+  const headerGroups = table.getHeaderGroups();
+  const { rows } = table.getRowModel();
   const hasRows = rows.length > 0;
 
   return (
-    <div className="rounded-md border">
+    <div className="w-full rounded-md border" ref={tableContainerRef}>
       <Table>
         <TableHeader>
           {headerGroups.map(({ id: headerGroupId, headers }) => (
             <TableRow key={headerGroupId}>
               {headers.map(({ id: headerId, isPlaceholder, column: { columnDef }, getContext }) => (
-                <TableHead key={headerId}>
+                <TableHead key={headerId} className="relative">
                   {isPlaceholder ? null : flexRender(columnDef.header, getContext())}
                 </TableHead>
               ))}
@@ -69,6 +85,8 @@ export function UsersTable({ columns, data }: UserTableProps) {
           )}
         </TableBody>
       </Table>
+
+      <DataTablePagination table={table} />
     </div>
   );
 }
