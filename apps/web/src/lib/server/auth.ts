@@ -22,6 +22,18 @@ export async function checkSession(sessionCookie?: string) {
   return resp.ok;
 }
 
+export function getServerFetchOptions() {
+  const authCookie = extractSessionCookie();
+  if (!authCookie) return {};
+
+  return {
+    headers: {
+      cookie: `${sessionCookieName}=${authCookie}`,
+    },
+    cache: 'no-store',
+  } as const;
+}
+
 export async function isAuthenticated(request: NextRequest) {
   const sessionCookie = request.cookies.get(sessionCookieName);
   if (!sessionCookie) return false;

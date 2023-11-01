@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import { cookies } from 'next/headers';
 
-import type { ReactNode } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { ThemeProvider } from '@/components/theme-provider';
+import { ApolloWrapper } from '@/lib/client/ApolloWrapper';
 import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
 
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   description: 'Hydra Admin website',
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: PropsWithChildren) {
   const defaultTheme = 'dark';
   const currentTheme = cookies().get('theme')?.value ?? defaultTheme;
   return (
@@ -34,7 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ApolloWrapper>{children}</ApolloWrapper>
         </ThemeProvider>
       </body>
     </html>
