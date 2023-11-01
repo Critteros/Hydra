@@ -9,7 +9,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "$env": ["./src/env.mjs"]
+      "$env": ["./src/env.mjs"],
+      "$gql": ["./src/__generated__/index.ts"]
     },
     "moduleResolution": "node",
     "jsx": "preserve"
