@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import type { PropsWithChildren } from 'react';
 
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
 import { ApolloWrapper } from '@/lib/client/ApolloWrapper';
 import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           disableTransitionOnChange
         >
           <ApolloWrapper>{children}</ApolloWrapper>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

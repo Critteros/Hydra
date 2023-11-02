@@ -9,6 +9,7 @@ import { DataTableColumHeader } from '@/components/ui/table/data-table-column-he
 import { cn } from '@/lib/utils';
 
 import type { User } from './queries';
+import { UsersTableActions } from './users-table-actions';
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -93,5 +94,9 @@ export const columns: ColumnDef<User>[] = [
     meta: {
       label: 'Account Type',
     },
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => <UsersTableActions row={row} />,
   },
 ];
