@@ -11,7 +11,7 @@ import { UsersTableToolbar } from './users-table-toolbar';
 
 export default async function DashboardUsersPage() {
   const { data } = await getClient().query({
-    query: queries.allUsers,
+    query: queries.getAllUsers,
   });
 
   return (

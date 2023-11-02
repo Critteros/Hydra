@@ -2,9 +2,9 @@ import { gql, type DocumentType } from '$gql';
 
 import type { ArrayElement } from '@/lib/types';
 
-export type User = ArrayElement<DocumentType<typeof allUsers>['users']>;
+export type User = ArrayElement<DocumentType<typeof getAllUsers>['users']>;
 
-export const allUsers = gql(`
+export const getAllUsers = gql(`
   query Users {
     users {
       uid
@@ -15,7 +15,7 @@ export const allUsers = gql(`
   }
 `);
 
-export const currentUser = gql(`
+export const getCurrentUser = gql(`
   query CurrentUser {
     me {
       uid
