@@ -38,6 +38,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           disableTransitionOnChange
         >
           <ApolloWrapper
+            // FIXME: There must be a better way to use cookies in SSR mode, this sends back the JS only cookies back to client
             session={{ cookieName: sessionCookieName, cookie: extractSessionCookie() }}
           >
             {children}

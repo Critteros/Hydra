@@ -2,9 +2,10 @@
 
 import { useState, useRef } from 'react';
 
+import { useSuspenseQuery } from '@apollo/client';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import type { Row } from '@tanstack/react-table';
-import { ClipboardCopy } from 'lucide-react';
+import { ClipboardCopy, LogIn } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,13 +20,16 @@ import { useToast } from '@/components/ui/use-toast';
 
 import { ChangePasswordAction } from './action-items/change-password';
 import { EditAction } from './action-items/edit-action';
-import type { User } from './queries';
+import { type User, getCurrentUser } from './queries';
 
 type UsersTableActionsProps = {
   row: Row<User>;
 };
 
 export function UsersTableActions({ row }: UsersTableActionsProps) {
+  const {
+    data: { me: currentUser },
+  } = useSuspenseQuery(getCurrentUser);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [hasOpenDialog, setHasOpenDialog] = useState(false);
   const dropdownTriggerRef = useRef<HTMLButtonElement>(null);
@@ -91,6 +95,15 @@ export function UsersTableActions({ row }: UsersTableActionsProps) {
           onSelect={handleDialogItemSelect}
           user={user}
         />
+        {currentUser?.uid !== user.uid && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <LogIn className="mr-2 h-4 w-4" />
+              <span>Login in as</span>
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
