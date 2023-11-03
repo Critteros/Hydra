@@ -32,9 +32,9 @@ import type { User } from '../queries';
 
 const formSchema = z
   .object({
-    oldPassword: z.string().min(1),
-    newPassword: z.string().min(1),
-    confirmNewPassword: z.string().min(1),
+    oldPassword: z.string().min(1, { message: 'Old password cannot be empty' }),
+    newPassword: z.string().min(1, { message: 'New password cannot be empty' }),
+    confirmNewPassword: z.string().min(1, { message: 'Confirm new password cannot be empty' }),
   })
   .refine((data) => data.newPassword === data.confirmNewPassword, {
     message: 'Passwords do not match',

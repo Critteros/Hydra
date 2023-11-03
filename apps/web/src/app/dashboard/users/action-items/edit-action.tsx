@@ -39,7 +39,7 @@ import { useToast } from '@/components/ui/use-toast';
 import type { User } from '../queries';
 
 const formSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email({ message: 'Invalid email address' }),
   name: z.string(),
   accountType: z.nativeEnum(AccountType),
 });
