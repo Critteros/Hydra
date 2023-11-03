@@ -7,9 +7,13 @@ import type { PropsWithChildren } from 'react';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { ApolloWrapper } from '@/lib/client/ApolloWrapper';
+import { getClient } from '@/lib/server/apollo-client';
 import { extractSessionCookie, sessionCookieName } from '@/lib/server/auth';
 import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
+
+import { CurrentUserProvider } from './current-user-context';
+import { getCurrentUser } from './queries';
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -21,7 +25,11 @@ export const metadata: Metadata = {
   description: 'Hydra Admin website',
 };
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default async function RootLayout({ children }: PropsWithChildren) {
+  const {
+    data: { me: currentUser },
+  } = await getClient().query({ query: getCurrentUser });
+
   const defaultTheme = 'dark';
   const currentTheme = cookies().get('theme')?.value ?? defaultTheme;
   return (
@@ -37,12 +45,14 @@ export default function RootLayout({ children }: PropsWithChildren) {
           enableSystem
           disableTransitionOnChange
         >
-          <ApolloWrapper
-            // FIXME: There must be a better way to use cookies in SSR mode, this sends back the JS only cookies back to client
-            session={{ cookieName: sessionCookieName, cookie: extractSessionCookie() }}
-          >
-            {children}
-          </ApolloWrapper>
+          <CurrentUserProvider user={currentUser}>
+            <ApolloWrapper
+              // FIXME: There must be a better way to use cookies in SSR mode, this sends back the JS only cookies back to client
+              session={{ cookieName: sessionCookieName, cookie: extractSessionCookie() }}
+            >
+              {children}
+            </ApolloWrapper>
+          </CurrentUserProvider>
           <Toaster />
         </ThemeProvider>
       </body>
