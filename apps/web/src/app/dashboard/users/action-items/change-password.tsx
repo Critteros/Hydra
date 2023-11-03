@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 
 import type { ComponentProps } from 'react';
 
+import { type ApolloError, useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { StatusCodes } from 'http-status-codes';
 import { KeyRound } from 'lucide-react';
@@ -30,11 +31,13 @@ import { useToast } from '@/components/ui/use-toast';
 
 import type { User } from '../queries';
 
+import { changeCurentUserPasswordMutation } from './mutations';
+
 const formSchema = z
   .object({
     oldPassword: z.string().min(1, { message: 'Old password cannot be empty' }),
-    newPassword: z.string().min(1, { message: 'New password cannot be empty' }),
-    confirmNewPassword: z.string().min(1, { message: 'Confirm new password cannot be empty' }),
+    newPassword: z.string().min(4, { message: 'New password cannot be empty' }),
+    confirmNewPassword: z.string().min(4, { message: 'Confirm new password cannot be empty' }),
   })
   .refine((data) => data.newPassword === data.confirmNewPassword, {
     message: 'Passwords do not match',
@@ -48,6 +51,7 @@ type ChangePasswordActionProps = { user: User } & Pick<
 >;
 
 export function ChangePasswordAction({ user, ...props }: ChangePasswordActionProps) {
+  const [changeCurrentUserPassword, { error }] = useMutation(changeCurentUserPasswordMutation);
   const { toast } = useToast();
   const { refresh } = useRouter();
 
@@ -56,14 +60,35 @@ export function ChangePasswordAction({ user, ...props }: ChangePasswordActionPro
     defaultValues: {
       oldPassword: '',
       newPassword: '',
+      confirmNewPassword: '',
     },
   });
   const { isSubmitting } = form.formState;
 
   const onSubmit = async (values: FormSchema) => {
-    console.log(values);
+    try {
+      await changeCurrentUserPassword({
+        variables: {
+          data: {
+            currentPassword: values.oldPassword,
+            newPassword: values.newPassword,
+          },
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      toast({
+        title: 'Password change failed',
+        description: `The password for ${user.email} could not be changed. Reason: ${error?.message}`,
+        variant: 'destructive',
+      });
+      form.setError('root.serverError', {
+        type: StatusCodes.BAD_REQUEST.toString(),
+        message: (e as ApolloError).message,
+      });
+      return;
+    }
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     toast({
       title: 'Password changed',
       description: `The password for ${user.email} has been changed`,
@@ -97,7 +122,13 @@ export function ChangePasswordAction({ user, ...props }: ChangePasswordActionPro
                 <FormItem className="grid grid-cols-4 items-center gap-4">
                   <FormLabel className="text-right">Old password</FormLabel>
                   <FormControl>
-                    <Input className="col-span-3" type="password" id={field.name} {...field} />
+                    <Input
+                      className="col-span-3"
+                      type="password"
+                      autoComplete="current-password"
+                      id={field.name}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="col-span-3 col-start-2" />
                 </FormItem>
@@ -110,7 +141,13 @@ export function ChangePasswordAction({ user, ...props }: ChangePasswordActionPro
                 <FormItem className="grid grid-cols-4 items-center gap-4">
                   <FormLabel className="text-right">New password</FormLabel>
                   <FormControl>
-                    <Input className="col-span-3" type="password" id={field.name} {...field} />
+                    <Input
+                      className="col-span-3"
+                      type="password"
+                      autoComplete="new-password"
+                      id={field.name}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="col-span-3 col-start-2" />
                 </FormItem>
@@ -123,16 +160,22 @@ export function ChangePasswordAction({ user, ...props }: ChangePasswordActionPro
                 <FormItem className="grid grid-cols-4 items-center gap-4">
                   <FormLabel className="text-right">Confirm new password</FormLabel>
                   <FormControl>
-                    <Input className="col-span-3" type="password" id={field.name} {...field} />
+                    <Input
+                      className="col-span-3"
+                      type="password"
+                      autoComplete="new-password"
+                      id={field.name}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="col-span-3 col-start-2" />
                 </FormItem>
               )}
             />
             {form.formState.errors.root?.serverError?.type ==
-              StatusCodes.UNAUTHORIZED.toString() && (
+              StatusCodes.BAD_REQUEST.toString() && (
               <span className="text-sm font-medium text-destructive">
-                Invalid email or password
+                {(form.formState.errors.root?.serverError as ApolloError).message}
               </span>
             )}
             <Button type="submit" disabled={isSubmitting} className="w-full">

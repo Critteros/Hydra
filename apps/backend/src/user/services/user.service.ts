@@ -9,6 +9,7 @@ import { PrismaErrorCode, remapPrismaError } from '@/utils/prisma/errors';
 
 export const UserAlreadyExistsError = makeCustomError('UserAlreadyExistsError');
 export const UserNotFound = makeCustomError('UserNotFound');
+export const UserPasswordDoesNotMatch = makeCustomError('UserPasswordDoesNotMatch');
 
 @Injectable()
 export class UserService {
@@ -102,6 +103,62 @@ export class UserService {
       return await this.prisma.user.update({
         data,
         where,
+      });
+    } catch (error) {
+      throw remapPrismaError({
+        error,
+        toMatchError: Prisma.PrismaClientKnownRequestError,
+        code: PrismaErrorCode.RecordsNotFound,
+        throw: new UserNotFound(`User with query ${JSON.stringify(where)} is not found`),
+      });
+    }
+  }
+
+  async updatePasswordChecked(
+    where: Prisma.UserWhereUniqueInput,
+    {
+      oldPassword,
+      newPassword,
+    }: {
+      oldPassword: Prisma.UserCreateInput['password'];
+      newPassword: Prisma.UserCreateInput['password'];
+    },
+  ) {
+    const user = await this.prisma.user.findFirst({
+      where,
+    });
+
+    if (!user) {
+      throw new UserNotFound(`User with query ${JSON.stringify(where)} is not found`);
+    }
+
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isPasswordValid) {
+      throw new UserPasswordDoesNotMatch('Invalid password');
+    }
+
+    const password = await bcrypt.hash(newPassword, 10);
+
+    return this.prisma.user.update({
+      where: {
+        uid: user.uid,
+      },
+      data: {
+        password,
+      },
+    });
+  }
+
+  async updatePasswordUnckecked(where: Prisma.UserWhereUniqueInput, newPassword: string) {
+    const password = await bcrypt.hash(newPassword, 10);
+
+    try {
+      return this.prisma.user.update({
+        where,
+        data: {
+          password,
+        },
       });
     } catch (error) {
       throw remapPrismaError({

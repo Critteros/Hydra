@@ -1,12 +1,14 @@
 import { ForbiddenError } from '@nestjs/apollo';
-import { BadRequestException, UseGuards } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common';
 import { Resolver, Query, Args, ID, Mutation } from '@nestjs/graphql';
+
+import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 
 import { UserAuthenticated } from '@/auth/guards';
 
 import { User as InjectUser } from '../decorators/user';
-import { User, UserUpdateInput } from '../schemas/user.schems';
-import { UserService } from '../services/user.service';
+import { User, UserUpdateInput, UpdatePasswordInput } from '../schemas/user.schems';
+import { UserService, UserNotFound, UserPasswordDoesNotMatch } from '../services/user.service';
 
 @Resolver(() => User)
 @UseGuards(UserAuthenticated)
@@ -39,6 +41,10 @@ export class UserResolver {
   }
 
   @Mutation(() => User, { description: 'Updates user data' })
+  @MapErrors({
+    if: UserNotFound,
+    then: () => new BadRequestException('User not found'),
+  })
   async updateUser(@Args('userData') userData: UserUpdateInput, @InjectUser() user: User) {
     // Only allow the user to update their own data
     // admins can update any user data
@@ -57,5 +63,33 @@ export class UserResolver {
     });
 
     return updatedUser;
+  }
+
+  @Mutation(() => Boolean, { description: 'Updates current user password' })
+  @MapErrors([
+    {
+      if: UserNotFound,
+      then: () => new InternalServerErrorException('Current user not found'),
+    },
+    {
+      if: UserPasswordDoesNotMatch,
+      then: () => new BadRequestException('Password does not match'),
+    },
+  ])
+  async updateCurrentUserPassword(
+    @Args('data') { currentPassword, newPassword }: UpdatePasswordInput,
+    @InjectUser() user: User,
+  ) {
+    await this.userService.updatePasswordChecked(
+      {
+        uid: user.uid,
+      },
+      {
+        oldPassword: currentPassword,
+        newPassword,
+      },
+    );
+
+    return true;
   }
 }

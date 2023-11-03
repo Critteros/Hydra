@@ -33,6 +33,9 @@ type Query {
 type Mutation {
   """Updates user data"""
   updateUser(userData: UserUpdateInput!): User!
+
+  """Updates current user password"""
+  updateCurrentUserPassword(data: UpdatePasswordInput!): Boolean!
 }
 
 input UserUpdateInput {
@@ -47,4 +50,12 @@ input UserUpdateInput {
 
   """Type of the user account"""
   accountType: AccountType
+}
+
+input UpdatePasswordInput {
+  """Current password"""
+  currentPassword: String!
+
+  """New password"""
+  newPassword: String!
 }

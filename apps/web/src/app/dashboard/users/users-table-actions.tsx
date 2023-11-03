@@ -6,7 +6,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import type { Row } from '@tanstack/react-table';
 import { ClipboardCopy, LogIn } from 'lucide-react';
 
-import { useCurrentUser } from '@/app/current-user-context';
+import { useCurrentUser } from '@/app/dashboard/current-user-context';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,

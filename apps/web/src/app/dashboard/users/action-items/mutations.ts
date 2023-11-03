@@ -10,3 +10,9 @@ export const updateUserInfoMutation = gql(`
     }
   }
 `);
+
+export const changeCurentUserPasswordMutation = gql(`
+  mutation ChangeCurentUserPassword($data: UpdatePasswordInput!) {
+    updateCurrentUserPassword(data: $data)
+  }
+`);
