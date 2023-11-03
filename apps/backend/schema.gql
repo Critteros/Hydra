@@ -39,6 +39,9 @@ type Mutation {
 
   """Admin updates user password"""
   adminUpdateUserPassword(uid: String!, password: String!): Boolean!
+
+  """Creates a new user"""
+  createUser(userData: CreateUserInput!): User!
 }
 
 input UserUpdateInput {
@@ -61,4 +64,18 @@ input UpdatePasswordInput {
 
   """New password"""
   newPassword: String!
+}
+
+input CreateUserInput {
+  """Email address of the user"""
+  email: String!
+
+  """Password for the user"""
+  password: String!
+
+  """Nickname for the user"""
+  name: String
+
+  """Type of the user account"""
+  accountType: AccountType
 }

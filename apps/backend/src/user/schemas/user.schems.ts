@@ -1,7 +1,7 @@
 import { Field, ObjectType, ID, registerEnumType, PartialType, InputType } from '@nestjs/graphql';
 
 import { AccountType } from '@prisma/client';
-import { IsNotEmpty, MaxLength, MinLength, IsEmail, IsOptional } from 'class-validator';
+import { IsNotEmpty, MaxLength, MinLength, IsEmail, IsOptional, IsString } from 'class-validator';
 
 @ObjectType()
 export class User {
@@ -43,3 +43,24 @@ registerEnumType(AccountType, {
   name: 'AccountType',
   description: 'Type of the user account',
 });
+
+@InputType()
+export class CreateUserInput {
+  @Field(() => String, { description: 'Email address of the user' })
+  @IsString({ message: 'Name must be a string' })
+  @IsEmail({}, { message: 'Invalid email address' })
+  email!: string;
+
+  @Field(() => String, { description: 'Password for the user' })
+  @IsString({ message: 'Password must be a string' })
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  password!: string;
+
+  @Field(() => String, { nullable: true, description: 'Nickname for the user' })
+  @IsOptional()
+  @IsString({ message: 'Name must be a string' })
+  name?: string;
+
+  @Field(() => AccountType, { nullable: true, description: 'Type of the user account' })
+  accountType?: AccountType;
+}

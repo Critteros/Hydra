@@ -9,8 +9,18 @@ import { UserAuthenticated } from '@/auth/guards';
 
 import { User as InjectUser } from '../decorators/user';
 import { AdminUserGuard } from '../guards/admin-user.guard';
-import { User, UserUpdateInput, UpdatePasswordInput } from '../schemas/user.schems';
-import { UserService, UserNotFound, UserPasswordDoesNotMatch } from '../services/user.service';
+import {
+  User,
+  UserUpdateInput,
+  UpdatePasswordInput,
+  CreateUserInput,
+} from '../schemas/user.schems';
+import {
+  UserService,
+  UserNotFound,
+  UserPasswordDoesNotMatch,
+  UserAlreadyExistsError,
+} from '../services/user.service';
 
 @Resolver(() => User)
 @UseGuards(UserAuthenticated)
@@ -110,5 +120,16 @@ export class UserResolver {
 
     await this.userService.updatePasswordUnckecked({ uid }, password);
     return true;
+  }
+
+  @Mutation(() => User, { description: 'Creates a new user' })
+  @MapErrors({
+    if: UserAlreadyExistsError,
+    then: () => new BadRequestException('User already exists'),
+  })
+  @UseGuards(AdminUserGuard)
+  async createUser(@Args('userData') userData: CreateUserInput) {
+    const user = await this.userService.createUser(userData);
+    return user;
   }
 }
