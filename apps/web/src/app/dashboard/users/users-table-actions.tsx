@@ -1,21 +1,12 @@
 'use client';
 
-import { useState, useRef, type ReactNode } from 'react';
+import { useState, useRef } from 'react';
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import type { Row } from '@tanstack/react-table';
-import { PencilLine, ClipboardCopy, KeyRound } from 'lucide-react';
+import { ClipboardCopy } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -26,34 +17,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/components/ui/use-toast';
 
+import { ChangePasswordAction } from './action-items/change-password';
+import { EditAction } from './action-items/edit-action';
 import type { User } from './queries';
 
 type UsersTableActionsProps = {
   row: Row<User>;
 };
-type DialogItemProps = {
-  trigger: ReactNode;
-  onSelect: () => void;
-  onOpenChange: (open: boolean) => void;
-  children: ReactNode;
-};
-function DialogItem({ trigger, onSelect, onOpenChange, children }: DialogItemProps) {
-  return (
-    <Dialog onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <DropdownMenuItem
-          onSelect={(event) => {
-            event.preventDefault();
-            onSelect?.();
-          }}
-        >
-          {trigger}
-        </DropdownMenuItem>
-      </DialogTrigger>
-      <DialogContent>{children}</DialogContent>
-    </Dialog>
-  );
-}
+
 export function UsersTableActions({ row }: UsersTableActionsProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [hasOpenDialog, setHasOpenDialog] = useState(false);
@@ -110,22 +81,11 @@ export function UsersTableActions({ row }: UsersTableActionsProps) {
           <ClipboardCopy className="mr-2 h-4 w-4" />
           <span>Copy UID</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <PencilLine className="mr-2 h-4 w-4" />
-          <span>Edit</span>
-        </DropdownMenuItem>
-        <DialogItem
-          trigger={
-            <>
-              <KeyRound className="mr-2 h-4 w-4" />
-              <span>Change password</span>
-            </>
-          }
-          onSelect={handleDialogItemSelect}
+        <EditAction onOpenChange={handleDialogItemOpenChange} onSelect={handleDialogItemSelect} />
+        <ChangePasswordAction
           onOpenChange={handleDialogItemOpenChange}
-        >
-          ttt
-        </DialogItem>
+          onSelect={handleDialogItemSelect}
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );

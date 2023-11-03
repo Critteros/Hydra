@@ -7,6 +7,8 @@ import { Check, ChevronRight, Circle } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
+import { Dialog, DialogTrigger } from './dialog';
+
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -169,6 +171,33 @@ const DropdownMenuShortcut = ({ className, ...props }: React.HTMLAttributes<HTML
 };
 DropdownMenuShortcut.displayName = 'DropdownMenuShortcut';
 
+const DropdownDialogItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuItem>,
+  React.PropsWithChildren<{
+    dropdownItem: React.ReactNode;
+    dropdownItemProps?: React.ComponentPropsWithoutRef<typeof DropdownMenuItem>;
+    onSelect?: () => void;
+    onOpenChange?: (open: boolean) => void;
+  }>
+>(({ dropdownItem, onSelect, onOpenChange, children }) => {
+  return (
+    <Dialog onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <DropdownMenuItem
+          onSelect={(event) => {
+            event.preventDefault();
+            onSelect?.();
+          }}
+        >
+          {dropdownItem}
+        </DropdownMenuItem>
+      </DialogTrigger>
+      {children}
+    </Dialog>
+  );
+});
+DropdownDialogItem.displayName = 'DropdownDialogItem';
+
 export {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -185,4 +214,5 @@ export {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuRadioGroup,
+  DropdownDialogItem,
 };
