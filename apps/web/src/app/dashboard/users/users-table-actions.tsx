@@ -89,6 +89,7 @@ export function UsersTableActions({ row }: UsersTableActionsProps) {
         <ChangePasswordAction
           onOpenChange={handleDialogItemOpenChange}
           onSelect={handleDialogItemSelect}
+          user={user}
         />
       </DropdownMenuContent>
     </DropdownMenu>
