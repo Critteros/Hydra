@@ -1,6 +1,8 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 
-import type { ComponentProps } from 'react';
+import { type ComponentProps, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -53,7 +55,8 @@ type ChangePasswordActionProps = { user: User } & Pick<
   'onSelect' | 'onOpenChange'
 >;
 
-export function EditAction({ user, ...props }: ChangePasswordActionProps) {
+export function EditAction({ user, onOpenChange, ...props }: ChangePasswordActionProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { refresh } = useRouter();
   const [updateUserInfo] = useMutation(updateUserInfoMutation);
   const { toast } = useToast();
@@ -67,6 +70,11 @@ export function EditAction({ user, ...props }: ChangePasswordActionProps) {
   });
 
   const { isSubmitting } = form.formState;
+
+  const handleDialogOpenChange = (open: boolean) => {
+    setDialogOpen(open);
+    onOpenChange?.(open);
+  };
 
   const onSubmit = async (values: FormSchema) => {
     const data = {
@@ -87,6 +95,7 @@ export function EditAction({ user, ...props }: ChangePasswordActionProps) {
       description: 'User profile has been updated successfully',
     });
     refresh();
+    handleDialogOpenChange(false);
   };
 
   return (
@@ -97,6 +106,10 @@ export function EditAction({ user, ...props }: ChangePasswordActionProps) {
           <span>Edit</span>
         </>
       }
+      dialogProps={{
+        open: dialogOpen,
+      }}
+      onOpenChange={handleDialogOpenChange}
       {...props}
     >
       <DialogContent>

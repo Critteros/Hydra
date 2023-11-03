@@ -178,10 +178,11 @@ const DropdownDialogItem = React.forwardRef<
     dropdownItemProps?: React.ComponentPropsWithoutRef<typeof DropdownMenuItem>;
     onSelect?: () => void;
     onOpenChange?: (open: boolean) => void;
+    dialogProps?: Omit<React.ComponentPropsWithoutRef<typeof Dialog>, 'onOpenChange'>;
   }>
->(({ dropdownItem, onSelect, onOpenChange, children }, ref) => {
+>(({ dropdownItem, onSelect, onOpenChange, children, dialogProps }, ref) => {
   return (
-    <Dialog onOpenChange={onOpenChange}>
+    <Dialog onOpenChange={onOpenChange} {...dialogProps}>
       <DialogTrigger asChild>
         <DropdownMenuItem
           onSelect={(event) => {

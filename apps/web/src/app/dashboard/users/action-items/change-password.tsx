@@ -1,6 +1,8 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 
-import type { ComponentProps } from 'react';
+import { type ComponentProps, useState } from 'react';
 
 import { type ApolloError, useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -50,8 +52,9 @@ type ChangePasswordActionProps = { user: User } & Pick<
   'onSelect' | 'onOpenChange'
 >;
 
-export function ChangePasswordAction({ user, ...props }: ChangePasswordActionProps) {
-  const [changeCurrentUserPassword, { error }] = useMutation(changeCurentUserPasswordMutation);
+export function ChangePasswordAction({ user, onOpenChange, ...props }: ChangePasswordActionProps) {
+  const [dialogOpen, setDialogOpnen] = useState(false);
+  const [changeCurrentUserPassword] = useMutation(changeCurentUserPasswordMutation);
   const { toast } = useToast();
   const { refresh } = useRouter();
 
@@ -65,6 +68,11 @@ export function ChangePasswordAction({ user, ...props }: ChangePasswordActionPro
   });
   const { isSubmitting } = form.formState;
 
+  const handleDialogOpenChange = (open: boolean) => {
+    setDialogOpnen(open);
+    onOpenChange?.(open);
+  };
+
   const onSubmit = async (values: FormSchema) => {
     try {
       await changeCurrentUserPassword({
@@ -76,15 +84,15 @@ export function ChangePasswordAction({ user, ...props }: ChangePasswordActionPro
         },
       });
     } catch (e) {
-      console.log(e);
+      const error = e as ApolloError;
       toast({
         title: 'Password change failed',
-        description: `The password for ${user.email} could not be changed. Reason: ${error?.message}`,
+        description: `The password for ${user.email} could not be changed. Reason: ${error.message}`,
         variant: 'destructive',
       });
       form.setError('root.serverError', {
         type: StatusCodes.BAD_REQUEST.toString(),
-        message: (e as ApolloError).message,
+        message: error.message,
       });
       return;
     }
@@ -94,6 +102,7 @@ export function ChangePasswordAction({ user, ...props }: ChangePasswordActionPro
       description: `The password for ${user.email} has been changed`,
     });
     refresh();
+    handleDialogOpenChange(false);
   };
 
   return (
@@ -104,6 +113,10 @@ export function ChangePasswordAction({ user, ...props }: ChangePasswordActionPro
           <span>Change password</span>
         </>
       }
+      dialogProps={{
+        open: dialogOpen,
+      }}
+      onOpenChange={handleDialogOpenChange}
       {...props}
     >
       <DialogContent>
