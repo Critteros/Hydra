@@ -179,7 +179,7 @@ const DropdownDialogItem = React.forwardRef<
     onSelect?: () => void;
     onOpenChange?: (open: boolean) => void;
   }>
->(({ dropdownItem, onSelect, onOpenChange, children }) => {
+>(({ dropdownItem, onSelect, onOpenChange, children }, ref) => {
   return (
     <Dialog onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -188,6 +188,7 @@ const DropdownDialogItem = React.forwardRef<
             event.preventDefault();
             onSelect?.();
           }}
+          ref={ref}
         >
           {dropdownItem}
         </DropdownMenuItem>
