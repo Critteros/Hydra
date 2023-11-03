@@ -81,7 +81,11 @@ export function UsersTableActions({ row }: UsersTableActionsProps) {
           <ClipboardCopy className="mr-2 h-4 w-4" />
           <span>Copy UID</span>
         </DropdownMenuItem>
-        <EditAction onOpenChange={handleDialogItemOpenChange} onSelect={handleDialogItemSelect} />
+        <EditAction
+          onOpenChange={handleDialogItemOpenChange}
+          onSelect={handleDialogItemSelect}
+          user={user}
+        />
         <ChangePasswordAction
           onOpenChange={handleDialogItemOpenChange}
           onSelect={handleDialogItemSelect}
