@@ -24,6 +24,7 @@ export default async function DashboardUsersPage() {
           columns={columns}
           data={data.users}
           className="w-full"
+          defaultSorting={[{ id: 'accountType', desc: false }]}
           components={{ ToolBar: UsersTableToolbar }}
         />
       </main>
