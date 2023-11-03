@@ -16,3 +16,9 @@ export const changeCurentUserPasswordMutation = gql(`
     updateCurrentUserPassword(data: $data)
   }
 `);
+
+export const adminChangeUserPasswordMutation = gql(`
+  mutation AdminChangeUserPassword($uid: String!, $newPassword: String!) {
+    adminUpdateUserPassword(uid: $uid, password: $newPassword)
+  }
+`);

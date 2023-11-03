@@ -3,10 +3,12 @@ import { BadRequestException, InternalServerErrorException, UseGuards } from '@n
 import { Resolver, Query, Args, ID, Mutation } from '@nestjs/graphql';
 
 import { MapErrors } from '@hydra-ipxe/common/shared/errors';
+import { z } from 'zod';
 
 import { UserAuthenticated } from '@/auth/guards';
 
 import { User as InjectUser } from '../decorators/user';
+import { AdminUserGuard } from '../guards/admin-user.guard';
 import { User, UserUpdateInput, UpdatePasswordInput } from '../schemas/user.schems';
 import { UserService, UserNotFound, UserPasswordDoesNotMatch } from '../services/user.service';
 
@@ -90,6 +92,23 @@ export class UserResolver {
       },
     );
 
+    return true;
+  }
+
+  @Mutation(() => Boolean, { description: 'Admin updates user password' })
+  @MapErrors([
+    {
+      if: UserNotFound,
+      then: () => new BadRequestException('User not found'),
+    },
+  ])
+  @UseGuards(AdminUserGuard)
+  async adminUpdateUserPassword(@Args('uid') uid: string, @Args('password') password: string) {
+    if (z.string().min(1).safeParse(password).success === false) {
+      throw new BadRequestException('Password must be at least 1 character long');
+    }
+
+    await this.userService.updatePasswordUnckecked({ uid }, password);
     return true;
   }
 }

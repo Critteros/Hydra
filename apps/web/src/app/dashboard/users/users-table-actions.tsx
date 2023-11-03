@@ -6,6 +6,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import type { Row } from '@tanstack/react-table';
 import { ClipboardCopy, LogIn } from 'lucide-react';
 
+import { AccountType } from '@/__generated__/graphql';
 import { useCurrentUser } from '@/app/dashboard/current-user-context';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/components/ui/use-toast';
 
+import { AdminChangePasswordAction } from './action-items/admin-change-password';
 import { ChangePasswordAction } from './action-items/change-password';
 import { EditAction } from './action-items/edit-action';
 import type { User } from './queries';
@@ -55,6 +57,11 @@ export function UsersTableActions({ row }: UsersTableActionsProps) {
     });
   };
 
+  const ChangePasswordActionComponent =
+    currentUser.accountType === AccountType.Admin
+      ? AdminChangePasswordAction
+      : ChangePasswordAction;
+
   return (
     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
       <DropdownMenuTrigger asChild>
@@ -88,11 +95,13 @@ export function UsersTableActions({ row }: UsersTableActionsProps) {
           onSelect={handleDialogItemSelect}
           user={user}
         />
-        <ChangePasswordAction
-          onOpenChange={handleDialogItemOpenChange}
-          onSelect={handleDialogItemSelect}
-          user={user}
-        />
+        {(currentUser.accountType === AccountType.Admin || currentUser.uid === user.uid) && (
+          <ChangePasswordActionComponent
+            onOpenChange={handleDialogItemOpenChange}
+            onSelect={handleDialogItemSelect}
+            user={user}
+          />
+        )}
         {currentUser?.uid !== user.uid && (
           <>
             <DropdownMenuSeparator />

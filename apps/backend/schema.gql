@@ -36,6 +36,9 @@ type Mutation {
 
   """Updates current user password"""
   updateCurrentUserPassword(data: UpdatePasswordInput!): Boolean!
+
+  """Admin updates user password"""
+  adminUpdateUserPassword(uid: String!, password: String!): Boolean!
 }
 
 input UserUpdateInput {
