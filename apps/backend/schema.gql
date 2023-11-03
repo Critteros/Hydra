@@ -29,3 +29,22 @@ type Query {
   """Returns the current user"""
   me: User!
 }
+
+type Mutation {
+  """Updates user data"""
+  updateUser(userData: UserUpdateInput!): User!
+}
+
+input UserUpdateInput {
+  """Unique identifier of the user"""
+  uid: ID
+
+  """Email address of the user"""
+  email: String
+
+  """Nickname for the user"""
+  name: String
+
+  """Type of the user account"""
+  accountType: AccountType
+}

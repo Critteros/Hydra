@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 
 import type { ComponentProps } from 'react';
 
+import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { StatusCodes } from 'http-status-codes';
 import { PencilLine } from 'lucide-react';
@@ -38,6 +39,8 @@ import { useToast } from '@/components/ui/use-toast';
 
 import type { User } from '../queries';
 
+import { updateUserInfoMutation } from './mutations';
+
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
   name: z.string(),
@@ -52,6 +55,7 @@ type ChangePasswordActionProps = { user: User } & Pick<
 
 export function EditAction({ user, ...props }: ChangePasswordActionProps) {
   const { refresh } = useRouter();
+  const [updateUserInfo] = useMutation(updateUserInfoMutation);
   const { toast } = useToast();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -67,11 +71,17 @@ export function EditAction({ user, ...props }: ChangePasswordActionProps) {
   const onSubmit = async (values: FormSchema) => {
     const data = {
       ...values,
+      uid: user.uid,
       name: values.name === '' ? null : values.name,
     };
 
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await updateUserInfo({
+      variables: {
+        userData: {
+          ...data,
+        },
+      },
+    });
     toast({
       title: 'User profile updated',
       description: 'User profile has been updated successfully',
@@ -155,7 +165,7 @@ export function EditAction({ user, ...props }: ChangePasswordActionProps) {
             )}
             <Button type="submit" disabled={isSubmitting} className="w-full">
               {isSubmitting && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-              Log in
+              Update
             </Button>
           </form>
         </Form>

@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID, registerEnumType } from '@nestjs/graphql';
+import { Field, ObjectType, ID, registerEnumType, PartialType, InputType } from '@nestjs/graphql';
 
 import { AccountType } from '@prisma/client';
 
@@ -16,6 +16,8 @@ export class User {
   @Field(() => AccountType, { description: 'Type of the user account' })
   accountType!: AccountType;
 }
+@InputType()
+export class UserUpdateInput extends PartialType(User, InputType) {}
 
 registerEnumType(AccountType, {
   name: 'AccountType',

@@ -93,4 +93,23 @@ export class UserService {
       });
     }
   }
+
+  async updateUserInfo(
+    where: Prisma.UserWhereUniqueInput,
+    data: Pick<Prisma.UserUpdateInput, 'email' | 'accountType' | 'name'>,
+  ) {
+    try {
+      return await this.prisma.user.update({
+        data,
+        where,
+      });
+    } catch (error) {
+      throw remapPrismaError({
+        error,
+        toMatchError: Prisma.PrismaClientKnownRequestError,
+        code: PrismaErrorCode.RecordsNotFound,
+        throw: new UserNotFound(`User with query ${JSON.stringify(where)} is not found`),
+      });
+    }
+  }
 }
