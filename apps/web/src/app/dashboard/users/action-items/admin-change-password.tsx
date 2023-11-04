@@ -121,7 +121,6 @@ export function AdminChangePasswordAction({
                       className="col-span-3"
                       type="password"
                       autoComplete="new-password"
-                      id={field.name}
                       {...field}
                     />
                   </FormControl>
@@ -140,7 +139,6 @@ export function AdminChangePasswordAction({
                       className="col-span-3"
                       type="password"
                       autoComplete="new-password"
-                      id={field.name}
                       {...field}
                     />
                   </FormControl>
