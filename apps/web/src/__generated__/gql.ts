@@ -18,6 +18,7 @@ const documents = {
     "\n  mutation ChangeCurentUserPassword($data: UpdatePasswordInput!) {\n    updateCurrentUserPassword(data: $data)\n  }\n": types.ChangeCurentUserPasswordDocument,
     "\n  mutation AdminChangeUserPassword($uid: String!, $newPassword: String!) {\n    adminUpdateUserPassword(uid: $uid, password: $newPassword)\n  }\n": types.AdminChangeUserPasswordDocument,
     "\n  mutation AdminLoginAsUser($uid: String!) {\n    adminLoginAsUser(uid: $uid)\n  }\n": types.AdminLoginAsUserDocument,
+    "\n  mutation CreateNewUser($userData: CreateUserInput!) {\n    createNewUser(userData: $userData) {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n": types.CreateNewUserDocument,
     "\n  query Users {\n    users {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n": types.UsersDocument,
 };
 
@@ -55,6 +56,10 @@ export function gql(source: "\n  mutation AdminChangeUserPassword($uid: String!,
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation AdminLoginAsUser($uid: String!) {\n    adminLoginAsUser(uid: $uid)\n  }\n"): (typeof documents)["\n  mutation AdminLoginAsUser($uid: String!) {\n    adminLoginAsUser(uid: $uid)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateNewUser($userData: CreateUserInput!) {\n    createNewUser(userData: $userData) {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"): (typeof documents)["\n  mutation CreateNewUser($userData: CreateUserInput!) {\n    createNewUser(userData: $userData) {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

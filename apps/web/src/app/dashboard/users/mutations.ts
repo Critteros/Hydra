@@ -5,3 +5,14 @@ export const adminLoginAsUserMutation = gql(`
     adminLoginAsUser(uid: $uid)
   }
 `);
+
+export const createNewUserMutation = gql(`
+  mutation CreateNewUser($userData: CreateUserInput!) {
+    createNewUser(userData: $userData) {
+      uid
+      email
+      name
+      accountType
+    }
+  }
+`);

@@ -122,10 +122,10 @@ export class UserResolver {
     return true;
   }
 
-  @Mutation(() => User, { description: 'Creates a new user' })
+  @Mutation(() => User, { description: 'Creates a new user', name: 'createNewUser' })
   @MapErrors({
     if: UserAlreadyExistsError,
-    then: () => new BadRequestException('User already exists'),
+    then: () => new BadRequestException('Email address already in use'),
   })
   @UseGuards(AdminUserGuard)
   async createUser(@Args('userData') userData: CreateUserInput) {

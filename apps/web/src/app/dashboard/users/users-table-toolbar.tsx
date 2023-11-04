@@ -1,16 +1,25 @@
 'use client';
 
-import { DialogTrigger } from '@radix-ui/react-dialog';
+import { useState } from 'react';
+
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
 import type { Table } from '@tanstack/react-table';
 import { UserCog2 as AdminIcon, User as UserIcon } from 'lucide-react';
 
 import { AccountType } from '@/__generated__/graphql';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { DataTableFilter, type OptionsRender } from '@/components/ui/table/data-table-filter';
 import { DataTableViewOptions } from '@/components/ui/table/data-table-view-options';
+
+import { useCurrentUser } from '../current-user-context';
 
 import { CreateUserForm } from './create-user-form';
 import type { User } from './queries';
@@ -33,7 +42,9 @@ const accountTypes: Array<OptionsRender<User['accountType']>> = [
 ];
 
 export function UsersTableToolbar<TData>({ table }: UsersTableToorbarProps<TData>) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const isFiltered = table.getState().columnFilters.length > 0;
+  const currentUser = useCurrentUser();
 
   return (
     <div className="flex items-center justify-between">
@@ -64,20 +75,22 @@ export function UsersTableToolbar<TData>({ table }: UsersTableToorbarProps<TData
         )}
       </div>
       <div className="flex gap-2">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline" className="lg:px- h-8 px-2">
-              <PlusIcon className="h-4 w-4" />
-              <span className="ml-2">Add User</span>
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add User</DialogTitle>
-            </DialogHeader>
-            <CreateUserForm />
-          </DialogContent>
-        </Dialog>
+        {currentUser.accountType === AccountType.Admin && (
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="lg:px- h-8 px-2">
+                <PlusIcon className="h-4 w-4" />
+                <span className="ml-2">Add User</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add User</DialogTitle>
+              </DialogHeader>
+              <CreateUserForm closeDialog={() => setDialogOpen(false)} />
+            </DialogContent>
+          </Dialog>
+        )}
         <DataTableViewOptions table={table} />
       </div>
     </div>

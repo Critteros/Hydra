@@ -1,3 +1,6 @@
+import { useRouter } from 'next/navigation';
+
+import { type ApolloError, useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -21,6 +24,9 @@ import {
   SelectItem,
   SelectValue,
 } from '@/components/ui/select';
+import { useToast } from '@/components/ui/use-toast';
+
+import { createNewUserMutation } from './mutations';
 
 const formSchema = z
   .object({
@@ -38,7 +44,13 @@ const formSchema = z
   });
 export type FormSchema = z.infer<typeof formSchema>;
 
-export function CreateUserForm() {
+type CreateUserFormProps = {
+  closeDialog?: () => void;
+};
+export function CreateUserForm({ closeDialog }: CreateUserFormProps) {
+  const { refresh } = useRouter();
+  const [createNewUser] = useMutation(createNewUserMutation);
+  const { toast } = useToast();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,8 +64,35 @@ export function CreateUserForm() {
   const { isSubmitting } = form.formState;
 
   const onSubmit = async (data: FormSchema) => {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      await createNewUser({
+        variables: {
+          userData: {
+            email: data.email,
+            password: data.password,
+            name: data.name,
+            accountType: data.accountType,
+          },
+        },
+      });
+      toast({
+        title: 'User created',
+        description: `User ${data.email} has been created`,
+        variant: 'default',
+      });
+      refresh();
+      closeDialog?.();
+    } catch (e) {
+      const error = e as ApolloError;
+      form.setError('root.serverError', {
+        message: error.message,
+      });
+      toast({
+        title: 'User creation failed',
+        description: `User ${data.email} could not be created. Reason: ${error.message}`,
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -149,6 +188,11 @@ export function CreateUserForm() {
             </FormItem>
           )}
         />
+        {form.formState.errors.root?.serverError && (
+          <span className="text-sm font-medium text-destructive">
+            {(form.formState.errors.root?.serverError as ApolloError).message}
+          </span>
+        )}
         <Button type="submit" disabled={isSubmitting} className="w-full">
           {isSubmitting && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
           Submit
