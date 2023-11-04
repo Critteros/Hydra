@@ -34,7 +34,7 @@ export const columns: ColumnDef<RolePresentation>[] = [
   {
     accessorKey: 'uid',
     header: ({ column }) => <DataTableColumHeader column={column} title="UID" />,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue('uid')}</div>,
+    cell: ({ row }) => <div className="w-[100px]">{row.getValue('uid')}</div>,
     enableSorting: false,
     enableHiding: false,
   },
