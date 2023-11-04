@@ -1,4 +1,4 @@
-/** @type {import("eslint").Linter.Config} **/
+/** @type {import('eslint').Linter.Config} * */
 module.exports = {
   extends: ['@hydra-ipxe/hydra/nest'],
   parserOptions: {
@@ -14,6 +14,7 @@ module.exports = {
       rules: {
         '@typescript-eslint/consistent-type-imports': 'off',
         'import/named': 'off',
+        '@typescript-eslint/no-unused-vars': 'warn',
       },
     },
   ],

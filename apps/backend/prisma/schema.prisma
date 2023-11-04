@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,14 +8,41 @@ datasource db {
 }
 
 model User {
-  uid                 String               @id @default(cuid())
-  email               String               @unique @db.VarChar(255)
-  password            String               @db.VarChar(512)
-  name                String?              @db.VarChar(255)
-  accountType         AccountType          @default(STANDARD) @map("account_type")
-  assignedPermissions PermissionsOnRoles[]
+  uid         String      @id @default(cuid())
+  email       String      @unique @db.VarChar(255)
+  password    String      @db.VarChar(512)
+  name        String?     @db.VarChar(255)
+  accountType AccountType @default(STANDARD) @map("account_type")
+
+  // The permissions assigned by this user
+  PermissionsOnRoles_assignedBy PermissionsOnRoles[] @relation("PermissionsOnRoles_assigned_by_uid")
+  // Roles assigned by this user
+  RolesOnUser_assignedBy        RolesOnUser[]        @relation("RolesOnUser_assigned_by_uid")
+
+  // The permissions assigned to this user
+  roles RolesOnUser[] @relation("RolesOnUser_roles")
 
   @@index(fields: [email], name: "email_idx")
+}
+
+model RolesOnUser {
+  // This table keep track of which roles are assigned to which users
+  // Each record in this table represents a role assigned to a user
+
+  // The user that is being assigned a certain role
+  user    User   @relation("RolesOnUser_roles", fields: [userUid], references: [uid], onDelete: Cascade)
+  userUid String @map("user_uid") @db.VarChar(256)
+
+  // The role that is being assigned to the user
+  role    Role   @relation(fields: [roleUid], references: [uid], onDelete: Cascade)
+  roleUid String @map("role_uid") @db.VarChar(256)
+
+  // Keep track of who assigned the role and when
+  assignedAt    DateTime @default(now()) @map("assigned_at") @db.Timestamp(6)
+  assignedBy    User?    @relation("RolesOnUser_assigned_by_uid", fields: [assignedByUid], references: [uid], onDelete: SetNull)
+  assignedByUid String?  @map("assigned_by_uid") @db.VarChar(256)
+
+  @@id([userUid, roleUid])
 }
 
 model Role {
@@ -26,16 +50,24 @@ model Role {
   name        String               @unique @db.VarChar(256)
   description String               @db.VarChar(1024)
   permissions PermissionsOnRoles[]
+  members     RolesOnUser[]
 }
 
 model PermissionsOnRoles {
-  role          Role       @relation(fields: [roleUid], references: [uid])
-  roleUid       String     @map("role_uid") @db.VarChar(256)
-  permission    Permission @relation(fields: [permissionId], references: [id])
-  permissionId  String     @map("permission_id") @db.VarChar(512)
-  assignedAt    DateTime   @default(now()) @map("assigned_at") @db.Timestamp(6)
-  assignedBy    User?      @relation(fields: [assignedByUid], references: [uid])
-  assignedByUid String?    @map("assigned_by_uid") @db.VarChar(256)
+  // This table keep track of which permissions are assigned to which roles
+
+  // The role that is being assigned a certain permission
+  role    Role   @relation(fields: [roleUid], references: [uid], onDelete: Cascade)
+  roleUid String @map("role_uid") @db.VarChar(256)
+
+  // The permission that is being assigned to the role
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  permissionId String     @map("permission_id") @db.VarChar(512)
+
+  // Keep track of who assigned the permission and when
+  assignedAt    DateTime @default(now()) @map("assigned_at") @db.Timestamp(6)
+  assignedBy    User?    @relation("PermissionsOnRoles_assigned_by_uid", fields: [assignedByUid], references: [uid], onDelete: SetNull)
+  assignedByUid String?  @map("assigned_by_uid") @db.VarChar(256)
 
   @@id([roleUid, permissionId])
 }

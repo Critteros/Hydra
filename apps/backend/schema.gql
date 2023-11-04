@@ -30,6 +30,48 @@ type Permission {
   description: String!
 }
 
+type AssignedPermission {
+  """Unique identifier and name of the permission"""
+  id: String!
+
+  """Description of the permission"""
+  description: String!
+
+  """User who assigned specific permission"""
+  assignedBy: User
+
+  """Date when permission was assigned"""
+  assignedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Role {
+  """Role unique identifier"""
+  uid: String!
+
+  """Role name"""
+  name: String!
+
+  """Role description"""
+  description: String!
+
+  """Role permissions"""
+  permissions: [AssignedPermission!]!
+
+  """Number of permissions assigned to a given role"""
+  permissionsCount: Int!
+
+  """Members of a given role"""
+  members: [User!]!
+
+  """Number of members of a given role"""
+  membersCount: Int!
+}
+
 type Query {
   users: [User!]!
   user(uid: ID, email: String): User
@@ -39,6 +81,9 @@ type Query {
 
   """Get all permissions"""
   permissions: [Permission!]!
+
+  """Get all roles"""
+  roles: [Role!]!
 }
 
 type Mutation {

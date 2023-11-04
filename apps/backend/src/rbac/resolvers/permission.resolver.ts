@@ -1,9 +1,13 @@
+import { UseGuards } from '@nestjs/common';
 import { Resolver, Query } from '@nestjs/graphql';
+
+import { UserAuthenticated } from '@/auth';
 
 import { Permission } from '../schemas/permission.schema';
 import { PermissionService } from '../services/permission.service';
 
-@Resolver()
+@Resolver(() => Permission)
+@UseGuards(UserAuthenticated)
 export class PermissionResolver {
   constructor(private readonly permissionService: PermissionService) {}
 
