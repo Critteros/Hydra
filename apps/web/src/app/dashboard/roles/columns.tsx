@@ -47,9 +47,15 @@ export const columns: ColumnDef<RolePresentation>[] = [
   {
     accessorKey: 'permissionsCount',
     header: ({ column }) => <DataTableColumHeader column={column} title="Permissions" />,
+    meta: {
+      label: 'Permissions',
+    },
   },
   {
     accessorKey: 'membersCount',
     header: ({ column }) => <DataTableColumHeader column={column} title="Members" />,
+    meta: {
+      label: 'Members',
+    },
   },
 ];

@@ -9,7 +9,7 @@ import { User } from '@/user/schemas/user.schema';
 
 import { AssignedPermission } from '../schemas/permission.schema';
 import { Role, CreateRoleInput } from '../schemas/roles.schema';
-import { RolesService, RoleNotFoudError } from '../services/roles.service';
+import { RolesService, RoleNotFoudError, RoleAlreadyExistsError } from '../services/roles.service';
 
 @Resolver(() => Role)
 @UseGuards(UserAuthenticated)
@@ -47,10 +47,16 @@ export class RolesResolver {
   }
 
   @Mutation(() => Boolean, { description: 'Delete a role' })
-  @MapErrors({
-    if: RoleNotFoudError,
-    then: () => new BadRequestException('Role not found'),
-  })
+  @MapErrors([
+    {
+      if: RoleNotFoudError,
+      then: () => new BadRequestException('Role not found'),
+    },
+    {
+      if: RoleAlreadyExistsError,
+      then: () => new BadRequestException('Role already exists'),
+    },
+  ])
   async deleteRole(@Args('uid') uid: string): Promise<boolean> {
     await this.rolesService.deleteRole(uid);
     return true;

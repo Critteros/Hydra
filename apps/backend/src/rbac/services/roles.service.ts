@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
 import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '@/db/prisma.service';
 import { UserNotFound } from '@/user/services/user.service';
+import { remapPrismaError, PrismaErrorCode } from '@/utils/prisma/errors';
 
 export const RoleNotFoudError = makeCustomError('RoleNotFoundError');
+export const RoleAlreadyExistsError = makeCustomError('RoleAlreadyExistsError');
 
 @Injectable()
 export class RolesService {
@@ -159,15 +161,25 @@ export class RolesService {
   }
 
   async createRole(roleData: Prisma.RoleCreateInput) {
-    const role = await this.prisma.role.create({
-      data: roleData,
-    });
+    try {
+      const role = await this.prisma.role.create({
+        data: roleData,
+      });
 
-    return {
-      ...role,
-      membersCount: 0,
-      permissionsCount: 0,
-    };
+      return {
+        ...role,
+        membersCount: 0,
+        permissionsCount: 0,
+      };
+    } catch (error) {
+      throw remapPrismaError({
+        error,
+        toMatchError: Prisma.PrismaClientKnownRequestError,
+        code: PrismaErrorCode.UniqueConstraintViolation,
+        field: 'name',
+        throw: new RoleAlreadyExistsError(`Role with name ${roleData.name} already exists`),
+      });
+    }
   }
 
   async deleteRole(roleUid: string) {
