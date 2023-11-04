@@ -22,7 +22,11 @@
     "test:watch": "jest --watch",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:push": "prisma db push"
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed/index.ts"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed/index.ts"
   },
   "prettier": "@hydra-ipxe/prettier-config",
   "jest": {
@@ -110,6 +114,7 @@
     "ts-loader": "^9.5.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
+    "tsx": "^3.14.0",
     "type-fest": "^4.5.0",
     "typescript": "latest"
   }

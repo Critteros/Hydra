@@ -14,6 +14,7 @@ import { ManagementModule } from './management/management.module';
 import { PassportMiddleware } from './middleware/passport.middleware';
 import { SessionMiddleware } from './middleware/session.middleware';
 import { UserModule } from './user/user.module';
+import { RbacModule } from './rbac/rbac.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { UserModule } from './user/user.module';
     DbModule,
     UserModule,
     RedisModule,
+    RbacModule,
   ],
   controllers: [AppController],
   providers: [AppService],
