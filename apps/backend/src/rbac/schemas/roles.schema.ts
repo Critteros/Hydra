@@ -1,4 +1,6 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
+
+import { MinLength } from 'class-validator';
 
 import { User } from '@/user/schemas/user.schema';
 
@@ -26,4 +28,15 @@ export class Role {
 
   @Field(() => Int, { description: 'Number of members of a given role' })
   membersCount!: number;
+}
+
+@InputType()
+export class CreateRoleInput {
+  @Field(() => String, { description: 'Role name' })
+  @MinLength(1, { message: 'Role name cannot be empty' })
+  name!: string;
+
+  @Field(() => String, { description: 'Role description' })
+  @MinLength(1, { message: 'Role description cannot be empty' })
+  description!: string;
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
+import type { Prisma } from '@prisma/client';
 
 import { PrismaService } from '@/db/prisma.service';
 import { UserNotFound } from '@/user/services/user.service';
@@ -155,5 +156,37 @@ export class RolesService {
     }));
 
     return permissions;
+  }
+
+  async createRole(roleData: Prisma.RoleCreateInput) {
+    const role = await this.prisma.role.create({
+      data: roleData,
+    });
+
+    return {
+      ...role,
+      membersCount: 0,
+      permissionsCount: 0,
+    };
+  }
+
+  async deleteRole(roleUid: string) {
+    const role = await this.prisma.role.findUnique({
+      where: {
+        uid: roleUid,
+      },
+    });
+
+    if (!role) {
+      throw new RoleNotFoudError();
+    }
+
+    await this.prisma.role.delete({
+      where: {
+        uid: roleUid,
+      },
+    });
+
+    return role;
   }
 }

@@ -101,6 +101,12 @@ type Mutation {
 
   """Creates a new user"""
   createNewUser(userData: CreateUserInput!): User!
+
+  """Create a new role"""
+  createRole(input: CreateRoleInput!): Role!
+
+  """Delete a role"""
+  deleteRole(uid: String!): Boolean!
 }
 
 input UserUpdateInput {
@@ -137,4 +143,12 @@ input CreateUserInput {
 
   """Type of the user account"""
   accountType: AccountType
+}
+
+input CreateRoleInput {
+  """Role name"""
+  name: String!
+
+  """Role description"""
+  description: String!
 }

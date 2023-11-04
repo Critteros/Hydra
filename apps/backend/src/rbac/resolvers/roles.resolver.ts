@@ -1,15 +1,19 @@
-import { UseGuards } from '@nestjs/common';
-import { Resolver, Query, Parent, ResolveField } from '@nestjs/graphql';
+import { BadRequestException, UseGuards } from '@nestjs/common';
+import { Resolver, Query, Parent, ResolveField, Mutation, Args } from '@nestjs/graphql';
+
+import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 
 import { UserAuthenticated } from '@/auth';
+import { AdminUserGuard } from '@/user/guards';
 import { User } from '@/user/schemas/user.schema';
 
 import { AssignedPermission } from '../schemas/permission.schema';
-import { Role } from '../schemas/roles.schema';
-import { RolesService } from '../services/roles.service';
+import { Role, CreateRoleInput } from '../schemas/roles.schema';
+import { RolesService, RoleNotFoudError } from '../services/roles.service';
 
 @Resolver(() => Role)
 @UseGuards(UserAuthenticated)
+@UseGuards(AdminUserGuard)
 export class RolesResolver {
   constructor(private rolesService: RolesService) {}
 
@@ -32,5 +36,23 @@ export class RolesResolver {
     const { uid } = role;
     const permissions = await this.rolesService.getAssignedPermissionsToRole(uid);
     return permissions;
+  }
+
+  @Mutation(() => Role, { description: 'Create a new role' })
+  async createRole(
+    @Args('input') { description, name }: CreateRoleInput,
+  ): Promise<Omit<Role, 'permissions' | 'members'>> {
+    const role = await this.rolesService.createRole({ description, name });
+    return role;
+  }
+
+  @Mutation(() => Boolean, { description: 'Delete a role' })
+  @MapErrors({
+    if: RoleNotFoudError,
+    then: () => new BadRequestException('Role not found'),
+  })
+  async deleteRole(@Args('uid') uid: string): Promise<boolean> {
+    await this.rolesService.deleteRole(uid);
+    return true;
   }
 }
