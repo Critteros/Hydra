@@ -201,4 +201,16 @@ export class RolesService {
 
     return role;
   }
+
+  async deleteManyRoles(rolesUids: string[]) {
+    const res = await this.prisma.role.deleteMany({
+      where: {
+        uid: {
+          in: rolesUids,
+        },
+      },
+    });
+
+    return res.count;
+  }
 }

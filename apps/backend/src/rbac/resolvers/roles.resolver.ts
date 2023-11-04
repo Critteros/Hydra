@@ -1,5 +1,5 @@
 import { BadRequestException, UseGuards } from '@nestjs/common';
-import { Resolver, Query, Parent, ResolveField, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Parent, ResolveField, Mutation, Args, Int } from '@nestjs/graphql';
 
 import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 
@@ -39,6 +39,10 @@ export class RolesResolver {
   }
 
   @Mutation(() => Role, { description: 'Create a new role' })
+  @MapErrors({
+    if: RoleAlreadyExistsError,
+    then: () => new BadRequestException('Role already exists'),
+  })
   async createRole(
     @Args('input') { description, name }: CreateRoleInput,
   ): Promise<Omit<Role, 'permissions' | 'members'>> {
@@ -52,13 +56,17 @@ export class RolesResolver {
       if: RoleNotFoudError,
       then: () => new BadRequestException('Role not found'),
     },
-    {
-      if: RoleAlreadyExistsError,
-      then: () => new BadRequestException('Role already exists'),
-    },
   ])
   async deleteRole(@Args('uid') uid: string): Promise<boolean> {
     await this.rolesService.deleteRole(uid);
     return true;
+  }
+
+  @Mutation(() => Int, { description: 'Delete many roles' })
+  async deleteMultipleRoles(
+    @Args({ name: 'uids', type: () => [String] }) uids: string[],
+  ): Promise<number> {
+    const deleteCount = await this.rolesService.deleteManyRoles(uids);
+    return deleteCount;
   }
 }

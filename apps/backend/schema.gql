@@ -107,6 +107,9 @@ type Mutation {
 
   """Delete a role"""
   deleteRole(uid: String!): Boolean!
+
+  """Delete many roles"""
+  deleteMultipleRoles(uids: [String!]!): Int!
 }
 
 input UserUpdateInput {

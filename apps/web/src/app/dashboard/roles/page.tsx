@@ -8,6 +8,7 @@ import { getClient } from '@/lib/server/apollo-client';
 import { columns } from './columns';
 import { queryRoles } from './queries';
 import { RolesTableToolbar } from './roles-table-toolbar';
+import { TableSelectionActions } from './table-selection-actions';
 
 export default async function DashboardRolesPage() {
   const {
@@ -26,7 +27,7 @@ export default async function DashboardRolesPage() {
           columns={columns}
           data={roles}
           className="w-full"
-          components={{ ToolBar: RolesTableToolbar }}
+          components={{ ToolBar: RolesTableToolbar, SelectionActions: TableSelectionActions }}
         />
       </main>
     </ScrollArea>

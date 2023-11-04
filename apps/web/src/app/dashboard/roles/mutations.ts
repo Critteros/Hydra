@@ -7,3 +7,9 @@ export const createRoleMutation = gql(`
     }
   }
 `);
+
+export const deleteMultipleRolesMutation = gql(`
+  mutation DeleteMultipleRoles($uids: [String!]!) {
+    deleteMultipleRoles(uids: $uids)
+  }
+`);
