@@ -1,7 +1,10 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { useState, useRef } from 'react';
 
+import { useMutation } from '@apollo/client';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import type { Row } from '@tanstack/react-table';
 import { ClipboardCopy, LogIn } from 'lucide-react';
@@ -22,6 +25,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { AdminChangePasswordAction } from './action-items/admin-change-password';
 import { ChangePasswordAction } from './action-items/change-password';
 import { EditAction } from './action-items/edit-action';
+import { adminLoginAsUserMutation } from './mutations';
 import type { User } from './queries';
 
 type UsersTableActionsProps = {
@@ -29,6 +33,8 @@ type UsersTableActionsProps = {
 };
 
 export function UsersTableActions({ row }: UsersTableActionsProps) {
+  const { refresh } = useRouter();
+  const [adminLoginAs] = useMutation(adminLoginAsUserMutation);
   const currentUser = useCurrentUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [hasOpenDialog, setHasOpenDialog] = useState(false);
@@ -102,10 +108,15 @@ export function UsersTableActions({ row }: UsersTableActionsProps) {
             user={user}
           />
         )}
-        {currentUser?.uid !== user.uid && (
+        {currentUser.accountType === AccountType.Admin && currentUser?.uid !== user.uid && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await adminLoginAs({ variables: { uid: user.uid } });
+                refresh();
+              }}
+            >
               <LogIn className="mr-2 h-4 w-4" />
               <span>Login in as</span>
             </DropdownMenuItem>

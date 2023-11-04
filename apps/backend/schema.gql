@@ -31,6 +31,9 @@ type Query {
 }
 
 type Mutation {
+  """Login as a user"""
+  adminLoginAsUser(uid: String!): Boolean!
+
   """Updates user data"""
   updateUser(userData: UserUpdateInput!): User!
 
