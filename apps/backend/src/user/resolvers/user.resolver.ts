@@ -14,7 +14,7 @@ import {
   UserUpdateInput,
   UpdatePasswordInput,
   CreateUserInput,
-} from '../schemas/user.schems';
+} from '../schemas/user.schema';
 import {
   UserService,
   UserNotFound,

@@ -22,12 +22,23 @@ enum AccountType {
   ADMIN
 }
 
+type Permission {
+  """Unique identifier and name of the permission"""
+  id: String!
+
+  """Description of the permission"""
+  description: String!
+}
+
 type Query {
   users: [User!]!
   user(uid: ID, email: String): User
 
   """Returns the current user"""
   me: User!
+
+  """Get all permissions"""
+  permissions: [Permission!]!
 }
 
 type Mutation {
