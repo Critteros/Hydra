@@ -5,7 +5,9 @@ import { cookies } from 'next/headers';
 import type { PropsWithChildren } from 'react';
 
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
 import { ApolloWrapper } from '@/lib/client/ApolloWrapper';
+import { extractSessionCookie, sessionCookieName } from '@/lib/server/auth';
 import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
 
@@ -35,7 +37,13 @@ export default function RootLayout({ children }: PropsWithChildren) {
           enableSystem
           disableTransitionOnChange
         >
-          <ApolloWrapper>{children}</ApolloWrapper>
+          <ApolloWrapper
+            // FIXME: There must be a better way to use cookies in SSR mode, this sends back the JS only cookies back to client
+            session={{ cookieName: sessionCookieName, cookie: extractSessionCookie() }}
+          >
+            {children}
+          </ApolloWrapper>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

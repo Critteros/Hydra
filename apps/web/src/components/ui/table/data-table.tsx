@@ -13,6 +13,7 @@ import {
   getFacetedUniqueValues,
   flexRender,
   type Table as TableType,
+  type SortingState,
 } from '@tanstack/react-table';
 
 import {
@@ -35,6 +36,7 @@ type DataTableProps<TData, TValue> = {
   components?: {
     ToolBar?: ComponentType<{ table: TableType<TData> }>;
   };
+  defaultSorting?: SortingState;
 };
 
 export function DataTable<TData, TValue>({
@@ -42,6 +44,7 @@ export function DataTable<TData, TValue>({
   data,
   className,
   components,
+  defaultSorting,
 }: DataTableProps<TData, TValue>) {
   const {
     columnFilters,
@@ -52,7 +55,7 @@ export function DataTable<TData, TValue>({
     setRowSelection,
     sorting,
     setSorting,
-  } = useTableState();
+  } = useTableState({ defaultSorting });
 
   const table = useReactTable({
     columns,

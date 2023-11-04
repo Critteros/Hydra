@@ -11,26 +11,39 @@ import {
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr';
 
-function makeClient() {
-  const httpLink = new HttpLink({
-    uri: `${env.NEXT_PUBLIC_BACKEND_BASE_URL}/graphql`,
-    fetchOptions: { cache: 'no-store' },
-  });
+import { getIsServer } from '../utils';
 
-  return new NextSSRApolloClient({
-    cache: new NextSSRInMemoryCache(),
-    link:
-      typeof window === 'undefined'
-        ? ApolloLink.from([
-            new SSRMultipartLink({
-              stripDefer: true,
-            }),
-            httpLink,
-          ])
-        : httpLink,
-  });
+type SessionProp = { cookieName: string; cookie?: string };
+
+function makeClient({ cookieName, cookie }: SessionProp) {
+  return () => {
+    const isServer = getIsServer();
+
+    const uri = isServer ? `${env.BACKEND_BASE_URL}/api/graphql` : '/api/graphql';
+
+    const httpLink = new HttpLink({
+      uri,
+      fetchOptions: { cache: 'no-store' },
+      headers: {
+        cookie: `${cookieName}=${cookie ?? ''}`,
+      },
+    });
+
+    return new NextSSRApolloClient({
+      cache: new NextSSRInMemoryCache(),
+      link:
+        typeof window === 'undefined'
+          ? ApolloLink.from([
+              new SSRMultipartLink({
+                stripDefer: true,
+              }),
+              httpLink,
+            ])
+          : httpLink,
+    });
+  };
 }
 
-export function ApolloWrapper({ children }: PropsWithChildren) {
-  return <ApolloNextAppProvider makeClient={makeClient}>{children}</ApolloNextAppProvider>;
+export function ApolloWrapper({ children, session }: PropsWithChildren<{ session: SessionProp }>) {
+  return <ApolloNextAppProvider makeClient={makeClient(session)}>{children}</ApolloNextAppProvider>;
 }

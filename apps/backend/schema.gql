@@ -29,3 +29,56 @@ type Query {
   """Returns the current user"""
   me: User!
 }
+
+type Mutation {
+  """Login as a user"""
+  adminLoginAsUser(uid: String!): Boolean!
+
+  """Updates user data"""
+  updateUser(userData: UserUpdateInput!): User!
+
+  """Updates current user password"""
+  updateCurrentUserPassword(data: UpdatePasswordInput!): Boolean!
+
+  """Admin updates user password"""
+  adminUpdateUserPassword(uid: String!, password: String!): Boolean!
+
+  """Creates a new user"""
+  createNewUser(userData: CreateUserInput!): User!
+}
+
+input UserUpdateInput {
+  """Unique identifier of the user"""
+  uid: ID
+
+  """Email address of the user"""
+  email: String
+
+  """Nickname for the user"""
+  name: String
+
+  """Type of the user account"""
+  accountType: AccountType
+}
+
+input UpdatePasswordInput {
+  """Current password"""
+  currentPassword: String!
+
+  """New password"""
+  newPassword: String!
+}
+
+input CreateUserInput {
+  """Email address of the user"""
+  email: String!
+
+  """Password for the user"""
+  password: String!
+
+  """Nickname for the user"""
+  name: String
+
+  """Type of the user account"""
+  accountType: AccountType
+}

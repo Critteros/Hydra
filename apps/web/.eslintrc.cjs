@@ -7,5 +7,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-misused-promises': 'off',
     'import/named': 'off',
+    // FIXME: Next.js useRouter cause this error
+    '@typescript-eslint/unbound-method': 'off',
   },
 };

@@ -14,14 +14,3 @@ export const getAllUsers = gql(`
     }
   }
 `);
-
-export const getCurrentUser = gql(`
-  query CurrentUser {
-    me {
-      uid
-      email
-      name
-      accountType
-    }
-  }
-`);

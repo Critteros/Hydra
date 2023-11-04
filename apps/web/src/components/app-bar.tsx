@@ -35,7 +35,10 @@ export async function AppBar() {
             <Logo />
           </Link>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          <span className="px-3">
+            <b>{email}</b>
+          </span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar>
