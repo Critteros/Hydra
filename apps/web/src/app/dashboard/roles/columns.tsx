@@ -5,6 +5,8 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DataTableColumHeader } from '@/components/ui/table/data-table-column-header';
 
+import { EditPermissionsWidget } from './edit-permissions-widget';
+import { EditUsersWidget } from './edit-users-widget';
 import type { RolePresentation } from './queries';
 
 export const columns: ColumnDef<RolePresentation>[] = [
@@ -46,6 +48,14 @@ export const columns: ColumnDef<RolePresentation>[] = [
   },
   {
     accessorKey: 'permissionsCount',
+    cell: ({ row }) => (
+      <div className="flex w-[80px] items-center">
+        <EditPermissionsWidget
+          permissionCount={row.getValue('permissionsCount')}
+          roleUid={row.getValue('uid')}
+        />
+      </div>
+    ),
     header: ({ column }) => <DataTableColumHeader column={column} title="Permissions" />,
     meta: {
       label: 'Permissions',
@@ -53,6 +63,11 @@ export const columns: ColumnDef<RolePresentation>[] = [
   },
   {
     accessorKey: 'membersCount',
+    cell: ({ row }) => (
+      <div className="flex w-[80px] items-center">
+        <EditUsersWidget userCount={row.getValue('membersCount')} roleUid={row.getValue('uid')} />
+      </div>
+    ),
     header: ({ column }) => <DataTableColumHeader column={column} title="Members" />,
     meta: {
       label: 'Members',

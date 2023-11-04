@@ -13,3 +13,9 @@ export const deleteMultipleRolesMutation = gql(`
     deleteMultipleRoles(uids: $uids)
   }
 `);
+
+export const assignPermissionsToRoleMutation = gql(`
+  mutation AssignPermissionsToRole($roleUid: String!, $permissionIds: [String!]!) {
+    assignPermissionsToRole(roleUid: $roleUid, permissionIds: $permissionIds)
+  }
+`);

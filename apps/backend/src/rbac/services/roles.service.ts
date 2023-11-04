@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
-import { Prisma } from '@prisma/client';
+import { Prisma, type Permission, type User } from '@prisma/client';
 
 import { PrismaService } from '@/db/prisma.service';
 import { UserNotFound } from '@/user/services/user.service';
@@ -44,6 +44,39 @@ export class RolesService {
     }));
 
     return rolesWithPermissionsCount;
+  }
+
+  async getRole(where: Prisma.RoleWhereUniqueInput) {
+    const role = await this.prisma.role.findUnique({
+      where,
+      select: {
+        uid: true,
+        name: true,
+        description: true,
+        members: {
+          select: {
+            userUid: true,
+          },
+        },
+        permissions: {
+          select: {
+            permissionId: true,
+          },
+        },
+      },
+    });
+
+    if (!role) {
+      throw new RoleNotFoudError();
+    }
+
+    const roleWithPermissionsCount = {
+      ...role,
+      permissionsCount: role.permissions.length,
+      membersCount: role.members.length,
+    };
+
+    return roleWithPermissionsCount;
   }
 
   async getUsersWithRole(roleUid: string) {
@@ -212,5 +245,39 @@ export class RolesService {
     });
 
     return res.count;
+  }
+
+  async assignPermissionsToRole(
+    whichRole: Prisma.RoleWhereUniqueInput,
+    permissionIds: Permission['id'][],
+    assignedByUid: User['uid'],
+  ) {
+    const role = await this.prisma.role.findUnique({ where: whichRole });
+    if (!role) {
+      throw new RoleNotFoudError();
+    }
+
+    const data = permissionIds.map(
+      (permissionId) =>
+        ({
+          permissionId,
+          roleUid: role.uid,
+          assignedByUid,
+        }) satisfies Prisma.PermissionsOnRolesCreateManyInput,
+    );
+
+    const res = await this.prisma.$transaction([
+      this.prisma.permissionsOnRoles.deleteMany({
+        where: {
+          roleUid: role.uid,
+        },
+      }),
+      this.prisma.permissionsOnRoles.createMany({
+        data,
+      }),
+    ]);
+    const { count } = res[1];
+
+    return count;
   }
 }

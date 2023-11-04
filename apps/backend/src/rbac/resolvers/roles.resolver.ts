@@ -4,6 +4,7 @@ import { Resolver, Query, Parent, ResolveField, Mutation, Args, Int } from '@nes
 import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 
 import { UserAuthenticated } from '@/auth';
+import { User as InjectUser } from '@/user/decorators/user';
 import { AdminUserGuard } from '@/user/guards';
 import { User } from '@/user/schemas/user.schema';
 
@@ -22,6 +23,13 @@ export class RolesResolver {
     const roles = await this.rolesService.getRoles();
 
     return roles;
+  }
+
+  @Query(() => Role, { description: 'Get a single role' })
+  async role(@Args('uid') uid: string) {
+    const role = await this.rolesService.getRole({ uid });
+
+    return role;
   }
 
   @ResolveField(() => [User], { description: 'Members of a given role' })
@@ -68,5 +76,22 @@ export class RolesResolver {
   ): Promise<number> {
     const deleteCount = await this.rolesService.deleteManyRoles(uids);
     return deleteCount;
+  }
+
+  @Mutation(() => Boolean, { description: 'Assign permissions to a role' })
+  async assignPermissionsToRole(
+    @Args('roleUid') roleUid: string,
+    @Args({ name: 'permissionIds', type: () => [String] }) permissionIds: string[],
+    @InjectUser() user: User,
+  ) {
+    const res = await this.rolesService.assignPermissionsToRole(
+      {
+        uid: roleUid,
+      },
+      permissionIds,
+      user.uid,
+    );
+
+    return res;
   }
 }

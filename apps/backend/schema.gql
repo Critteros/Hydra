@@ -84,6 +84,9 @@ type Query {
 
   """Get all roles"""
   roles: [Role!]!
+
+  """Get a single role"""
+  role(uid: String!): Role!
 }
 
 type Mutation {
@@ -110,6 +113,9 @@ type Mutation {
 
   """Delete many roles"""
   deleteMultipleRoles(uids: [String!]!): Int!
+
+  """Assign permissions to a role"""
+  assignPermissionsToRole(roleUid: String!, permissionIds: [String!]!): Boolean!
 }
 
 input UserUpdateInput {

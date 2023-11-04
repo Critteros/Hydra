@@ -15,3 +15,25 @@ export const queryRoles = gql(`
     }
   }
 `);
+
+export const queryPermissionIds = gql(`
+  query QueryPermissionIds {
+    permissions {
+      id
+    }
+  }
+`);
+
+export const queryRolePermissions = gql(`
+  query QueryRolePermissions($uid: String!) {
+    role(uid: $uid) {
+      uid
+      permissions {
+        id
+      }
+    }
+    permissions {
+      id
+    }
+  }
+`);
