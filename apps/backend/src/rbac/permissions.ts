@@ -1,19 +1,5 @@
+import type { Permissions } from '@hydra-ipxe/common/shared/permissions';
 import type { Permission } from '@prisma/client';
-
-import type { Path } from './type-utils';
-
-const keyPath = {
-  accounts: {
-    read: {},
-    create: {},
-    changePassword: {},
-    adminChangePassword: {},
-    edit: {},
-    loginAs: {},
-  },
-} as const;
-
-export type Permissions = Exclude<Path<typeof keyPath>, keyof typeof keyPath>;
 
 export const permissionConfig = {
   'accounts.read': {
