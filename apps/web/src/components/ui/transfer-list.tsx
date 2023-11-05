@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-import { Checkbox } from '@radix-ui/react-checkbox';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -13,20 +12,21 @@ import {
 import { cn } from '@/lib/utils';
 
 import { Button, buttonVariants } from './button';
+import { Checkbox } from './checkbox';
 import { ScrollArea } from './scroll-area';
 
-type TransferListProps<TData extends { id: string | number; display: string }> = {
+type TransferListProps<TData extends { id: string; display: string }> = {
   className?: string;
   items: ReadonlyArray<TData>;
   selectedItems?: ReadonlyArray<string>;
   checkboxSelection?: string[];
-  onCheckboxSelectionChange?: (selectedItems: Array<string | number>) => void;
+  onCheckboxSelectionChange?: (selectedItems: Array<string>) => void;
   onConfirm: (selectedItems: ReadonlyArray<TData>) => unknown;
   unselectedTitle?: string;
   selectedTitle?: string;
 };
 
-export function TransferList<TData extends { id: string | number; display: string }>({
+export function TransferList<TData extends { id: string; display: string }>({
   className,
   items,
   selectedItems: selectedItemsProp = [],
@@ -36,23 +36,18 @@ export function TransferList<TData extends { id: string | number; display: strin
   unselectedTitle = 'Available',
   selectedTitle = 'Selected',
 }: TransferListProps<TData>) {
-  const [selectedItems, setSelectedItems] = useState<Array<string | number>>(
-    selectedItemsProp.slice(),
-  );
-  const [unselectedItems, setUnselectedItems] = useState<Array<string | number>>(
+  const [selectedItems, setSelectedItems] = useState<Array<string>>(selectedItemsProp.slice());
+  const [unselectedItems, setUnselectedItems] = useState<Array<string>>(
     items.map((item) => item.id.toString()).filter((item) => !selectedItemsProp.includes(item)),
   );
-  const [checkboxSelectionOwnState, setCheckboxSelectionOwnState] = useState<
-    Array<string | number>
-  >([]);
+  const [checkboxSelectionOwnState, setCheckboxSelectionOwnState] = useState<Array<string>>([]);
 
   const checkboxSelection = checkboxSelectionProp ?? checkboxSelectionOwnState;
   const setCheckboxSelection = onCheckboxSelectionChange ?? setCheckboxSelectionOwnState;
 
-  const getDisplayValue = (itemId: string | number) =>
-    items.find((item) => item.id === itemId)?.display;
+  const getDisplayValue = (itemId: string) => items.find((item) => item.id === itemId)?.display;
 
-  const onItemSelect = (itemId: string | number) => {
+  const onItemSelect = (itemId: string) => {
     if (checkboxSelection.includes(itemId)) {
       setCheckboxSelection(checkboxSelection.filter((selectedItem) => selectedItem !== itemId));
     } else {
@@ -70,7 +65,7 @@ export function TransferList<TData extends { id: string | number; display: strin
     }
   };
 
-  const isItemSelected = (itemId: string | number) => checkboxSelection.includes(itemId);
+  const isItemSelected = (itemId: string) => checkboxSelection.includes(itemId);
 
   const onMoveSelectedItems = (direction: 'up' | 'down') => {
     if (direction === 'up') {
@@ -117,10 +112,10 @@ export function TransferList<TData extends { id: string | number; display: strin
   };
 
   return (
-    <div className={cn('', className)}>
+    <div className={cn('flex flex-col gap-2', className)}>
       <div className="flex flex-col gap-2">
-        <span className="pl-1 text-sm font-medium">{unselectedTitle}</span>
-        <div className="flex flex-col">
+        <div className="relative mt-5 flex flex-col">
+          <span className="absolute left-1 top-[-25px] text-sm font-medium">{unselectedTitle}</span>
           <div className="flex h-[200px] flex-col rounded-md border border-input">
             <ScrollArea>
               <div className="flex flex-col">
@@ -161,8 +156,8 @@ export function TransferList<TData extends { id: string | number; display: strin
         </Button>
       </div>
       <div className="flex flex-col gap-2">
-        <span className="pl-1 text-sm font-medium">{selectedTitle}</span>
-        <div className="flex flex-col">
+        <div className="relative flex flex-col">
+          <span className="absolute left-1 top-[-25px] text-sm font-medium">{selectedTitle}</span>
           <div className="flex h-[200px] flex-col rounded-md border border-input">
             <ScrollArea>
               <div className="flex flex-col">
@@ -188,7 +183,9 @@ export function TransferList<TData extends { id: string | number; display: strin
           </div>
         </div>
       </div>
-      <Button onClick={handleConfirm}>Save</Button>
+      <Button className="w-full" onClick={handleConfirm}>
+        Save
+      </Button>
     </div>
   );
 }
