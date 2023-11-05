@@ -250,7 +250,7 @@ export class RolesService {
   async assignPermissionsToRole(
     whichRole: Prisma.RoleWhereUniqueInput,
     permissionIds: Permission['id'][],
-    assignedByUid: User['uid'],
+    assignedByUid?: User['uid'],
   ) {
     const role = await this.prisma.role.findUnique({ where: whichRole });
     if (!role) {
@@ -276,6 +276,42 @@ export class RolesService {
         data,
       }),
     ]);
+    const { count } = res[1];
+
+    return count;
+  }
+
+  async assignUsersToRole(
+    whichRole: Prisma.RoleWhereUniqueInput,
+    userUids: User['uid'][],
+    assignedByUid?: User['uid'],
+  ) {
+    const role = await this.prisma.role.findUnique({ where: whichRole });
+
+    if (!role) {
+      throw new RoleNotFoudError();
+    }
+
+    const data = userUids.map(
+      (userUid) =>
+        ({
+          userUid,
+          roleUid: role.uid,
+          assignedByUid,
+        }) satisfies Prisma.RolesOnUserCreateManyInput,
+    );
+
+    const res = await this.prisma.$transaction([
+      this.prisma.rolesOnUser.deleteMany({
+        where: {
+          roleUid: role.uid,
+        },
+      }),
+      this.prisma.rolesOnUser.createMany({
+        data,
+      }),
+    ]);
+
     const { count } = res[1];
 
     return count;

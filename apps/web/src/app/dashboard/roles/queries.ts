@@ -37,3 +37,19 @@ export const queryRolePermissions = gql(`
     }
   }
 `);
+
+export const queryRoleMembers = gql(`
+  query QueryRoleMembers($uid: String!) {
+    role(uid: $uid) {
+      uid
+      members {
+        uid
+        email
+      }
+    }
+    users {
+      uid
+      email
+    }
+  }
+`);

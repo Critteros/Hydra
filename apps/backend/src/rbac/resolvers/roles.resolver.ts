@@ -94,4 +94,21 @@ export class RolesResolver {
 
     return res;
   }
+
+  @Mutation(() => Boolean, { description: 'Assign users to a role' })
+  async assignUsersToRole(
+    @Args('roleUid') roleUid: string,
+    @Args({ name: 'usersUids', type: () => [String] }) usersUids: string[],
+    @InjectUser() user: User,
+  ) {
+    const res = await this.rolesService.assignUsersToRole(
+      {
+        uid: roleUid,
+      },
+      usersUids,
+      user.uid,
+    );
+
+    return res;
+  }
 }

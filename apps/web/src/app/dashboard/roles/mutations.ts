@@ -19,3 +19,9 @@ export const assignPermissionsToRoleMutation = gql(`
     assignPermissionsToRole(roleUid: $roleUid, permissionIds: $permissionIds)
   }
 `);
+
+export const assignUsersToRoleMutation = gql(`
+  mutation AssignUsersToRole($roleUid: String!, $usersUids: [String!]!) {
+    assignUsersToRole(roleUid: $roleUid, usersUids: $usersUids)
+  }
+`);

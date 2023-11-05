@@ -116,6 +116,9 @@ type Mutation {
 
   """Assign permissions to a role"""
   assignPermissionsToRole(roleUid: String!, permissionIds: [String!]!): Boolean!
+
+  """Assign users to a role"""
+  assignUsersToRole(roleUid: String!, usersUids: [String!]!): Boolean!
 }
 
 input UserUpdateInput {
