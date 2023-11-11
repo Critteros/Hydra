@@ -6,6 +6,7 @@ import { Typography } from '@/components/ui/typography';
 import { getClient } from '@/lib/server/apollo-client';
 
 import { columns } from './columns';
+import { TableSelectionActions } from './table-selection-actions';
 import * as queries from './user-queries';
 import { UsersTableToolbar } from './users-table-toolbar';
 
@@ -25,7 +26,7 @@ export default async function DashboardUsersPage() {
           data={data.users}
           className="w-full"
           defaultSorting={[{ id: 'accountType', desc: false }]}
-          components={{ ToolBar: UsersTableToolbar }}
+          components={{ ToolBar: UsersTableToolbar, SelectionActions: TableSelectionActions }}
         />
       </main>
     </ScrollArea>

@@ -9,14 +9,15 @@ import { DeleteButton } from '@/components/buttons/delete-button';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useToast } from '@/components/ui/use-toast';
 
-import { deleteMultipleRolesMutation } from './roles-mutations';
-import type { RolePresentation } from './roles-queries';
+import { deleteMultipleUsersMutation } from './user-mutations';
+import type { User } from './user-queries';
 
 type TableSelectionActions = {
-  table: Table<RolePresentation>;
+  table: Table<User>;
 };
+
 export function TableSelectionActions({ table }: TableSelectionActions) {
-  const [deleteMultipleRoles] = useMutation(deleteMultipleRolesMutation);
+  const [deleteMutlipleUsers] = useMutation(deleteMultipleUsersMutation);
   const { refresh } = useRouter();
   const { toast } = useToast();
   const filteredRows = table.getFilteredSelectedRowModel().rows;
@@ -27,14 +28,14 @@ export function TableSelectionActions({ table }: TableSelectionActions) {
 
   const onConfirm = async () => {
     const roleIds = filteredRows.map((row) => row.original.uid);
-    const deletedCount = await deleteMultipleRoles({
+    const deletedCount = await deleteMutlipleUsers({
       variables: {
         uids: roleIds,
       },
     });
     toast({
       title: 'Roles deleted',
-      description: `Successfully deleted ${deletedCount.data?.deleteMultipleRoles} roles.`,
+      description: `Successfully deleted ${deletedCount.data?.deleteMultipleUsers} roles.`,
     });
     refresh();
   };

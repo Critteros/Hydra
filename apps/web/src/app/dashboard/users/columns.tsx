@@ -36,7 +36,7 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: 'uid',
     header: ({ column }) => <DataTableColumHeader column={column} title="UID" />,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue('uid')}</div>,
+    cell: ({ row }) => <div className="w-[120px]">{row.getValue('uid')}</div>,
     enableSorting: false,
     enableHiding: false,
   },

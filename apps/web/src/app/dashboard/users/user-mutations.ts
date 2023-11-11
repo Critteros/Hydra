@@ -39,3 +39,9 @@ export const adminChangeUserPasswordMutation = gql(`
     adminUpdateUserPassword(uid: $uid, password: $newPassword)
   }
 `);
+
+export const deleteMultipleUsersMutation = gql(`
+  mutation DeleteMultipleUsers($uids: [ID!]!) {
+    deleteMultipleUsers(uids: $uids)
+  }
+`);

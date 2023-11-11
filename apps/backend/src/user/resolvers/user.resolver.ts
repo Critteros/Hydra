@@ -1,6 +1,6 @@
 import { ForbiddenError } from '@nestjs/apollo';
 import { BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common';
-import { Resolver, Query, Args, Mutation, ResolveField, Parent } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, ResolveField, Parent, ID } from '@nestjs/graphql';
 
 import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 
@@ -138,6 +138,11 @@ export class UserResolver {
   async createUser(@Args('data') userData: CreateUserInput) {
     const user = await this.userService.createUser(userData);
     return user;
+  }
+
+  @Mutation(() => Boolean, { description: 'Delete multiple users' })
+  async deleteMultipleUsers(@Args({ name: 'uids', type: () => [ID] }) uids: string[]) {
+    return await this.userService.deleteMultipleUsers({ userUids: uids });
   }
 
   // ================================ Resolvers ================================
