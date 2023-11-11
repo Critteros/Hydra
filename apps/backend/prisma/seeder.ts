@@ -2,7 +2,7 @@ import { exit } from 'node:process';
 
 import { PrismaClient } from '@prisma/client';
 
-import { run as seedPermissions } from './permissions';
+import { run as seedPermissions } from './seed/permissions.seed';
 
 async function main() {
   const prisma = new PrismaClient();

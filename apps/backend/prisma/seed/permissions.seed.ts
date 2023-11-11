@@ -1,6 +1,6 @@
 import type { PrismaClient, Permission } from '@prisma/client';
 
-import { permissionConfig } from '@/rbac/permissions';
+import { permissionConfig } from '@/rbac/constants/permissions.constant';
 
 export async function run(client: PrismaClient) {
   const permissionsIds = Object.keys(permissionConfig);

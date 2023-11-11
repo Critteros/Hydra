@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
 import { Prisma, type Permission, type User } from '@prisma/client';
 
-import { PrismaService } from '@/db/prisma.service';
+import { PrismaService } from '@/database/prisma.service';
 import { UserNotFound } from '@/user/services/user.service';
 import { remapPrismaError, PrismaErrorCode } from '@/utils/prisma/errors';
 

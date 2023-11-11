@@ -3,7 +3,8 @@ import { Injectable } from '@nestjs/common';
 import type { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-import { UserService, type AuthenticatedUser } from '@/user';
+import { UserService } from '@/user/services/user.service';
+import type { AuthenticatedUser } from '@/user/types';
 import { exclude } from '@/utils/objects';
 
 @Injectable()

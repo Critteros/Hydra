@@ -3,7 +3,7 @@ import { Mutation, Resolver, Args } from '@nestjs/graphql';
 
 import type { Request } from 'express';
 
-import { AdminUserGuard } from '@/user/guards';
+import { AdminUserGuard } from '@/user/guards/admin-user.guard';
 import { UserService } from '@/user/services/user.service';
 import { exclude } from '@/utils/objects';
 import { InjectRequest } from '@/utils/request.decorator';

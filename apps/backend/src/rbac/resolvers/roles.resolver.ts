@@ -3,9 +3,9 @@ import { Resolver, Query, Parent, ResolveField, Mutation, Args, Int } from '@nes
 
 import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 
-import { UserAuthenticated } from '@/auth';
-import { User as InjectUser } from '@/user/decorators/user';
-import { AdminUserGuard } from '@/user/guards';
+import { UserAuthenticated } from '@/auth/guards/user-authenticated.guard';
+import { User as InjectUser } from '@/user/decorators/user.decorator';
+import { AdminUserGuard } from '@/user/guards/admin-user.guard';
 import { User } from '@/user/schemas/user.schema';
 
 import { AssignedPermission } from '../schemas/assigned-permission.schema';
@@ -33,14 +33,14 @@ export class RolesResolver {
   }
 
   @ResolveField(() => [User], { description: 'Members of a given role' })
-  async members(@Parent() role: Role): Promise<User[]> {
+  async members(@Parent() role: Role) {
     const { uid } = role;
     const users = await this.rolesService.getUsersWithRole(uid);
     return users;
   }
 
   @ResolveField(() => [AssignedPermission], { description: 'Role permissions' })
-  async permissions(@Parent() role: Role): Promise<AssignedPermission[]> {
+  async permissions(@Parent() role: Role) {
     const { uid } = role;
     const permissions = await this.rolesService.getAssignedPermissionsToRole(uid);
     return permissions;

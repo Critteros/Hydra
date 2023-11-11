@@ -1,12 +1,16 @@
 import { Module } from '@nestjs/common';
 
-import { DbModule } from '@/db/db.module';
+import { DatabaseModule } from '@/database/database.module';
 
-import { PermissionResolver, RolesResolver } from './resolvers';
-import { PermissionService, RolesService } from './services';
+// Resolvers
+import { PermissionResolver } from './resolvers/permission.resolver';
+import { RolesResolver } from './resolvers/roles.resolver';
+// Services
+import { PermissionService } from './services/permission.service';
+import { RolesService } from './services/roles.service';
 
 @Module({
-  imports: [DbModule],
+  imports: [DatabaseModule],
   providers: [PermissionResolver, PermissionService, RolesService, RolesResolver],
   exports: [PermissionService, RolesService],
 })

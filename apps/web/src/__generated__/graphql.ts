@@ -197,6 +197,8 @@ export type User = {
   email: Scalars['String']['output'];
   /** Nickname for the user */
   name?: Maybe<Scalars['String']['output']>;
+  /** List of permissions assigned to the user */
+  permissions: Array<Scalars['String']['output']>;
   /** Unique identifier of the user */
   uid: Scalars['ID']['output'];
 };

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import type { Permissions } from '@hydra-ipxe/common/shared/permissions';
 
-import { PrismaService } from '@/db/prisma.service';
+import { PrismaService } from '@/database/prisma.service';
 import { UserNotFound } from '@/user/services/user.service';
 
 @Injectable()

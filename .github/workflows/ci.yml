@@ -4,6 +4,9 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+env:
+  DISABLE_ERD: "true"
+
 jobs:
   test:
     name: Test
