@@ -1,9 +1,8 @@
 import { ForbiddenError } from '@nestjs/apollo';
 import { BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common';
-import { Resolver, Query, Args, Mutation, ResolveField, Parent, ID } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, ResolveField, Parent } from '@nestjs/graphql';
 
 import { MapErrors } from '@hydra-ipxe/common/shared/errors';
-import { z } from 'zod';
 
 import { UserAuthenticated } from '@/auth/guards/user-authenticated.guard';
 import { Permission } from '@/rbac/schemas/permission.schema';
@@ -11,6 +10,7 @@ import { PermissionService } from '@/rbac/services/permission.service';
 
 import { User as InjectUser } from '../decorators/user.decorator';
 import { AdminUserGuard } from '../guards/admin-user.guard';
+import { AdminPasswordUpdateArgs } from '../schemas/admin-password-update.args';
 import { CreateUserArgs } from '../schemas/create-user.args';
 import { UpdatePasswordArgs } from '../schemas/update-password.args';
 import { UpdateUserArgs } from '../schemas/update-user.args';
@@ -124,14 +124,10 @@ export class UserResolver {
   ])
   @UseGuards(AdminUserGuard)
   async adminUpdateUserPassword(
-    @Args('uid', { type: () => ID }) uid: string,
-    @Args('password') password: string,
+    @Args() { uid, email }: UserSelectionArgs,
+    @Args() { password }: AdminPasswordUpdateArgs,
   ) {
-    if (z.string().min(1).safeParse(password).success === false) {
-      throw new BadRequestException('Password must be at least 1 character long');
-    }
-
-    await this.userService.updatePasswordUnckecked({ uid }, password);
+    await this.userService.updatePasswordUnckecked({ uid, email }, password);
     return true;
   }
 

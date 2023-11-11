@@ -74,8 +74,9 @@ export type MutationAdminLoginAsUserArgs = {
 
 
 export type MutationAdminUpdateUserPasswordArgs = {
+  email?: InputMaybe<Scalars['String']['input']>;
   password: Scalars['String']['input'];
-  uid: Scalars['ID']['input'];
+  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 

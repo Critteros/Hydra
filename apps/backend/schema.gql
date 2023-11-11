@@ -127,7 +127,16 @@ type Mutation {
   ): Boolean!
 
   """Admin updates user password"""
-  adminUpdateUserPassword(uid: ID!, password: String!): Boolean!
+  adminUpdateUserPassword(
+    """Unique identifier of the user to update"""
+    uid: ID
+
+    """Email of the user to update"""
+    email: String
+
+    """New password"""
+    password: String!
+  ): Boolean!
 
   """Creates a new user"""
   createNewUser(
