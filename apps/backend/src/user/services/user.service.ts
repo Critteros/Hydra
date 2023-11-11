@@ -4,7 +4,7 @@ import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
 import { Prisma, type User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-import { PrismaService } from '@/db/prisma.service';
+import { PrismaService } from '@/database/prisma.service';
 import { PrismaErrorCode, remapPrismaError } from '@/utils/prisma/errors';
 
 export const UserAlreadyExistsError = makeCustomError('UserAlreadyExistsError');

@@ -5,7 +5,7 @@ import { CreateAccountDto } from '@hydra-ipxe/common/server/internal/dto/account
 import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 import { ZodValidationPipe } from 'nestjs-zod';
 
-import { UserService, UserAlreadyExistsError } from '@/auth';
+import { UserService, UserAlreadyExistsError } from '@/user/services/user.service';
 
 @Controller('accounts')
 @UsePipes(ZodValidationPipe)

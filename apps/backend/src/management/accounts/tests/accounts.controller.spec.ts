@@ -5,8 +5,8 @@ import { faker } from '@faker-js/faker';
 import request from 'supertest';
 
 import { AuthModule } from '@/auth/auth.module';
-import { PrismaService } from '@/db/prisma.service';
-import { UserModule } from '@/user';
+import { PrismaService } from '@/database/prisma.service';
+import { UserModule } from '@/user/user.module';
 import { prismaTruncateDB, createMockDB, type StartedPostgreSqlContainer } from '@/utils/test';
 
 import { AccountsController } from '../accounts.controller';

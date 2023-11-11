@@ -12,10 +12,10 @@ import type { Express } from 'express';
 import request from 'supertest';
 import { GenericContainer, Wait, type StartedTestContainer } from 'testcontainers';
 
-import { PrismaService } from '@/db/prisma.service';
-import { RedisOptionsToken } from '@/db/redis.constants';
-import type { RedisOptions } from '@/db/redis.module';
-import { UserService } from '@/user';
+import { PrismaService } from '@/database/prisma.service';
+import { RedisOptionsToken } from '@/redis/redis.constants';
+import type { RedisOptions } from '@/redis/redis.module';
+import { UserService } from '@/user/services/user.service';
 
 import { AppModule } from '../app.module';
 

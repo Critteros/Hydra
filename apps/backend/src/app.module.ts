@@ -8,13 +8,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
-import { DbModule } from './db/db.module';
-import { RedisModule } from './db/redis.module';
+import { DatabaseModule } from './database/database.module';
 import { ManagementModule } from './management/management.module';
 import { PassportMiddleware } from './middleware/passport.middleware';
 import { SessionMiddleware } from './middleware/session.middleware';
-import { UserModule } from './user/user.module';
 import { RbacModule } from './rbac/rbac.module';
+import { RedisModule } from './redis/redis.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -50,10 +50,10 @@ import { RbacModule } from './rbac/rbac.module';
     ManagementModule,
     ConfigModule,
     AuthModule,
-    DbModule,
     UserModule,
     RedisModule,
     RbacModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

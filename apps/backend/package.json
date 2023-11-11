@@ -23,10 +23,10 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed/index.ts"
+    "db:seed": "tsx prisma/seeder.ts"
   },
   "prisma": {
-    "seed": "tsx prisma/seed/index.ts"
+    "seed": "tsx prisma/seeder.ts"
   },
   "prettier": "@hydra-ipxe/prettier-config",
   "jest": {

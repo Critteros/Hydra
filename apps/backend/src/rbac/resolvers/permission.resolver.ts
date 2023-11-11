@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Resolver, Query } from '@nestjs/graphql';
 
-import { UserAuthenticated } from '@/auth';
+import { UserAuthenticated } from '@/auth/guards/user-authenticated.guard';
 
 import { Permission } from '../schemas/permission.schema';
 import { PermissionService } from '../services/permission.service';

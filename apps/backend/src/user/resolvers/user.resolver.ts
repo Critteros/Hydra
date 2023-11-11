@@ -5,11 +5,11 @@ import { Resolver, Query, Args, ID, Mutation, ResolveField, Parent } from '@nest
 import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 import { z } from 'zod';
 
-import { UserAuthenticated } from '@/auth/guards';
+import { UserAuthenticated } from '@/auth/guards/user-authenticated.guard';
 import { Permission } from '@/rbac/schemas/permission.schema';
 import { PermissionService } from '@/rbac/services/permission.service';
 
-import { User as InjectUser } from '../decorators/user';
+import { User as InjectUser } from '../decorators/user.decorator';
 import { AdminUserGuard } from '../guards/admin-user.guard';
 import {
   User,
