@@ -11,8 +11,13 @@ import { PermissionService } from '../services/permission.service';
 export class PermissionResolver {
   constructor(private readonly permissionService: PermissionService) {}
 
+  // ================================ Queries ================================
+
   @Query(() => [Permission], { description: 'Get all permissions' })
   async permissions(): Promise<Permission[]> {
     return await this.permissionService.getPermissions();
   }
+
+  // ================================ Mutations ================================
+  // ================================ Resolvers ================================
 }

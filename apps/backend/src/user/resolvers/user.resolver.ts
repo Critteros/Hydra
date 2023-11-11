@@ -31,6 +31,8 @@ export class UserResolver {
     private readonly permissionsService: PermissionService,
   ) {}
 
+  // ================================ Queries ================================
+
   @Query(() => [User])
   async users() {
     const users = await this.userService.findMany({});
@@ -47,11 +49,7 @@ export class UserResolver {
     return user;
   }
 
-  @ResolveField(() => [Permission], { description: 'List of permissions assigned to the user' })
-  async permissions(@Parent() user: User) {
-    const permissions = await this.permissionsService.getUserPermissions(user.uid);
-    return permissions;
-  }
+  // ================================ Mutations ================================
 
   @Mutation(() => User, { description: 'Updates user data' })
   @MapErrors({
@@ -140,5 +138,13 @@ export class UserResolver {
   async createUser(@Args('data') userData: CreateUserInput) {
     const user = await this.userService.createUser(userData);
     return user;
+  }
+
+  // ================================ Resolvers ================================
+
+  @ResolveField(() => [Permission], { description: 'List of permissions assigned to the user' })
+  async permissions(@Parent() user: User) {
+    const permissions = await this.permissionsService.getUserPermissions(user.uid);
+    return permissions;
   }
 }
