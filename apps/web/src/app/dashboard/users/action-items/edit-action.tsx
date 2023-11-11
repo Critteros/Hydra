@@ -39,7 +39,7 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 
-import type { User } from '../queries';
+import type { User } from '../user-queries';
 
 import { updateUserInfoMutation } from './mutations';
 

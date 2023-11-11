@@ -21,7 +21,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 
 import { deleteMultipleRolesMutation } from './mutations';
-import type { RolePresentation } from './queries';
+import type { RolePresentation } from './roles-queries';
 
 type TableSelectionActions = {
   table: Table<RolePresentation>;

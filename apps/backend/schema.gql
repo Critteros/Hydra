@@ -77,7 +77,13 @@ type Role {
 
 type Query {
   users: [User!]!
-  user(uid: ID, email: String): User
+  user(
+    """Unique identifier of the user to update"""
+    uid: ID
+
+    """Email of the user to update"""
+    email: String
+  ): User
 
   """Returns the current user"""
   me: User!
@@ -97,16 +103,46 @@ type Mutation {
   adminLoginAsUser(uid: String!): Boolean!
 
   """Updates user data"""
-  updateUser(userData: UserUpdateInput!): User!
+  updateUser(
+    """Unique identifier of the user to update"""
+    uid: ID
+
+    """New email address of the user"""
+    email: String
+
+    """Nickname for the user"""
+    name: String
+
+    """Type of the user account"""
+    accountType: AccountType
+  ): User!
 
   """Updates current user password"""
-  updateCurrentUserPassword(data: UpdatePasswordInput!): Boolean!
+  updateCurrentUserPassword(
+    """Current password"""
+    currentPassword: String!
+
+    """New password"""
+    newPassword: String!
+  ): Boolean!
 
   """Admin updates user password"""
-  adminUpdateUserPassword(uid: String!, password: String!): Boolean!
+  adminUpdateUserPassword(uid: ID!, password: String!): Boolean!
 
   """Creates a new user"""
-  createNewUser(userData: CreateUserInput!): User!
+  createNewUser(
+    """New email address of the user"""
+    email: String
+
+    """Password for the user"""
+    password: String!
+
+    """Nickname for the user"""
+    name: String
+
+    """Type of the user account"""
+    accountType: AccountType! = STANDARD
+  ): User!
 
   """Create a new role"""
   createRole(input: CreateRoleInput!): Role!
@@ -122,42 +158,6 @@ type Mutation {
 
   """Assign users to a role"""
   assignUsersToRole(roleUid: String!, usersUids: [String!]!): Boolean!
-}
-
-input UserUpdateInput {
-  """Unique identifier of the user"""
-  uid: ID
-
-  """Email address of the user"""
-  email: String
-
-  """Nickname for the user"""
-  name: String
-
-  """Type of the user account"""
-  accountType: AccountType
-}
-
-input UpdatePasswordInput {
-  """Current password"""
-  currentPassword: String!
-
-  """New password"""
-  newPassword: String!
-}
-
-input CreateUserInput {
-  """Email address of the user"""
-  email: String!
-
-  """Password for the user"""
-  password: String!
-
-  """Nickname for the user"""
-  name: String
-
-  """Type of the user account"""
-  accountType: AccountType
 }
 
 input CreateRoleInput {

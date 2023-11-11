@@ -21,7 +21,7 @@ import { TransferList } from '@/components/ui/transfer-list';
 import { useToast } from '@/components/ui/use-toast';
 
 import { assignPermissionsToRoleMutation } from './mutations';
-import { queryRolePermissions } from './queries';
+import { queryRolePermissions } from './roles-queries';
 
 type EditPermissionsWidgetProps = {
   permissionCount: number;

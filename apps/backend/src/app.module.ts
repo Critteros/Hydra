@@ -1,5 +1,7 @@
 import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo';
 import { Module, type MiddlewareConsumer } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 
 import { resolve } from 'path';
@@ -56,7 +58,17 @@ import { UserModule } from './user/user.module';
     DatabaseModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: false,
+        transform: true,
+      }),
+    },
+  ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

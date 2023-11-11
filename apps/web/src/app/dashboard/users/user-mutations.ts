@@ -7,8 +7,8 @@ export const adminLoginAsUserMutation = gql(`
 `);
 
 export const createNewUserMutation = gql(`
-  mutation CreateNewUser($userData: CreateUserInput!) {
-    createNewUser(userData: $userData) {
+  mutation CreateNewUser($email: String!, $password: String!, $name: String, $accountType: AccountType!) {
+    createNewUser(email: $email, password: $password, name: $name, accountType: $accountType) {
       uid
       email
       name

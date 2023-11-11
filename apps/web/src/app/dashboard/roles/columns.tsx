@@ -7,7 +7,7 @@ import { DataTableColumHeader } from '@/components/ui/table/data-table-column-he
 
 import { EditPermissionsWidget } from './edit-permissions-widget';
 import { EditUsersWidget } from './edit-users-widget';
-import type { RolePresentation } from './queries';
+import type { RolePresentation } from './roles-queries';
 
 export const columns: ColumnDef<RolePresentation>[] = [
   {

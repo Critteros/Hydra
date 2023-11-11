@@ -28,7 +28,7 @@ import { Icons } from '@/components/ui/icons';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 
-import type { User } from '../queries';
+import type { User } from '../user-queries';
 
 import { adminChangeUserPasswordMutation } from './mutations';
 

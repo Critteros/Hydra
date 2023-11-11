@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 
-import { createNewUserMutation } from './mutations';
+import { createNewUserMutation } from './user-mutations';
 
 const formSchema = z
   .object({

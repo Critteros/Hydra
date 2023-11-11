@@ -6,7 +6,7 @@ import { Typography } from '@/components/ui/typography';
 import { getClient } from '@/lib/server/apollo-client';
 
 import { columns } from './columns';
-import * as queries from './queries';
+import * as queries from './user-queries';
 import { UsersTableToolbar } from './users-table-toolbar';
 
 export default async function DashboardUsersPage() {

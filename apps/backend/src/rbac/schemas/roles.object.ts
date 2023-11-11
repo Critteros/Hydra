@@ -2,9 +2,9 @@ import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
 
 import { MinLength } from 'class-validator';
 
-import { User } from '@/user/schemas/user.schema';
+import { User } from '@/user/schemas/user.object';
 
-import { AssignedPermission } from './assigned-permission.schema';
+import { AssignedPermission } from './assigned-permission.object';
 
 @ObjectType()
 export class Role {

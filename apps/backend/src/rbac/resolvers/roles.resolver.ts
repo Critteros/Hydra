@@ -6,10 +6,10 @@ import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 import { UserAuthenticated } from '@/auth/guards/user-authenticated.guard';
 import { User as InjectUser } from '@/user/decorators/user.decorator';
 import { AdminUserGuard } from '@/user/guards/admin-user.guard';
-import { User } from '@/user/schemas/user.schema';
+import { User } from '@/user/schemas/user.object';
 
-import { AssignedPermission } from '../schemas/assigned-permission.schema';
-import { Role, CreateRoleInput } from '../schemas/roles.schema';
+import { AssignedPermission } from '../schemas/assigned-permission.object';
+import { Role, CreateRoleInput } from '../schemas/roles.object';
 import { RolesService, RoleNotFoudError, RoleAlreadyExistsError } from '../services/roles.service';
 
 @Resolver(() => Role)

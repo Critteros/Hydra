@@ -21,7 +21,7 @@ import { TransferList } from '@/components/ui/transfer-list';
 import { useToast } from '@/components/ui/use-toast';
 
 import { assignUsersToRoleMutation } from './mutations';
-import { queryRoleMembers } from './queries';
+import { queryRoleMembers } from './roles-queries';
 
 type EditUsersWidgetProps = {
   userCount: number;
