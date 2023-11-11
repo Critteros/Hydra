@@ -62,10 +62,10 @@ export const columns: ColumnDef<RolePresentation>[] = [
     },
   },
   {
-    accessorKey: 'membersCount',
+    accessorKey: 'memberCount',
     cell: ({ row }) => (
       <div className="flex w-[80px] items-center">
-        <EditUsersWidget userCount={row.getValue('membersCount')} roleUid={row.getValue('uid')} />
+        <EditUsersWidget userCount={row.getValue('memberCount')} roleUid={row.getValue('uid')} />
       </div>
     ),
     header: ({ column }) => <DataTableColumHeader column={column} title="Members" />,

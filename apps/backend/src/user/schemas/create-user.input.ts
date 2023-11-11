@@ -1,11 +1,11 @@
-import { ArgsType, Field } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
 
 import { IsEmail, Length, IsOptional, IsDefined } from 'class-validator';
 
 import { AccountType } from './account-type.enum';
 
-@ArgsType()
-export class CreateUserArgs {
+@InputType()
+export class CreateUserInput {
   @Field(() => String, { description: 'New email address of the user', nullable: true })
   @IsDefined()
   @IsEmail({}, { message: 'Invalid email address' })

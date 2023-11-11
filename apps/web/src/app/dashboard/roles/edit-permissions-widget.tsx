@@ -20,7 +20,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { TransferList } from '@/components/ui/transfer-list';
 import { useToast } from '@/components/ui/use-toast';
 
-import { assignPermissionsToRoleMutation } from './mutations';
+import { assignPermissionsToRoleMutation } from './roles-mutations';
 import { queryRolePermissions } from './roles-queries';
 
 type EditPermissionsWidgetProps = {

@@ -7,12 +7,35 @@ export const adminLoginAsUserMutation = gql(`
 `);
 
 export const createNewUserMutation = gql(`
-  mutation CreateNewUser($email: String!, $password: String!, $name: String, $accountType: AccountType!) {
-    createNewUser(email: $email, password: $password, name: $name, accountType: $accountType) {
+  mutation CreateNewUser($input: CreateUserInput!) {
+    createUser(data: $input) {
       uid
       email
       name
       accountType
     }
+  }
+`);
+
+export const updateUserInfoMutation = gql(`
+  mutation UpdateUserInfo($uid: ID!, $input: UpdateUserInput!) {
+    updateUser(uid: $uid, updateData: $input) {
+      uid
+      email
+      name
+      accountType
+    }
+  }
+`);
+
+export const changeCurentUserPasswordMutation = gql(`
+  mutation ChangeCurentUserPassword($currentPassword: String!, $newPassword: String!) {
+    updateCurrentUserPassword(currentPassword: $currentPassword, newPassword: $newPassword)
+  }
+`);
+
+export const adminChangeUserPasswordMutation = gql(`
+  mutation AdminChangeUserPassword($uid: ID!, $newPassword: String!) {
+    adminUpdateUserPassword(uid: $uid, password: $newPassword)
   }
 `);

@@ -20,7 +20,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { TransferList } from '@/components/ui/transfer-list';
 import { useToast } from '@/components/ui/use-toast';
 
-import { assignUsersToRoleMutation } from './mutations';
+import { assignUsersToRoleMutation } from './roles-mutations';
 import { queryRoleMembers } from './roles-queries';
 
 type EditUsersWidgetProps = {
@@ -55,20 +55,20 @@ export function EditUsersWidget({ userCount, roleUid }: EditUsersWidgetProps) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Permissions</DialogTitle>
+          <DialogTitle>Edit Users</DialogTitle>
           <DialogDescription>Change assigned permissions and then click save</DialogDescription>
         </DialogHeader>
         {data ? (
           <TransferList
             items={data.users.map(({ uid, email }) => ({ id: uid, display: email }))}
-            selectedItems={data.role.members.map(({ uid }) => uid)}
+            selectedItems={data?.role?.members.map(({ uid }) => uid)}
             checkboxSelection={selectedItems}
             onCheckboxSelectionChange={setSelectedItems}
             onConfirm={async (items) => {
               await assignUsersToRole({
                 variables: {
                   roleUid,
-                  usersUids: items.map((item) => item.id),
+                  userUids: items.map((item) => item.id),
                 },
               });
               refresh();

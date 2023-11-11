@@ -3,7 +3,7 @@ import { Resolver, Query } from '@nestjs/graphql';
 
 import { UserAuthenticated } from '@/auth/guards/user-authenticated.guard';
 
-import { Permission } from '../schemas/permission.schema';
+import { Permission } from '../schemas/permission.object';
 import { PermissionService } from '../services/permission.service';
 
 @Resolver(() => Permission)

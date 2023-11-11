@@ -31,9 +31,8 @@ import { Icons } from '@/components/ui/icons';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 
+import { changeCurentUserPasswordMutation } from '../user-mutations';
 import type { User } from '../user-queries';
-
-import { changeCurentUserPasswordMutation } from './mutations';
 
 const formSchema = z
   .object({
@@ -77,10 +76,8 @@ export function ChangePasswordAction({ user, onOpenChange, ...props }: ChangePas
     try {
       await changeCurrentUserPassword({
         variables: {
-          data: {
-            currentPassword: values.oldPassword,
-            newPassword: values.newPassword,
-          },
+          currentPassword: values.oldPassword,
+          newPassword: values.newPassword,
         },
       });
     } catch (e) {

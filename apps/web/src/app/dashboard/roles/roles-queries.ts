@@ -11,7 +11,7 @@ export const queryRoles = gql(`
       name
       description
       permissionsCount
-      membersCount
+      memberCount
     }
   }
 `);
@@ -25,7 +25,7 @@ export const queryPermissionIds = gql(`
 `);
 
 export const queryRolePermissions = gql(`
-  query QueryRolePermissions($uid: String!) {
+  query QueryRolePermissions($uid: ID!) {
     role(uid: $uid) {
       uid
       permissions {
@@ -39,7 +39,7 @@ export const queryRolePermissions = gql(`
 `);
 
 export const queryRoleMembers = gql(`
-  query QueryRoleMembers($uid: String!) {
+  query QueryRoleMembers($uid: ID!) {
     role(uid: $uid) {
       uid
       members {

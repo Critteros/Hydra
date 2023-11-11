@@ -5,15 +5,15 @@ import { Resolver, Query, Args, Mutation, ResolveField, Parent } from '@nestjs/g
 import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 
 import { UserAuthenticated } from '@/auth/guards/user-authenticated.guard';
-import { Permission } from '@/rbac/schemas/permission.schema';
+import { Permission } from '@/rbac/schemas/permission.object';
 import { PermissionService } from '@/rbac/services/permission.service';
 
 import { User as InjectUser } from '../decorators/user.decorator';
 import { AdminUserGuard } from '../guards/admin-user.guard';
 import { AdminPasswordUpdateArgs } from '../schemas/admin-password-update.args';
-import { CreateUserArgs } from '../schemas/create-user.args';
+import { CreateUserInput } from '../schemas/create-user.input';
 import { UpdatePasswordArgs } from '../schemas/update-password.args';
-import { UpdateUserArgs } from '../schemas/update-user.args';
+import { UpdateUserInput } from '../schemas/update-user.input';
 import { UserSelectionArgs } from '../schemas/user-selection.args';
 import { User } from '../schemas/user.object';
 import {
@@ -60,7 +60,7 @@ export class UserResolver {
   })
   async updateUser(
     @Args() { email, uid }: UserSelectionArgs,
-    @Args() userData: UpdateUserArgs,
+    @Args('updateData') userData: UpdateUserInput,
     @InjectUser() user: User,
   ) {
     const targetUser = await this.userService.find({ uid, email });
@@ -131,13 +131,13 @@ export class UserResolver {
     return true;
   }
 
-  @Mutation(() => User, { description: 'Creates a new user', name: 'createNewUser' })
+  @Mutation(() => User, { description: 'Creates a new user' })
   @MapErrors({
     if: UserAlreadyExistsError,
     then: () => new BadRequestException('Email address already in use'),
   })
   @UseGuards(AdminUserGuard)
-  async createUser(@Args() userData: CreateUserArgs) {
+  async createUser(@Args('data') userData: CreateUserInput) {
     const user = await this.userService.createUser(userData);
     return user;
   }

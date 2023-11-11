@@ -20,7 +20,7 @@ import {
 import { Button, buttonVariants } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 
-import { deleteMultipleRolesMutation } from './mutations';
+import { deleteMultipleRolesMutation } from './roles-mutations';
 import type { RolePresentation } from './roles-queries';
 
 type TableSelectionActions = {

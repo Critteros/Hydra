@@ -2,7 +2,7 @@ import { ObjectType, Field } from '@nestjs/graphql';
 
 import { User } from '@/user/schemas/user.object';
 
-import { Permission } from './permission.schema';
+import { Permission } from './permission.object';
 
 @ObjectType()
 export class AssignedPermission extends Permission {

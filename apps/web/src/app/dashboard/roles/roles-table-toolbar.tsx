@@ -20,8 +20,8 @@ import { DataTableViewOptions } from '@/components/ui/table/data-table-view-opti
 
 import { useCurrentUser } from '../current-user-context';
 
-import { createRoleMutation } from './mutations';
 import { RoleModifyForm, type FormSchema } from './role-modify-form';
+import { createRoleMutation } from './roles-mutations';
 
 type RolesTableToorbarProps<TData> = {
   table: Table<TData>;
