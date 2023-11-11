@@ -1,11 +1,13 @@
 import { ForbiddenError } from '@nestjs/apollo';
 import { BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common';
-import { Resolver, Query, Args, ID, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Args, ID, Mutation, ResolveField, Parent } from '@nestjs/graphql';
 
 import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 import { z } from 'zod';
 
 import { UserAuthenticated } from '@/auth/guards';
+import { Permission } from '@/rbac/schemas/permission.schema';
+import { PermissionService } from '@/rbac/services/permission.service';
 
 import { User as InjectUser } from '../decorators/user';
 import { AdminUserGuard } from '../guards/admin-user.guard';
@@ -25,7 +27,10 @@ import {
 @Resolver(() => User)
 @UseGuards(UserAuthenticated)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly permissionsService: PermissionService,
+  ) {}
 
   @Query(() => [User])
   async users() {
@@ -50,6 +55,12 @@ export class UserResolver {
   @Query(() => User, { name: 'me', description: 'Returns the current user' })
   currentUser(@InjectUser() user: User) {
     return user;
+  }
+
+  @ResolveField(() => [Permission], { description: 'List of permissions assigned to the user' })
+  async permissions(@Parent() user: User) {
+    const permissions = await this.permissionsService.getUserPermissions(user.uid);
+    return permissions;
   }
 
   @Mutation(() => User, { description: 'Updates user data' })

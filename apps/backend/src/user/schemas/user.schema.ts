@@ -1,5 +1,14 @@
-import { Field, ObjectType, ID, registerEnumType, PartialType, InputType } from '@nestjs/graphql';
+import {
+  Field,
+  ObjectType,
+  ID,
+  registerEnumType,
+  PartialType,
+  InputType,
+  PickType,
+} from '@nestjs/graphql';
 
+import { Permissions } from '@hydra-ipxe/common/shared/permissions';
 import { AccountType } from '@prisma/client';
 import { IsNotEmpty, MaxLength, MinLength, IsEmail, IsOptional, IsString } from 'class-validator';
 
@@ -22,9 +31,15 @@ export class User {
 
   @Field(() => AccountType, { description: 'Type of the user account' })
   accountType!: AccountType;
+
+  @Field(() => [String], { description: 'List of permissions assigned to the user' })
+  permissions!: Permissions[];
 }
 @InputType()
-export class UserUpdateInput extends PartialType(User, InputType) {}
+export class UserUpdateInput extends PartialType(
+  PickType(User, ['email', 'name', 'accountType', 'uid']),
+  InputType,
+) {}
 
 @InputType()
 export class UpdatePasswordInput {

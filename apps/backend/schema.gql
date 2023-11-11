@@ -2,6 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Permission {
+  """Unique identifier and name of the permission"""
+  id: String!
+
+  """Description of the permission"""
+  description: String!
+}
+
 type User {
   """Unique identifier of the user"""
   uid: ID!
@@ -14,20 +22,15 @@ type User {
 
   """Type of the user account"""
   accountType: AccountType!
+
+  """List of permissions assigned to the user"""
+  permissions: [String!]!
 }
 
 """Type of the user account"""
 enum AccountType {
   STANDARD
   ADMIN
-}
-
-type Permission {
-  """Unique identifier and name of the permission"""
-  id: String!
-
-  """Description of the permission"""
-  description: String!
 }
 
 type AssignedPermission {

@@ -8,7 +8,7 @@ import { User as InjectUser } from '@/user/decorators/user';
 import { AdminUserGuard } from '@/user/guards';
 import { User } from '@/user/schemas/user.schema';
 
-import { AssignedPermission } from '../schemas/permission.schema';
+import { AssignedPermission } from '../schemas/assigned-permission.schema';
 import { Role, CreateRoleInput } from '../schemas/roles.schema';
 import { RolesService, RoleNotFoudError, RoleAlreadyExistsError } from '../services/roles.service';
 

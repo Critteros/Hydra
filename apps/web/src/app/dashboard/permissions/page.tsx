@@ -4,7 +4,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -22,27 +21,31 @@ export default async function DashboardPermissionsPage() {
 
   return (
     <ScrollArea className="flex min-h-0 grow items-center justify-center">
-      <main className="flex grow flex-col items-center justify-center gap-10 px-4">
+      <main className="flex grow flex-col  justify-center gap-10 px-4">
         <Typography variant="h1" className="mb-4 self-start">
           Permissions
         </Typography>
-        <Table>
-          <TableCaption>Available permissions</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Permission</TableHead>
-              <TableHead>Description</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {permissions.map(({ id, description }, index) => (
-              <TableRow key={`${id}-${index}`}>
-                <TableCell className="font-semibold">{id}</TableCell>
-                <TableCell>{description}</TableCell>
+        <div>
+          <Typography variant="h3" className="mb-4 self-start">
+            Available permissions
+          </Typography>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Permission</TableHead>
+                <TableHead>Description</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {permissions.map(({ id, description }, index) => (
+                <TableRow key={`${id}-${index}`}>
+                  <TableCell className="font-semibold">{id}</TableCell>
+                  <TableCell>{description}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </main>
     </ScrollArea>
   );

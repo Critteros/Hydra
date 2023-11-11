@@ -4,7 +4,7 @@ import { MinLength } from 'class-validator';
 
 import { User } from '@/user/schemas/user.schema';
 
-import { AssignedPermission } from './permission.schema';
+import { AssignedPermission } from './assigned-permission.schema';
 
 @ObjectType()
 export class Role {

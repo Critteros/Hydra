@@ -8,5 +8,6 @@ import { PermissionService, RolesService } from './services';
 @Module({
   imports: [DbModule],
   providers: [PermissionResolver, PermissionService, RolesService, RolesResolver],
+  exports: [PermissionService, RolesService],
 })
 export class RbacModule {}
