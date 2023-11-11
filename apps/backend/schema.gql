@@ -142,6 +142,9 @@ type Mutation {
   """Creates a new user"""
   createUser(data: CreateUserInput!): User!
 
+  """Delete multiple users"""
+  deleteMultipleUsers(uids: [ID!]!): Boolean!
+
   """Create a new role"""
   createRole(data: CreateRoleInput!): Role!
 
