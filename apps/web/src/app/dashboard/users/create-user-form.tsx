@@ -1,11 +1,11 @@
 import { useRouter } from 'next/navigation';
 
+import { AccountType } from '$gql/types';
 import { type ApolloError, useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { AccountType } from '@/__generated__/graphql';
 import { Button } from '@/components/ui/button';
 import {
   Form,

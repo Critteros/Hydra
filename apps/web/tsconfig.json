@@ -10,7 +10,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "$env": ["./src/env.mjs"],
-      "$gql": ["./src/__generated__/index.ts"]
+      "$gql": ["./src/__generated__/index.ts"],
+      "$gql/types": ["./src/__generated__/graphql.ts"],
     },
     "moduleResolution": "node",
     "jsx": "preserve"

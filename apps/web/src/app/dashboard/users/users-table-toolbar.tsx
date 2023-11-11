@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 
+import { AccountType } from '$gql/types';
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
 import type { Table } from '@tanstack/react-table';
 import { UserCog2 as AdminIcon, User as UserIcon } from 'lucide-react';
 
-import { AccountType } from '@/__generated__/graphql';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

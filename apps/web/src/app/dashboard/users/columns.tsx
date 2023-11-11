@@ -1,9 +1,9 @@
 'use client';
 
+import { AccountType } from '$gql/types';
 import type { ColumnDef } from '@tanstack/react-table';
 import { UserCog2 as AdminIcon, User as UserIcon } from 'lucide-react';
 
-import { AccountType } from '@/__generated__/graphql';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DataTableColumHeader } from '@/components/ui/table/data-table-column-header';
 import { cn } from '@/lib/utils';

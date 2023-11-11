@@ -4,12 +4,12 @@ import { useRouter } from 'next/navigation';
 
 import { useState, useRef } from 'react';
 
+import { AccountType } from '$gql/types';
 import { useMutation } from '@apollo/client';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import type { Row } from '@tanstack/react-table';
 import { ClipboardCopy, LogIn } from 'lucide-react';
 
-import { AccountType } from '@/__generated__/graphql';
 import { useCurrentUser } from '@/app/dashboard/current-user-context';
 import { Button } from '@/components/ui/button';
 import {

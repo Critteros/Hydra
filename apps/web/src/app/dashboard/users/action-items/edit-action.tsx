@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import { type ComponentProps, useState } from 'react';
 
+import { AccountType } from '$gql/types';
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { StatusCodes } from 'http-status-codes';
@@ -11,7 +12,6 @@ import { PencilLine } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { AccountType } from '@/__generated__/graphql';
 import { Button } from '@/components/ui/button';
 import {
   DialogContent,
