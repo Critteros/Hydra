@@ -1,22 +1,21 @@
 import { ForbiddenError } from '@nestjs/apollo';
 import { BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common';
-import { Resolver, Query, Args, ID, Mutation, ResolveField, Parent } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, ResolveField, Parent } from '@nestjs/graphql';
 
 import { MapErrors } from '@hydra-ipxe/common/shared/errors';
-import { z } from 'zod';
 
 import { UserAuthenticated } from '@/auth/guards/user-authenticated.guard';
-import { Permission } from '@/rbac/schemas/permission.schema';
+import { Permission } from '@/rbac/schemas/permission.object';
 import { PermissionService } from '@/rbac/services/permission.service';
 
 import { User as InjectUser } from '../decorators/user.decorator';
 import { AdminUserGuard } from '../guards/admin-user.guard';
-import {
-  User,
-  UserUpdateInput,
-  UpdatePasswordInput,
-  CreateUserInput,
-} from '../schemas/user.schema';
+import { AdminPasswordUpdateArgs } from '../schemas/admin-password-update.args';
+import { CreateUserInput } from '../schemas/create-user.input';
+import { UpdatePasswordArgs } from '../schemas/update-password.args';
+import { UpdateUserInput } from '../schemas/update-user.input';
+import { UserSelectionArgs } from '../schemas/user-selection.args';
+import { User } from '../schemas/user.object';
 import {
   UserService,
   UserNotFound,
@@ -32,6 +31,8 @@ export class UserResolver {
     private readonly permissionsService: PermissionService,
   ) {}
 
+  // ================================ Queries ================================
+
   @Query(() => [User])
   async users() {
     const users = await this.userService.findMany({});
@@ -39,17 +40,8 @@ export class UserResolver {
   }
 
   @Query(() => User, { nullable: true })
-  async user(
-    @Args('uid', { type: () => ID, nullable: true }) uid?: string,
-    @Args('email', { nullable: true }) email?: string,
-  ) {
-    if (!uid && !email) {
-      throw new BadRequestException('uid or email must be provided');
-    }
-
-    const user = await this.userService.find({ uid, email });
-
-    return user;
+  async user(@Args() { uid, email }: UserSelectionArgs) {
+    return await this.userService.find({ uid, email });
   }
 
   @Query(() => User, { name: 'me', description: 'Returns the current user' })
@@ -57,21 +49,26 @@ export class UserResolver {
     return user;
   }
 
-  @ResolveField(() => [Permission], { description: 'List of permissions assigned to the user' })
-  async permissions(@Parent() user: User) {
-    const permissions = await this.permissionsService.getUserPermissions(user.uid);
-    return permissions;
-  }
+  // ================================ Mutations ================================
 
   @Mutation(() => User, { description: 'Updates user data' })
   @MapErrors({
     if: UserNotFound,
     then: () => new BadRequestException('User not found'),
   })
-  async updateUser(@Args('userData') userData: UserUpdateInput, @InjectUser() user: User) {
+  async updateUser(
+    @Args() { email, uid }: UserSelectionArgs,
+    @Args('updateData') userData: UpdateUserInput,
+    @InjectUser() user: User,
+  ) {
+    const targetUser = await this.userService.find({ uid, email });
+    if (!targetUser) {
+      throw new UserNotFound(`User with uid ${uid} or email ${email} not found`);
+    }
+
     // Only allow the user to update their own data
     // admins can update any user data
-    if (user.uid !== userData.uid && user.accountType !== 'ADMIN') {
+    if (user.uid !== targetUser.uid && user.accountType !== 'ADMIN') {
       throw new ForbiddenError('You can only update your own data');
     }
 
@@ -81,7 +78,7 @@ export class UserResolver {
     }
 
     const updatedUser = await this.userService.updateUser({
-      where: { uid: userData.uid ?? user.uid },
+      where: { uid, email },
       data: userData,
     });
 
@@ -100,7 +97,7 @@ export class UserResolver {
     },
   ])
   async updateCurrentUserPassword(
-    @Args('data') { currentPassword, newPassword }: UpdatePasswordInput,
+    @Args() { currentPassword, newPassword }: UpdatePasswordArgs,
     @InjectUser() user: User,
   ) {
     await this.userService.updatePasswordChecked(
@@ -124,23 +121,30 @@ export class UserResolver {
     },
   ])
   @UseGuards(AdminUserGuard)
-  async adminUpdateUserPassword(@Args('uid') uid: string, @Args('password') password: string) {
-    if (z.string().min(1).safeParse(password).success === false) {
-      throw new BadRequestException('Password must be at least 1 character long');
-    }
-
-    await this.userService.updatePasswordUnckecked({ uid }, password);
+  async adminUpdateUserPassword(
+    @Args() { uid, email }: UserSelectionArgs,
+    @Args() { password }: AdminPasswordUpdateArgs,
+  ) {
+    await this.userService.updatePasswordUnckecked({ uid, email }, password);
     return true;
   }
 
-  @Mutation(() => User, { description: 'Creates a new user', name: 'createNewUser' })
+  @Mutation(() => User, { description: 'Creates a new user' })
   @MapErrors({
     if: UserAlreadyExistsError,
     then: () => new BadRequestException('Email address already in use'),
   })
   @UseGuards(AdminUserGuard)
-  async createUser(@Args('userData') userData: CreateUserInput) {
+  async createUser(@Args('data') userData: CreateUserInput) {
     const user = await this.userService.createUser(userData);
     return user;
+  }
+
+  // ================================ Resolvers ================================
+
+  @ResolveField(() => [Permission], { description: 'List of permissions assigned to the user' })
+  async permissions(@Parent() user: User) {
+    const permissions = await this.permissionsService.getUserPermissions(user.uid);
+    return permissions;
   }
 }

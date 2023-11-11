@@ -14,6 +14,9 @@ import { UserAuthenticated } from '../guards/user-authenticated.guard';
 export class AuthResolver {
   constructor(private readonly userService: UserService) {}
 
+  // ================================ Queries ================================
+  // ================================ Mutations ==============================
+
   @Mutation(() => Boolean, { name: 'adminLoginAsUser', description: 'Login as a user' })
   @UseGuards(UserAuthenticated)
   @UseGuards(AdminUserGuard)
@@ -36,4 +39,6 @@ export class AuthResolver {
 
     return true;
   }
+
+  // ================================ Resolvers ================================
 }

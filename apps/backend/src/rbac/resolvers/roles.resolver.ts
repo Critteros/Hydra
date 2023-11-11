@@ -6,10 +6,12 @@ import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 import { UserAuthenticated } from '@/auth/guards/user-authenticated.guard';
 import { User as InjectUser } from '@/user/decorators/user.decorator';
 import { AdminUserGuard } from '@/user/guards/admin-user.guard';
-import { User } from '@/user/schemas/user.schema';
+import { User } from '@/user/schemas/user.object';
 
-import { AssignedPermission } from '../schemas/assigned-permission.schema';
-import { Role, CreateRoleInput } from '../schemas/roles.schema';
+import { AssignedPermission } from '../schemas/assigned-permission.object';
+import { CreateRoleInput } from '../schemas/create-role.input';
+import { RoleSelectionArgs } from '../schemas/role-selection.args';
+import { Role } from '../schemas/roles.object';
 import { RolesService, RoleNotFoudError, RoleAlreadyExistsError } from '../services/roles.service';
 
 @Resolver(() => Role)
@@ -18,44 +20,29 @@ import { RolesService, RoleNotFoudError, RoleAlreadyExistsError } from '../servi
 export class RolesResolver {
   constructor(private rolesService: RolesService) {}
 
+  // ================================ Queries ================================
+
   @Query(() => [Role], { description: 'Get all roles' })
   async roles() {
-    const roles = await this.rolesService.getRoles();
+    const roles = await this.rolesService.listRoles();
 
     return roles;
   }
 
-  @Query(() => Role, { description: 'Get a single role' })
-  async role(@Args('uid') uid: string) {
-    const role = await this.rolesService.getRole({ uid });
-
-    return role;
+  @Query(() => Role, { description: 'Get a single role', nullable: true })
+  async role(@Args() { uid, name }: RoleSelectionArgs) {
+    return await this.rolesService.getRole({ uid, name });
   }
 
-  @ResolveField(() => [User], { description: 'Members of a given role' })
-  async members(@Parent() role: Role) {
-    const { uid } = role;
-    const users = await this.rolesService.getUsersWithRole(uid);
-    return users;
-  }
-
-  @ResolveField(() => [AssignedPermission], { description: 'Role permissions' })
-  async permissions(@Parent() role: Role) {
-    const { uid } = role;
-    const permissions = await this.rolesService.getAssignedPermissionsToRole(uid);
-    return permissions;
-  }
+  // ================================ Mutations ================================
 
   @Mutation(() => Role, { description: 'Create a new role' })
   @MapErrors({
     if: RoleAlreadyExistsError,
     then: () => new BadRequestException('Role already exists'),
   })
-  async createRole(
-    @Args('input') { description, name }: CreateRoleInput,
-  ): Promise<Omit<Role, 'permissions' | 'members'>> {
-    const role = await this.rolesService.createRole({ description, name });
-    return role;
+  async createRole(@Args('data') { description, name }: CreateRoleInput) {
+    return await this.rolesService.createRole({ description, name });
   }
 
   @Mutation(() => Boolean, { description: 'Delete a role' })
@@ -65,8 +52,8 @@ export class RolesResolver {
       then: () => new BadRequestException('Role not found'),
     },
   ])
-  async deleteRole(@Args('uid') uid: string): Promise<boolean> {
-    await this.rolesService.deleteRole(uid);
+  async deleteRole(@Args() { uid, name }: RoleSelectionArgs): Promise<boolean> {
+    await this.rolesService.deleteRole({ uid, name });
     return true;
   }
 
@@ -74,41 +61,68 @@ export class RolesResolver {
   async deleteMultipleRoles(
     @Args({ name: 'uids', type: () => [String] }) uids: string[],
   ): Promise<number> {
-    const deleteCount = await this.rolesService.deleteManyRoles(uids);
-    return deleteCount;
+    return await this.rolesService.deleteManyRoles({ rolesUids: uids });
   }
 
   @Mutation(() => Boolean, { description: 'Assign permissions to a role' })
   async assignPermissionsToRole(
-    @Args('roleUid') roleUid: string,
+    @Args() { uid, name }: RoleSelectionArgs,
     @Args({ name: 'permissionIds', type: () => [String] }) permissionIds: string[],
     @InjectUser() user: User,
   ) {
-    const res = await this.rolesService.assignPermissionsToRole(
-      {
-        uid: roleUid,
+    const res = await this.rolesService.assignPermissionsToRole({
+      role: {
+        uid,
+        name,
       },
-      permissionIds,
-      user.uid,
-    );
+      permissionsIds: permissionIds,
+      assignedByUser: {
+        uid: user.uid,
+      },
+    });
 
     return res;
   }
 
   @Mutation(() => Boolean, { description: 'Assign users to a role' })
   async assignUsersToRole(
-    @Args('roleUid') roleUid: string,
-    @Args({ name: 'usersUids', type: () => [String] }) usersUids: string[],
+    @Args() { uid, name }: RoleSelectionArgs,
+    @Args({ name: 'userUids', type: () => [String] }) userUids: string[],
     @InjectUser() user: User,
   ) {
-    const res = await this.rolesService.assignUsersToRole(
-      {
-        uid: roleUid,
+    const res = await this.rolesService.assignUsersToRole({
+      role: {
+        uid,
+        name,
       },
-      usersUids,
-      user.uid,
-    );
+      userUids,
+      assignedByUser: {
+        uid: user.uid,
+      },
+    });
 
     return res;
+  }
+
+  // ================================ Resolvers ================================
+
+  @ResolveField(() => [User])
+  async members(@Parent() { uid }: Role) {
+    return await this.rolesService.getUsersWithRole({ uid });
+  }
+
+  @ResolveField(() => Int)
+  async memberCount(@Parent() parent: Role) {
+    return await this.rolesService.countUsersWithRole({ uid: parent.uid });
+  }
+
+  @ResolveField(() => [AssignedPermission])
+  async permissions(@Parent() { uid }: Role) {
+    return await this.rolesService.getRolePermissions({ uid });
+  }
+
+  @ResolveField(() => Int)
+  async permissionsCount(@Parent() parent: Role) {
+    return await this.rolesService.countRolePermissions({ uid: parent.uid });
   }
 }

@@ -25,8 +25,8 @@ import { useToast } from '@/components/ui/use-toast';
 import { AdminChangePasswordAction } from './action-items/admin-change-password';
 import { ChangePasswordAction } from './action-items/change-password';
 import { EditAction } from './action-items/edit-action';
-import { adminLoginAsUserMutation } from './mutations';
-import type { User } from './queries';
+import { adminLoginAsUserMutation } from './user-mutations';
+import type { User } from './user-queries';
 
 type UsersTableActionsProps = {
   row: Row<User>;

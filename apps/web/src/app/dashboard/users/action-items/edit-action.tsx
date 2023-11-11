@@ -39,9 +39,8 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 
-import type { User } from '../queries';
-
-import { updateUserInfoMutation } from './mutations';
+import { updateUserInfoMutation } from '../user-mutations';
+import type { User } from '../user-queries';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -79,15 +78,13 @@ export function EditAction({ user, onOpenChange, ...props }: ChangePasswordActio
   const onSubmit = async (values: FormSchema) => {
     const data = {
       ...values,
-      uid: user.uid,
       name: values.name === '' ? null : values.name,
     };
 
     await updateUserInfo({
       variables: {
-        userData: {
-          ...data,
-        },
+        input: data,
+        uid: user.uid,
       },
     });
     toast({

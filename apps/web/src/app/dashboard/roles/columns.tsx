@@ -7,7 +7,7 @@ import { DataTableColumHeader } from '@/components/ui/table/data-table-column-he
 
 import { EditPermissionsWidget } from './edit-permissions-widget';
 import { EditUsersWidget } from './edit-users-widget';
-import type { RolePresentation } from './queries';
+import type { RolePresentation } from './roles-queries';
 
 export const columns: ColumnDef<RolePresentation>[] = [
   {
@@ -62,10 +62,10 @@ export const columns: ColumnDef<RolePresentation>[] = [
     },
   },
   {
-    accessorKey: 'membersCount',
+    accessorKey: 'memberCount',
     cell: ({ row }) => (
       <div className="flex w-[80px] items-center">
-        <EditUsersWidget userCount={row.getValue('membersCount')} roleUid={row.getValue('uid')} />
+        <EditUsersWidget userCount={row.getValue('memberCount')} roleUid={row.getValue('uid')} />
       </div>
     ),
     header: ({ column }) => <DataTableColumHeader column={column} title="Members" />,

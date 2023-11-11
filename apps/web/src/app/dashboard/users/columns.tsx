@@ -8,7 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { DataTableColumHeader } from '@/components/ui/table/data-table-column-header';
 import { cn } from '@/lib/utils';
 
-import type { User } from './queries';
+import type { User } from './user-queries';
 import { UsersTableActions } from './users-table-actions';
 
 export const columns: ColumnDef<User>[] = [

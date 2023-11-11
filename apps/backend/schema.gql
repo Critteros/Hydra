@@ -4,7 +4,7 @@
 
 type Permission {
   """Unique identifier and name of the permission"""
-  id: String!
+  id: ID!
 
   """Description of the permission"""
   description: String!
@@ -35,7 +35,7 @@ enum AccountType {
 
 type AssignedPermission {
   """Unique identifier and name of the permission"""
-  id: String!
+  id: ID!
 
   """Description of the permission"""
   description: String!
@@ -54,7 +54,7 @@ scalar DateTime
 
 type Role {
   """Role unique identifier"""
-  uid: String!
+  uid: ID!
 
   """Role name"""
   name: String!
@@ -62,22 +62,28 @@ type Role {
   """Role description"""
   description: String!
 
+  """Members of a given role"""
+  members: [User!]!
+
+  """Number of members of a given role"""
+  memberCount: Int!
+
   """Role permissions"""
   permissions: [AssignedPermission!]!
 
   """Number of permissions assigned to a given role"""
   permissionsCount: Int!
-
-  """Members of a given role"""
-  members: [User!]!
-
-  """Number of members of a given role"""
-  membersCount: Int!
 }
 
 type Query {
   users: [User!]!
-  user(uid: ID, email: String): User
+  user(
+    """Unique identifier of the user to update"""
+    uid: ID
+
+    """Email of the user to update"""
+    email: String
+  ): User
 
   """Returns the current user"""
   me: User!
@@ -89,7 +95,13 @@ type Query {
   roles: [Role!]!
 
   """Get a single role"""
-  role(uid: String!): Role!
+  role(
+    """Role unique identifier"""
+    uid: ID
+
+    """Role name"""
+    name: String
+  ): Role
 }
 
 type Mutation {
@@ -97,38 +109,77 @@ type Mutation {
   adminLoginAsUser(uid: String!): Boolean!
 
   """Updates user data"""
-  updateUser(userData: UserUpdateInput!): User!
+  updateUser(
+    """Unique identifier of the user to update"""
+    uid: ID
+
+    """Email of the user to update"""
+    email: String
+    updateData: UpdateUserInput!
+  ): User!
 
   """Updates current user password"""
-  updateCurrentUserPassword(data: UpdatePasswordInput!): Boolean!
+  updateCurrentUserPassword(
+    """Current password"""
+    currentPassword: String!
+
+    """New password"""
+    newPassword: String!
+  ): Boolean!
 
   """Admin updates user password"""
-  adminUpdateUserPassword(uid: String!, password: String!): Boolean!
+  adminUpdateUserPassword(
+    """Unique identifier of the user to update"""
+    uid: ID
+
+    """Email of the user to update"""
+    email: String
+
+    """New password"""
+    password: String!
+  ): Boolean!
 
   """Creates a new user"""
-  createNewUser(userData: CreateUserInput!): User!
+  createUser(data: CreateUserInput!): User!
 
   """Create a new role"""
-  createRole(input: CreateRoleInput!): Role!
+  createRole(data: CreateRoleInput!): Role!
 
   """Delete a role"""
-  deleteRole(uid: String!): Boolean!
+  deleteRole(
+    """Role unique identifier"""
+    uid: ID
+
+    """Role name"""
+    name: String
+  ): Boolean!
 
   """Delete many roles"""
   deleteMultipleRoles(uids: [String!]!): Int!
 
   """Assign permissions to a role"""
-  assignPermissionsToRole(roleUid: String!, permissionIds: [String!]!): Boolean!
+  assignPermissionsToRole(
+    """Role unique identifier"""
+    uid: ID
+
+    """Role name"""
+    name: String
+    permissionIds: [String!]!
+  ): Boolean!
 
   """Assign users to a role"""
-  assignUsersToRole(roleUid: String!, usersUids: [String!]!): Boolean!
+  assignUsersToRole(
+    """Role unique identifier"""
+    uid: ID
+
+    """Role name"""
+    name: String
+    userUids: [String!]!
+  ): Boolean!
 }
 
-input UserUpdateInput {
-  """Unique identifier of the user"""
-  uid: ID
-
-  """Email address of the user"""
+input UpdateUserInput {
+  """New email address of the user"""
   email: String
 
   """Nickname for the user"""
@@ -138,17 +189,9 @@ input UserUpdateInput {
   accountType: AccountType
 }
 
-input UpdatePasswordInput {
-  """Current password"""
-  currentPassword: String!
-
-  """New password"""
-  newPassword: String!
-}
-
 input CreateUserInput {
-  """Email address of the user"""
-  email: String!
+  """New email address of the user"""
+  email: String
 
   """Password for the user"""
   password: String!
@@ -157,7 +200,7 @@ input CreateUserInput {
   name: String
 
   """Type of the user account"""
-  accountType: AccountType
+  accountType: AccountType! = STANDARD
 }
 
 input CreateRoleInput {

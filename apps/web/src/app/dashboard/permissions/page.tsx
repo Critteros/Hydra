@@ -12,7 +12,7 @@ import {
 import { Typography } from '@/components/ui/typography';
 import { getClient } from '@/lib/server/apollo-client';
 
-import { queryAllPermissions } from './queries';
+import { queryAllPermissions } from './permissions-queries';
 
 export default async function DashboardPermissionsPage() {
   const {

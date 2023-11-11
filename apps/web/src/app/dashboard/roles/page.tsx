@@ -6,7 +6,7 @@ import { Typography } from '@/components/ui/typography';
 import { getClient } from '@/lib/server/apollo-client';
 
 import { columns } from './columns';
-import { queryRoles } from './queries';
+import { queryRoles } from './roles-queries';
 import { RolesTableToolbar } from './roles-table-toolbar';
 import { TableSelectionActions } from './table-selection-actions';
 

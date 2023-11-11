@@ -22,7 +22,7 @@ import { DataTableViewOptions } from '@/components/ui/table/data-table-view-opti
 import { useCurrentUser } from '../current-user-context';
 
 import { CreateUserForm } from './create-user-form';
-import type { User } from './queries';
+import type { User } from './user-queries';
 
 type UsersTableToorbarProps<TData> = {
   table: Table<TData>;

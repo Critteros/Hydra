@@ -7,7 +7,7 @@ import { AppBar } from '@/components/app-bar';
 import { getClient } from '@/lib/server/apollo-client';
 
 import { CurrentUserProvider } from './current-user-context';
-import { getCurrentUser } from './queries';
+import { getCurrentUser } from './dashboard-queries';
 import { SidebarNavigation, type SidebarGrouping } from './sidebar-nav';
 
 const sidebarConfig: SidebarGrouping = {
