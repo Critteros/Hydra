@@ -2,9 +2,9 @@ import { Controller, UsePipes, Body, Post, ConflictException } from '@nestjs/com
 import { ApiExcludeController } from '@nestjs/swagger';
 
 import { CreateAccountDto } from '@hydra-ipxe/common/server/internal/dto/accounts.dto';
-import { MapErrors } from '@hydra-ipxe/common/shared/errors';
 import { ZodValidationPipe } from 'nestjs-zod';
 
+import { MapErrors } from '@/errors/map-errors.decorator';
 import { UserService, UserAlreadyExistsError } from '@/user/services/user.service';
 
 @Controller('accounts')

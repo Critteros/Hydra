@@ -3,6 +3,8 @@ import { Reflector, type ReflectableDecorator } from '@nestjs/core';
 
 import { mergeArrayWithPriority } from '@hydra-ipxe/common/shared/object-utils';
 
+type ElementOrArrayElement<T> = T extends (infer ElementType)[] ? ElementType : T;
+
 @Injectable()
 export class MetadataService {
   constructor(private readonly reflector: Reflector) {}
@@ -15,7 +17,7 @@ export class MetadataService {
   }: {
     context: ExecutionContext;
     decorator: ReflectableDecorator<TParam, TTrasnformed>;
-    selector?: (metadata: TTrasnformed) => unknown;
+    selector?: (metadata: ElementOrArrayElement<TTrasnformed>) => unknown;
     priority?: 'class' | 'handler';
   }) {
     const handlerMetadata = this.reflector.get(decorator, context.getHandler()) as

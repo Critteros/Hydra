@@ -18,6 +18,7 @@ import { RbacModule } from './rbac/rbac.module';
 import { RedisModule } from './redis/redis.module';
 import { UserModule } from './user/user.module';
 import { MetadataModule } from './metadata/metadata.module';
+import { ErrorsModule } from './errors/errors.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { MetadataModule } from './metadata/metadata.module';
     RbacModule,
     DatabaseModule,
     MetadataModule,
+    ErrorsModule,
   ],
   controllers: [AppController],
   providers: [
