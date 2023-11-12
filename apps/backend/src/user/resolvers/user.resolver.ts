@@ -147,9 +147,14 @@ export class UserResolver {
 
   // ================================ Resolvers ================================
 
-  @ResolveField(() => [Permission], { description: 'List of permissions assigned to the user' })
-  async permissions(@Parent() user: User) {
-    const permissions = await this.permissionsService.getUserPermissions(user.uid);
-    return permissions;
+  @ResolveField(() => [Permission])
+  async permissions(@Parent() { uid }: User) {
+    return await this.permissionsService.getUserPermissions({ uid });
+  }
+
+  @ResolveField(() => [String])
+  async permissionSet(@Parent() { uid }: User) {
+    const permissions = await this.permissionsService.getUserPermissions({ uid });
+    return permissions.map(({ id }) => id);
   }
 }

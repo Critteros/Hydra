@@ -24,7 +24,10 @@ type User {
   accountType: AccountType!
 
   """List of permissions assigned to the user"""
-  permissions: [String!]!
+  permissions: [Permission!]!
+
+  """Assigned permissions"""
+  permissionSet: [String!]!
 }
 
 """Type of the user account"""

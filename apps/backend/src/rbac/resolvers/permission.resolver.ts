@@ -15,7 +15,7 @@ export class PermissionResolver {
 
   @Query(() => [Permission], { description: 'Get all permissions' })
   async permissions(): Promise<Permission[]> {
-    return await this.permissionService.getPermissions();
+    return await this.permissionService.findMany();
   }
 
   // ================================ Mutations ================================
