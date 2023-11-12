@@ -1,13 +1,14 @@
 import { ForbiddenError } from '@nestjs/apollo';
-import { BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation, ResolveField, Parent, ID } from '@nestjs/graphql';
 
 import { MapErrors } from '@/errors/map-errors.decorator';
+import { AdministratorOnly } from '@/rbac/decorators/administrator-only.decorator';
+import { RequirePermission } from '@/rbac/decorators/require-permissions.decorator';
 import { Permission } from '@/rbac/schemas/permission.object';
 import { PermissionService } from '@/rbac/services/permission.service';
 
 import { User as InjectUser } from '../decorators/user.decorator';
-import { AdminUserGuard } from '../guards/admin-user.guard';
 import { AdminPasswordUpdateArgs } from '../schemas/admin-password-update.args';
 import { CreateUserInput } from '../schemas/create-user.input';
 import { UpdatePasswordArgs } from '../schemas/update-password.args';
@@ -31,12 +32,14 @@ export class UserResolver {
   // ================================ Queries ================================
 
   @Query(() => [User])
+  @RequirePermission('accounts.read')
   async users() {
     const users = await this.userService.findMany({});
     return users;
   }
 
   @Query(() => User, { nullable: true })
+  @RequirePermission('accounts.read')
   async user(@Args() { uid, email }: UserSelectionArgs) {
     return await this.userService.find({ uid, email });
   }
@@ -53,6 +56,7 @@ export class UserResolver {
     if: UserNotFound,
     then: () => new BadRequestException('User not found'),
   })
+  @RequirePermission('accounts.edit')
   async updateUser(
     @Args() { email, uid }: UserSelectionArgs,
     @Args('updateData') userData: UpdateUserInput,
@@ -117,7 +121,7 @@ export class UserResolver {
       then: () => new BadRequestException('User not found'),
     },
   ])
-  @UseGuards(AdminUserGuard)
+  @AdministratorOnly()
   async adminUpdateUserPassword(
     @Args() { uid, email }: UserSelectionArgs,
     @Args() { password }: AdminPasswordUpdateArgs,
@@ -131,13 +135,14 @@ export class UserResolver {
     if: UserAlreadyExistsError,
     then: () => new BadRequestException('Email address already in use'),
   })
-  @UseGuards(AdminUserGuard)
+  @RequirePermission('accounts.create')
   async createUser(@Args('data') userData: CreateUserInput) {
     const user = await this.userService.createUser(userData);
     return user;
   }
 
   @Mutation(() => Boolean, { description: 'Delete multiple users' })
+  @RequirePermission('accounts.delete')
   async deleteMultipleUsers(@Args({ name: 'uids', type: () => [ID] }) uids: string[]) {
     return await this.userService.deleteMultipleUsers({ userUids: uids });
   }

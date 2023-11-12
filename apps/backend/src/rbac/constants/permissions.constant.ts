@@ -11,14 +11,25 @@ export const permissionConfig = {
   'accounts.changePassword': {
     description: 'Permission to change password of other accounts knowing their current password',
   },
-  'accounts.adminChangePassword': {
-    description:
-      'Permissions to change password of other accounts without knowing their current password',
-  },
   'accounts.edit': {
     description: 'Permissions to edit other account information',
   },
-  'accounts.loginAs': {
-    description: 'Allows to login as other users',
+  'accounts.delete': {
+    description: 'Allows to delete accounts',
+  },
+  'roles.read': {
+    description: 'Allows to read roles',
+  },
+  'roles.create': {
+    description: 'Allows to create roles',
+  },
+  'roles.delete': {
+    description: 'Allows to delete roles',
+  },
+  'roles.assignUsers': {
+    description: 'Allows to assign users to roles',
+  },
+  'roles.assignPermissions': {
+    description: 'Allows to assign permissions to roles',
   },
 } as const satisfies Record<Permissions, Omit<Permission, 'id'>>;
