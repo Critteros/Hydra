@@ -1,23 +1,19 @@
 import 'server-only';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Typography } from '@/components/ui/typography';
 import { getClient } from '@/lib/server/apollo-client';
 
-import { queryAllPermissions } from './permissions-queries';
+import { queryPermissionsSummary } from './permissions-queries';
+import { PermissionsTable } from './permissions-table';
 
 export default async function DashboardPermissionsPage() {
   const {
-    data: { permissions },
-  } = await getClient().query({ query: queryAllPermissions });
+    data: {
+      allPermissions,
+      me: { permissions: currentUserPermisisons },
+    },
+  } = await getClient().query({ query: queryPermissionsSummary });
 
   return (
     <ScrollArea className="flex min-h-0 grow items-center justify-center">
@@ -29,22 +25,13 @@ export default async function DashboardPermissionsPage() {
           <Typography variant="h3" className="mb-4 self-start">
             Available permissions
           </Typography>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Permission</TableHead>
-                <TableHead>Description</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {permissions.map(({ id, description }, index) => (
-                <TableRow key={`${id}-${index}`}>
-                  <TableCell className="font-semibold">{id}</TableCell>
-                  <TableCell>{description}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <PermissionsTable permissions={allPermissions} />
+        </div>
+        <div>
+          <Typography variant="h3" className="mb-4 self-start">
+            Current permissions
+          </Typography>
+          <PermissionsTable permissions={currentUserPermisisons} />
         </div>
       </main>
     </ScrollArea>

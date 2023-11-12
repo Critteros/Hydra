@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n": types.CurrentUserDocument,
-    "\n  query AllPermissions {\n    permissions {\n      id\n      description\n    }\n  } \n": types.AllPermissionsDocument,
+    "\n  query PermissionsSummary {\n    allPermissions: permissions {\n      id\n      description\n    }\n    me {\n      permissions {\n        id\n        description\n      }\n    }\n  }\n": types.PermissionsSummaryDocument,
     "\n  mutation CreateRole($input: CreateRoleInput!) {\n    createRole(data: $input) {\n      __typename\n    }\n  }\n": types.CreateRoleDocument,
     "\n  mutation DeleteMultipleRoles($uids: [String!]!) {\n    deleteMultipleRoles(uids: $uids)\n  }\n": types.DeleteMultipleRolesDocument,
     "\n  mutation AssignPermissionsToRole($roleUid: ID!, $permissionIds: [String!]!) {\n    assignPermissionsToRole(uid: $roleUid, permissionIds: $permissionIds)\n  }\n": types.AssignPermissionsToRoleDocument,
@@ -53,7 +53,7 @@ export function gql(source: "\n  query CurrentUser {\n    me {\n      uid\n     
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query AllPermissions {\n    permissions {\n      id\n      description\n    }\n  } \n"): (typeof documents)["\n  query AllPermissions {\n    permissions {\n      id\n      description\n    }\n  } \n"];
+export function gql(source: "\n  query PermissionsSummary {\n    allPermissions: permissions {\n      id\n      description\n    }\n    me {\n      permissions {\n        id\n        description\n      }\n    }\n  }\n"): (typeof documents)["\n  query PermissionsSummary {\n    allPermissions: permissions {\n      id\n      description\n    }\n    me {\n      permissions {\n        id\n        description\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

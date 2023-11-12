@@ -3,14 +3,20 @@ import { gql, type DocumentType } from '$gql';
 import type { ArrayElement } from '@/lib/types';
 
 export type PermissionQueryType = ArrayElement<
-  DocumentType<typeof queryAllPermissions>['permissions']
+  DocumentType<typeof queryPermissionsSummary>['allPermissions']
 >;
 
-export const queryAllPermissions = gql(`
-  query AllPermissions {
-    permissions {
+export const queryPermissionsSummary = gql(`
+  query PermissionsSummary {
+    allPermissions: permissions {
       id
       description
     }
-  } 
+    me {
+      permissions {
+        id
+        description
+      }
+    }
+  }
 `);
