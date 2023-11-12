@@ -1,7 +1,9 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
 import { DatabaseModule } from '@/database/database.module';
 
+// Middleware
+import { PermissionsMiddleware } from './middleware/permissions.middleware';
 // Resolvers
 import { PermissionResolver } from './resolvers/permission.resolver';
 import { RolesResolver } from './resolvers/roles.resolver';
@@ -14,4 +16,8 @@ import { RolesService } from './services/roles.service';
   providers: [PermissionResolver, PermissionService, RolesService, RolesResolver],
   exports: [PermissionService, RolesService],
 })
-export class RbacModule {}
+export class RbacModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(PermissionsMiddleware).forRoutes('*');
+  }
+}

@@ -3,6 +3,8 @@ import { BadRequestException, InternalServerErrorException, UseGuards } from '@n
 import { Resolver, Query, Args, Mutation, ResolveField, Parent, ID } from '@nestjs/graphql';
 
 import { MapErrors } from '@/errors/map-errors.decorator';
+import { RequirePermission } from '@/rbac/decorators/require-permissions.decorator';
+import { PermissionGuard } from '@/rbac/guards/permission.guard';
 import { Permission } from '@/rbac/schemas/permission.object';
 import { PermissionService } from '@/rbac/services/permission.service';
 
@@ -22,6 +24,7 @@ import {
 } from '../services/user.service';
 
 @Resolver(() => User)
+@UseGuards(PermissionGuard)
 export class UserResolver {
   constructor(
     private readonly userService: UserService,
@@ -31,6 +34,7 @@ export class UserResolver {
   // ================================ Queries ================================
 
   @Query(() => [User])
+  @RequirePermission('accounts.read')
   async users() {
     const users = await this.userService.findMany({});
     return users;
