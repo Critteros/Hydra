@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Resolver, Query, Parent, ResolveField, Mutation, Args, Int } from '@nestjs/graphql';
 
 import { MapErrors } from '@/errors/map-errors.decorator';
-import { AdministratorOnly } from '@/rbac/decorators/administrator-only.decorator';
+import { RequirePermission } from '@/rbac/decorators/require-permissions.decorator';
 import { User as InjectUser } from '@/user/decorators/user.decorator';
 import { User } from '@/user/schemas/user.object';
 
@@ -13,13 +13,13 @@ import { Role } from '../schemas/roles.object';
 import { RolesService, RoleNotFoudError, RoleAlreadyExistsError } from '../services/roles.service';
 
 @Resolver(() => Role)
-@AdministratorOnly()
 export class RolesResolver {
   constructor(private rolesService: RolesService) {}
 
   // ================================ Queries ================================
 
   @Query(() => [Role], { description: 'Get all roles' })
+  @RequirePermission('roles.read')
   async roles() {
     const roles = await this.rolesService.listRoles();
 
@@ -27,6 +27,7 @@ export class RolesResolver {
   }
 
   @Query(() => Role, { description: 'Get a single role', nullable: true })
+  @RequirePermission('roles.read')
   async role(@Args() { uid, name }: RoleSelectionArgs) {
     return await this.rolesService.getRole({ uid, name });
   }
@@ -38,6 +39,7 @@ export class RolesResolver {
     if: RoleAlreadyExistsError,
     then: () => new BadRequestException('Role already exists'),
   })
+  @RequirePermission('roles.create')
   async createRole(@Args('data') { description, name }: CreateRoleInput) {
     return await this.rolesService.createRole({ description, name });
   }
@@ -49,12 +51,14 @@ export class RolesResolver {
       then: () => new BadRequestException('Role not found'),
     },
   ])
+  @RequirePermission('roles.delete')
   async deleteRole(@Args() { uid, name }: RoleSelectionArgs): Promise<boolean> {
     await this.rolesService.deleteRole({ uid, name });
     return true;
   }
 
   @Mutation(() => Int, { description: 'Delete many roles' })
+  @RequirePermission('roles.delete')
   async deleteMultipleRoles(
     @Args({ name: 'uids', type: () => [String] }) uids: string[],
   ): Promise<number> {
@@ -62,6 +66,7 @@ export class RolesResolver {
   }
 
   @Mutation(() => Boolean, { description: 'Assign permissions to a role' })
+  @RequirePermission('roles.assignPermissions')
   async assignPermissionsToRole(
     @Args() { uid, name }: RoleSelectionArgs,
     @Args({ name: 'permissionIds', type: () => [String] }) permissionIds: string[],
@@ -82,6 +87,7 @@ export class RolesResolver {
   }
 
   @Mutation(() => Boolean, { description: 'Assign users to a role' })
+  @RequirePermission('roles.assignUsers')
   async assignUsersToRole(
     @Args() { uid, name }: RoleSelectionArgs,
     @Args({ name: 'userUids', type: () => [String] }) userUids: string[],

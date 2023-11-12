@@ -13,16 +13,22 @@ export async function run(client: PrismaClient) {
       }) as Permission,
   );
 
+  // 1) Delete permissions that are not in the config
+  // 2) Upsert permissions from the config
   await client.$transaction([
     client.permission.deleteMany({
       where: {
         id: {
-          in: permissionsIds,
+          notIn: permissionsIds,
         },
       },
     }),
-    client.permission.createMany({
-      data: objects,
-    }),
+    ...objects.map((object) =>
+      client.permission.upsert({
+        where: { id: object.id },
+        create: object,
+        update: { description: object.description },
+      }),
+    ),
   ]);
 }

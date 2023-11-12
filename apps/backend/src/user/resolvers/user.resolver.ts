@@ -39,6 +39,7 @@ export class UserResolver {
   }
 
   @Query(() => User, { nullable: true })
+  @RequirePermission('accounts.read')
   async user(@Args() { uid, email }: UserSelectionArgs) {
     return await this.userService.find({ uid, email });
   }
@@ -55,6 +56,7 @@ export class UserResolver {
     if: UserNotFound,
     then: () => new BadRequestException('User not found'),
   })
+  @RequirePermission('accounts.edit')
   async updateUser(
     @Args() { email, uid }: UserSelectionArgs,
     @Args('updateData') userData: UpdateUserInput,
@@ -133,13 +135,14 @@ export class UserResolver {
     if: UserAlreadyExistsError,
     then: () => new BadRequestException('Email address already in use'),
   })
-  @AdministratorOnly()
+  @RequirePermission('accounts.create')
   async createUser(@Args('data') userData: CreateUserInput) {
     const user = await this.userService.createUser(userData);
     return user;
   }
 
   @Mutation(() => Boolean, { description: 'Delete multiple users' })
+  @RequirePermission('accounts.delete')
   async deleteMultipleUsers(@Args({ name: 'uids', type: () => [ID] }) uids: string[]) {
     return await this.userService.deleteMultipleUsers({ userUids: uids });
   }

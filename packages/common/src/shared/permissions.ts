@@ -4,10 +4,16 @@ const keyPath = {
   accounts: {
     read: {},
     create: {},
+    delete: {},
     changePassword: {},
-    adminChangePassword: {},
     edit: {},
-    loginAs: {},
+  },
+  roles: {
+    read: {},
+    create: {},
+    delete: {},
+    assignUsers: {},
+    assignPermissions: {},
   },
 } as const;
 
