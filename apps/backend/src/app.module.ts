@@ -1,24 +1,20 @@
 import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo';
-import { Module, type MiddlewareConsumer } from '@nestjs/common';
-import { ValidationPipe } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
+import { Module, type NestModule, type MiddlewareConsumer } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 
 import { resolve } from 'path';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
 import { DatabaseModule } from './database/database.module';
+import { ErrorsModule } from './errors/errors.module';
 import { ManagementModule } from './management/management.module';
+import { MetadataModule } from './metadata/metadata.module';
 import { PassportMiddleware } from './middleware/passport.middleware';
 import { SessionMiddleware } from './middleware/session.middleware';
 import { RbacModule } from './rbac/rbac.module';
 import { RedisModule } from './redis/redis.module';
 import { UserModule } from './user/user.module';
-import { MetadataModule } from './metadata/metadata.module';
-import { ErrorsModule } from './errors/errors.module';
 
 @Module({
   imports: [
@@ -61,20 +57,8 @@ import { ErrorsModule } from './errors/errors.module';
     MetadataModule,
     ErrorsModule,
   ],
-  controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_PIPE,
-      useValue: new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: false,
-        transform: true,
-      }),
-    },
-  ],
 })
-export class AppModule {
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(SessionMiddleware).forRoutes('*');
     consumer.apply(PassportMiddleware).forRoutes('*');

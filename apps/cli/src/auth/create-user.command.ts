@@ -1,12 +1,17 @@
 import { HttpService } from '@nestjs/axios';
 import { Logger } from '@nestjs/common';
 
-import { type CreateAccount } from '@hydra-ipxe/common/server/internal/dto/accounts.dto';
 import { Command, CommandRunner, InquirerService, Option } from 'nest-commander';
 import ora from 'ora';
 import { firstValueFrom } from 'rxjs';
 
 import { CreateUserValidatorService } from './create-user-validator.service';
+
+type CreateAccount = {
+  email: string;
+  password: string;
+  name?: string;
+};
 
 abstract class CreateUserCommand extends CommandRunner {
   abstract readonly url: string;

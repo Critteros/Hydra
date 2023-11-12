@@ -6,16 +6,15 @@ import { ApiBody } from '@nestjs/swagger';
 import { User as InjectUser } from '@/user/decorators/user.decorator';
 import type { AuthenticatedUser } from '@/user/types';
 
-import { PublicRoute } from '../decorators/public.decorator';
+import { PublicHandler } from '../decorators/public.decorator';
 import { UserLoginDto } from '../dto/user-login.dto';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
-import { UserAuthenticated } from '../guards/user-authenticated.guard';
 
 @Controller('auth')
 export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  @PublicRoute()
+  @PublicHandler()
   @HttpCode(HttpStatus.OK)
   @ApiBody({ type: UserLoginDto })
   async login(@InjectUser() user: AuthenticatedUser) {
@@ -30,7 +29,6 @@ export class AuthController {
   }
 
   @Get('session')
-  @UseGuards(UserAuthenticated)
   session(@InjectUser() { email, name, uid }: AuthenticatedUser) {
     return {
       uid,

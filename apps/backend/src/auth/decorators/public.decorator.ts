@@ -1,4 +1,4 @@
-import { SetMetadata } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 
-/* Routes marked by this decorator will be excluded from auth guards */
-export const PublicRoute = () => SetMetadata('public', true);
+/** Decorator to mark a handler as public */
+export const PublicHandler = Reflector.createDecorator<boolean>();
