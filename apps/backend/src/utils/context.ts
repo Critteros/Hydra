@@ -11,5 +11,7 @@ export function extractRequest(ctx: ExecutionContext): Request {
     return req;
   }
 
-  return ctx.switchToHttp().getRequest<Request>();
+  const req = ctx.switchToHttp().getRequest<Request>();
+
+  return req;
 }

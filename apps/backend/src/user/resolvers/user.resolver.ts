@@ -2,7 +2,6 @@ import { ForbiddenError } from '@nestjs/apollo';
 import { BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation, ResolveField, Parent, ID } from '@nestjs/graphql';
 
-import { UserAuthenticated } from '@/auth/guards/user-authenticated.guard';
 import { MapErrors } from '@/errors/map-errors.decorator';
 import { Permission } from '@/rbac/schemas/permission.object';
 import { PermissionService } from '@/rbac/services/permission.service';
@@ -23,7 +22,6 @@ import {
 } from '../services/user.service';
 
 @Resolver(() => User)
-@UseGuards(UserAuthenticated)
 export class UserResolver {
   constructor(
     private readonly userService: UserService,

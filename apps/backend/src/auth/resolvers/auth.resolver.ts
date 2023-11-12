@@ -8,8 +8,6 @@ import { UserService } from '@/user/services/user.service';
 import { exclude } from '@/utils/objects';
 import { InjectRequest } from '@/utils/request.decorator';
 
-import { UserAuthenticated } from '../guards/user-authenticated.guard';
-
 @Resolver()
 export class AuthResolver {
   constructor(private readonly userService: UserService) {}
@@ -18,7 +16,6 @@ export class AuthResolver {
   // ================================ Mutations ==============================
 
   @Mutation(() => Boolean, { name: 'adminLoginAsUser', description: 'Login as a user' })
-  @UseGuards(UserAuthenticated)
   @UseGuards(AdminUserGuard)
   async loginAs(@Args('uid') uid: string, @InjectRequest() request: Request) {
     const user = await this.userService.find({ uid });

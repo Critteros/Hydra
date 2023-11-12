@@ -108,9 +108,6 @@ type Query {
 }
 
 type Mutation {
-  """Login as a user"""
-  adminLoginAsUser(uid: String!): Boolean!
-
   """Updates user data"""
   updateUser(
     """Unique identifier of the user to update"""
@@ -182,6 +179,9 @@ type Mutation {
     name: String
     userUids: [String!]!
   ): Boolean!
+
+  """Login as a user"""
+  adminLoginAsUser(uid: String!): Boolean!
 }
 
 input UpdateUserInput {

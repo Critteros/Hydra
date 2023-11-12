@@ -1,7 +1,6 @@
 import { BadRequestException, UseGuards } from '@nestjs/common';
 import { Resolver, Query, Parent, ResolveField, Mutation, Args, Int } from '@nestjs/graphql';
 
-import { UserAuthenticated } from '@/auth/guards/user-authenticated.guard';
 import { MapErrors } from '@/errors/map-errors.decorator';
 import { User as InjectUser } from '@/user/decorators/user.decorator';
 import { AdminUserGuard } from '@/user/guards/admin-user.guard';
@@ -14,7 +13,6 @@ import { Role } from '../schemas/roles.object';
 import { RolesService, RoleNotFoudError, RoleAlreadyExistsError } from '../services/roles.service';
 
 @Resolver(() => Role)
-@UseGuards(UserAuthenticated)
 @UseGuards(AdminUserGuard)
 export class RolesResolver {
   constructor(private rolesService: RolesService) {}

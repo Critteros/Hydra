@@ -1,14 +1,15 @@
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 
-import { type INestApplication, HttpStatus } from '@nestjs/common';
+import { type INestApplication, HttpStatus, Injectable, type NestMiddleware } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
 import { faker } from '@faker-js/faker';
 import type { User as PrismaUser } from '@prisma/client';
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import cookie from 'cookie';
-import type { Express } from 'express';
+import type { Request, Response, NextFunction, Express } from 'express';
+import session from 'express-session';
 import request from 'supertest';
 import { GenericContainer, Wait, type StartedTestContainer } from 'testcontainers';
 
@@ -163,6 +164,23 @@ export class IntegrationTestManager {
       .session as string;
 
     return `session=${sessionCookie}`;
+  }
+}
+
+@Injectable()
+export class TestSessionMiddleware implements NestMiddleware {
+  private sessionOptions: session.SessionOptions;
+  constructor() {
+    this.sessionOptions = {
+      secret: 'hydra-ipxe',
+      cookie: { secure: false },
+      resave: false,
+      saveUninitialized: false,
+      name: 'session',
+    };
+  }
+  use(req: Request, res: Response, next: NextFunction) {
+    session(this.sessionOptions)(req, res, next);
   }
 }
 

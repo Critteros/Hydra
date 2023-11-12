@@ -19,7 +19,7 @@ export class MetadataService {
     decorator: ReflectableDecorator<TParam, TTrasnformed>;
     selector?: (metadata: ElementOrArrayElement<TTrasnformed>) => unknown;
     priority?: 'class' | 'handler';
-  }) {
+  }): TTrasnformed | undefined {
     const handlerMetadata = this.reflector.get(decorator, context.getHandler()) as
       | TTrasnformed
       | undefined;
@@ -48,6 +48,6 @@ export class MetadataService {
       array: fallbackList ?? [],
       priorityArray: priorityList ?? [],
       selector,
-    });
+    }) as TTrasnformed;
   }
 }

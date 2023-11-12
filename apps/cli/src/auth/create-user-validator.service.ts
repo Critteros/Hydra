@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreateAccountSchema } from '@hydra-ipxe/common/server/internal/dto/accounts.dto';
 import chalk from 'chalk';
+import { z } from 'zod';
 
 @Injectable()
 export class CreateUserValidatorService {
   validateEmail(email: unknown) {
-    const result = CreateAccountSchema.shape.email.safeParse(email);
+    const result = z.string().email().safeParse(email);
     if (!result.success) {
       throw new Error(chalk.redBright('Please enter a valid email address'));
     }
@@ -14,7 +14,11 @@ export class CreateUserValidatorService {
   }
 
   validatePassword(password: unknown) {
-    const result = CreateAccountSchema.shape.password.safeParse(password);
+    const result = z
+      .string()
+      .min(4, { message: 'Password must be at least 4 characters long' })
+      .max(100, { message: 'Password must be less than 100 characters long' })
+      .safeParse(password);
     if (!result.success) {
       const { error } = result;
       throw new Error(chalk.redBright(error.issues.map((issue) => issue.message).join('\n')));
@@ -23,7 +27,7 @@ export class CreateUserValidatorService {
   }
 
   validateName(name: unknown) {
-    const result = CreateAccountSchema.shape.name.safeParse(name);
+    const result = z.string().max(100).optional().safeParse(name);
     if (!result.success) {
       throw new Error(chalk.redBright('Please enter a valid name'));
     }

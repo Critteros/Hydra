@@ -35,7 +35,7 @@ describe('Test UserResolver', () => {
     const { data, errors } = await request(manager.httpServer).path('/api/graphql').query(query);
     expect(data).toBeNull();
     expect(errors).toHaveLength(1);
-    expect((errors![0] as any).code).toBe(HttpStatus.FORBIDDEN);
+    expect((errors![0] as any).code).toBe(HttpStatus.UNAUTHORIZED);
   });
 
   it('resolves to logged in user', async () => {

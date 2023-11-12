@@ -2,6 +2,7 @@ import { Module, Scope, type OnModuleDestroy, Inject } from '@nestjs/common';
 
 import { createClient } from 'redis';
 
+// Constants
 import { RedisClientToken, RedisOptionsToken, type RedisClient } from './redis.constants';
 
 export type RedisOptions = { url: string };
