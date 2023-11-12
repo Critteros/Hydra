@@ -1,54 +1,42 @@
 import { Injectable } from '@nestjs/common';
 
-import type { Permissions } from '@hydra-ipxe/common/shared/permissions';
+import { deduplicateArray } from '@hydra-ipxe/common/shared/object-utils';
+import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '@/database/prisma.service';
-import { UserNotFound } from '@/user/services/user.service';
+
+import { RolesService } from './roles.service';
 
 @Injectable()
 export class PermissionService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly rolesService: RolesService,
+  ) {}
 
-  async getPermissions() {
+  async findMany() {
     return await this.prisma.permission.findMany();
   }
 
-  async getUserPermissions(userUid: string) {
-    const user = await this.prisma.user.findUnique({
+  async getUserPermissions(where: Prisma.UserWhereUniqueInput) {
+    const roles = await this.rolesService.getUserRoles(where);
+    const rolesUids = roles.map(({ uid }) => uid);
+
+    const records = await this.prisma.permissionsOnRoles.findMany({
       where: {
-        uid: userUid,
-      },
-      select: {
-        roles: {
-          select: {
-            role: {
-              select: {
-                permissions: {
-                  select: {
-                    permission: {
-                      select: {
-                        id: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
+        roleUid: {
+          in: rolesUids,
         },
       },
+      include: {
+        permission: true,
+      },
     });
+    const permissions = deduplicateArray(
+      records.map(({ permission }) => ({ ...permission })),
+      ({ id }) => id,
+    );
 
-    if (!user) {
-      throw new UserNotFound();
-    }
-
-    const permissions = user.roles.flatMap(({ role }) => {
-      return role.permissions.map(({ permission }) => permission.id);
-    });
-
-    const uniquePermissions = [...new Set(permissions)];
-
-    return uniquePermissions as Permissions[];
+    return permissions;
   }
 }
