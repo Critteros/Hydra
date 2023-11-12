@@ -1,7 +1,9 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 
 import { DatabaseModule } from '@/database/database.module';
 
+import { PermissionGuard } from './guards/permission.guard';
 // Middleware
 import { PermissionsMiddleware } from './middleware/permissions.middleware';
 // Resolvers
@@ -13,7 +15,16 @@ import { RolesService } from './services/roles.service';
 
 @Module({
   imports: [DatabaseModule],
-  providers: [PermissionResolver, PermissionService, RolesService, RolesResolver],
+  providers: [
+    PermissionResolver,
+    PermissionService,
+    RolesService,
+    RolesResolver,
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
+  ],
   exports: [PermissionService, RolesService],
 })
 export class RbacModule implements NestModule {

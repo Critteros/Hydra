@@ -1,15 +1,14 @@
 import { ForbiddenError } from '@nestjs/apollo';
-import { BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation, ResolveField, Parent, ID } from '@nestjs/graphql';
 
 import { MapErrors } from '@/errors/map-errors.decorator';
+import { AdministratorOnly } from '@/rbac/decorators/administrator-only.decorator';
 import { RequirePermission } from '@/rbac/decorators/require-permissions.decorator';
-import { PermissionGuard } from '@/rbac/guards/permission.guard';
 import { Permission } from '@/rbac/schemas/permission.object';
 import { PermissionService } from '@/rbac/services/permission.service';
 
 import { User as InjectUser } from '../decorators/user.decorator';
-import { AdminUserGuard } from '../guards/admin-user.guard';
 import { AdminPasswordUpdateArgs } from '../schemas/admin-password-update.args';
 import { CreateUserInput } from '../schemas/create-user.input';
 import { UpdatePasswordArgs } from '../schemas/update-password.args';
@@ -24,7 +23,6 @@ import {
 } from '../services/user.service';
 
 @Resolver(() => User)
-@UseGuards(PermissionGuard)
 export class UserResolver {
   constructor(
     private readonly userService: UserService,
@@ -121,7 +119,7 @@ export class UserResolver {
       then: () => new BadRequestException('User not found'),
     },
   ])
-  @UseGuards(AdminUserGuard)
+  @AdministratorOnly()
   async adminUpdateUserPassword(
     @Args() { uid, email }: UserSelectionArgs,
     @Args() { password }: AdminPasswordUpdateArgs,
@@ -135,7 +133,7 @@ export class UserResolver {
     if: UserAlreadyExistsError,
     then: () => new BadRequestException('Email address already in use'),
   })
-  @UseGuards(AdminUserGuard)
+  @AdministratorOnly()
   async createUser(@Args('data') userData: CreateUserInput) {
     const user = await this.userService.createUser(userData);
     return user;

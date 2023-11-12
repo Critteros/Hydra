@@ -1,4 +1,9 @@
-import { Injectable, type CanActivate, type ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  type CanActivate,
+  type ExecutionContext,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 import { Permissions } from '@hydra-ipxe/common/shared/permissions';
@@ -31,9 +36,14 @@ export class PermissionGuard implements CanActivate {
 
     if (accountType === AccountType.ADMIN) return true;
 
-    return requiredPermissions.reduce(
+    const isAllowed = requiredPermissions.reduce(
       (acc, permission) => acc && userPermissions.includes(permission),
       true,
     );
+
+    if (!isAllowed) {
+      throw new ForbiddenException("You don't have permission to access this resource");
+    }
+    return isAllowed;
   }
 }
