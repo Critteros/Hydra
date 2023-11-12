@@ -17,6 +17,7 @@ import { SessionMiddleware } from './middleware/session.middleware';
 import { RbacModule } from './rbac/rbac.module';
 import { RedisModule } from './redis/redis.module';
 import { UserModule } from './user/user.module';
+import { MetadataModule } from './metadata/metadata.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { UserModule } from './user/user.module';
     RedisModule,
     RbacModule,
     DatabaseModule,
+    MetadataModule,
   ],
   controllers: [AppController],
   providers: [
