@@ -67,7 +67,7 @@ export function CreateUserForm({ closeDialog }: CreateUserFormProps) {
     try {
       await createNewUser({
         variables: {
-          userData: {
+          input: {
             email: data.email,
             password: data.password,
             name: data.name,

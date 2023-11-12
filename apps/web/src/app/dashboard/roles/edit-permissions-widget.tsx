@@ -65,7 +65,7 @@ export function EditPermissionsWidget({ permissionCount, roleUid }: EditPermissi
               id: permission.id,
               display: permission.id,
             }))}
-            selectedItems={data.role.permissions.map((permission) => permission.id)}
+            selectedItems={data?.role?.permissions.map((permission) => permission.id)}
             checkboxSelection={selectedItems}
             onCheckboxSelectionChange={setSelectedItems}
             onConfirm={async (items) => {
