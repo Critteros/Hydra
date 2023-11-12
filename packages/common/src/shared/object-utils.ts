@@ -12,3 +12,29 @@ export function deduplicateArray<TData>(
   });
   return deduplicatedArray;
 }
+
+export function mergeArrayWithPriority<TData>({
+  array,
+  priorityArray,
+  selector = (data) => data,
+}: {
+  array: TData[];
+  priorityArray: TData[];
+  selector?: SelectorFn<TData>;
+}) {
+  const priorityList = [...priorityArray];
+
+  array.forEach((entry) => {
+    const index = priorityList.findIndex((priorityEntry) => {
+      return selector(priorityEntry) === selector(entry);
+    });
+
+    if (index == -1) {
+      priorityList.push(entry);
+    }
+
+    return;
+  });
+
+  return priorityList;
+}

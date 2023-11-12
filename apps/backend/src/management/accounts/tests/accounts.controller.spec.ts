@@ -6,6 +6,7 @@ import request from 'supertest';
 
 import { AuthModule } from '@/auth/auth.module';
 import { PrismaService } from '@/database/prisma.service';
+import { ErrorsModule } from '@/errors/errors.module';
 import { UserModule } from '@/user/user.module';
 import { prismaTruncateDB, createMockDB, type StartedPostgreSqlContainer } from '@/utils/test';
 
@@ -28,7 +29,7 @@ describe('Test management AccountsController', () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       controllers: [AccountsController],
-      imports: [AuthModule, UserModule],
+      imports: [AuthModule, UserModule, ErrorsModule],
     }).compile();
     prisma = moduleRef.get(PrismaService);
     app = moduleRef.createNestApplication();
