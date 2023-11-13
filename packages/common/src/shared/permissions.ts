@@ -5,7 +5,6 @@ const keyPath = {
     read: {},
     create: {},
     delete: {},
-    changePassword: {},
     edit: {},
   },
   roles: {
