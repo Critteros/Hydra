@@ -75,7 +75,7 @@ export class UserResolver {
 
     // Accouunt type can be only updated by admins
     if (userData.accountType && user.accountType !== 'ADMIN') {
-      throw new ForbiddenError('You can only update your own data');
+      throw new ForbiddenError('Account type can be only updated by admins');
     }
 
     const updatedUser = await this.userService.updateUser({

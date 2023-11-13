@@ -8,9 +8,6 @@ export const permissionConfig = {
   'accounts.create': {
     description: 'Grants access to creating accounts',
   },
-  'accounts.changePassword': {
-    description: 'Permission to change password of other accounts knowing their current password',
-  },
   'accounts.edit': {
     description: 'Permissions to edit other account information',
   },

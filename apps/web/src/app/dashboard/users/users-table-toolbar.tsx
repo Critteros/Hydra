@@ -18,8 +18,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { DataTableFilter, type OptionsRender } from '@/components/ui/table/data-table-filter';
 import { DataTableViewOptions } from '@/components/ui/table/data-table-view-options';
-
-import { useCurrentUser } from '../current-user-context';
+import { ClientPermissiosnBoundry } from '@/lib/client/client-permission-boundry';
 
 import { CreateUserForm } from './create-user-form';
 import type { User } from './user-queries';
@@ -44,7 +43,6 @@ const accountTypes: Array<OptionsRender<User['accountType']>> = [
 export function UsersTableToolbar<TData>({ table }: UsersTableToorbarProps<TData>) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const isFiltered = table.getState().columnFilters.length > 0;
-  const currentUser = useCurrentUser();
 
   return (
     <div className="flex items-center justify-between">
@@ -75,7 +73,7 @@ export function UsersTableToolbar<TData>({ table }: UsersTableToorbarProps<TData
         )}
       </div>
       <div className="flex gap-2">
-        {currentUser.accountType === AccountType.Admin && (
+        <ClientPermissiosnBoundry permission="accounts.create" fallback={<></>}>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" className="lg:px- h-8 px-2">
@@ -90,7 +88,7 @@ export function UsersTableToolbar<TData>({ table }: UsersTableToorbarProps<TData
               <CreateUserForm closeDialog={() => setDialogOpen(false)} />
             </DialogContent>
           </Dialog>
-        )}
+        </ClientPermissiosnBoundry>
         <DataTableViewOptions table={table} />
       </div>
     </div>
