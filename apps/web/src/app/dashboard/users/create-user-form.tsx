@@ -1,3 +1,5 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 
 import { AccountType } from '$gql/types';
@@ -25,6 +27,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
+import { ClientAdminBoundry } from '@/lib/client/client-admin-boundry';
 
 import { createNewUserMutation } from './user-mutations';
 
@@ -180,7 +183,9 @@ export function CreateUserForm({ closeDialog }: CreateUserFormProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value={AccountType.Admin}>Admin Account</SelectItem>
+                  <ClientAdminBoundry fallback={<></>}>
+                    <SelectItem value={AccountType.Admin}>Admin Account</SelectItem>
+                  </ClientAdminBoundry>
                   <SelectItem value={AccountType.Standard}>Standard Account</SelectItem>
                 </SelectContent>
               </Select>

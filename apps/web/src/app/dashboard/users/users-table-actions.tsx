@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 
 import { useState, useRef } from 'react';
 
-import { AccountType } from '$gql/types';
 import { useMutation } from '@apollo/client';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import type { Row } from '@tanstack/react-table';
@@ -21,6 +20,8 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/components/ui/use-toast';
+import { ClientPermissiosnBoundry } from '@/lib/client/client-permission-boundry';
+import { usePermissions } from '@/lib/client/hooks/permissions';
 
 import { AdminChangePasswordAction } from './action-items/admin-change-password';
 import { ChangePasswordAction } from './action-items/change-password';
@@ -34,6 +35,7 @@ type UsersTableActionsProps = {
 
 export function UsersTableActions({ row }: UsersTableActionsProps) {
   const { refresh } = useRouter();
+  const { hasAdminAccess } = usePermissions();
   const [adminLoginAs] = useMutation(adminLoginAsUserMutation);
   const currentUser = useCurrentUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -63,10 +65,9 @@ export function UsersTableActions({ row }: UsersTableActionsProps) {
     });
   };
 
-  const ChangePasswordActionComponent =
-    currentUser.accountType === AccountType.Admin
-      ? AdminChangePasswordAction
-      : ChangePasswordAction;
+  const ChangePasswordActionComponent = hasAdminAccess()
+    ? AdminChangePasswordAction
+    : ChangePasswordAction;
 
   return (
     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
@@ -96,19 +97,23 @@ export function UsersTableActions({ row }: UsersTableActionsProps) {
           <ClipboardCopy className="mr-2 h-4 w-4" />
           <span>Copy UID</span>
         </DropdownMenuItem>
-        <EditAction
-          onOpenChange={handleDialogItemOpenChange}
-          onSelect={handleDialogItemSelect}
-          user={user}
-        />
-        {(currentUser.accountType === AccountType.Admin || currentUser.uid === user.uid) && (
+        <ClientPermissiosnBoundry permission="accounts.edit" fallback={<></>}>
+          {(hasAdminAccess() || currentUser.uid === user.uid) && (
+            <EditAction
+              onOpenChange={handleDialogItemOpenChange}
+              onSelect={handleDialogItemSelect}
+              user={user}
+            />
+          )}
+        </ClientPermissiosnBoundry>
+        {(hasAdminAccess() || currentUser.uid === user.uid) && (
           <ChangePasswordActionComponent
             onOpenChange={handleDialogItemOpenChange}
             onSelect={handleDialogItemSelect}
             user={user}
           />
         )}
-        {currentUser.accountType === AccountType.Admin && currentUser?.uid !== user.uid && (
+        {hasAdminAccess() && currentUser?.uid !== user.uid && (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem

@@ -38,6 +38,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
+import { ClientAdminBoundry } from '@/lib/client/client-admin-boundry';
+import { usePermissions } from '@/lib/client/hooks/permissions';
 
 import { updateUserInfoMutation } from '../user-mutations';
 import type { User } from '../user-queries';
@@ -55,6 +57,7 @@ type ChangePasswordActionProps = { user: User } & Pick<
 >;
 
 export function EditAction({ user, onOpenChange, ...props }: ChangePasswordActionProps) {
+  const { hasAdminAccess } = usePermissions();
   const [dialogOpen, setDialogOpen] = useState(false);
   const { refresh } = useRouter();
   const [updateUserInfo] = useMutation(updateUserInfoMutation);
@@ -75,10 +78,11 @@ export function EditAction({ user, onOpenChange, ...props }: ChangePasswordActio
     onOpenChange?.(open);
   };
 
-  const onSubmit = async (values: FormSchema) => {
+  const onSubmit = async ({ accountType, ...values }: FormSchema) => {
     const data = {
       ...values,
       name: values.name === '' ? null : values.name,
+      ...(hasAdminAccess() && { accountType }),
     };
 
     await updateUserInfo({
@@ -145,28 +149,29 @@ export function EditAction({ user, onOpenChange, ...props }: ChangePasswordActio
                 </FormItem>
               )}
             />
-
-            <FormField
-              name="accountType"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="grid grid-cols-4 items-center gap-4">
-                  <FormLabel className="text-right">Account type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="col-span-3">
-                        <SelectValue placeholder="Select tpe of an account" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value={AccountType.Admin}>Admin Account</SelectItem>
-                      <SelectItem value={AccountType.Standard}>Standard Account</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage className="col-span-3 col-start-2" />
-                </FormItem>
-              )}
-            />
+            <ClientAdminBoundry fallback={<></>}>
+              <FormField
+                name="accountType"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-4 items-center gap-4">
+                    <FormLabel className="text-right">Account type</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Select tpe of an account" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value={AccountType.Admin}>Admin Account</SelectItem>
+                        <SelectItem value={AccountType.Standard}>Standard Account</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage className="col-span-3 col-start-2" />
+                  </FormItem>
+                )}
+              />
+            </ClientAdminBoundry>
             {form.formState.errors.root?.serverError?.type ==
               StatusCodes.UNAUTHORIZED.toString() && (
               <span className="text-sm font-medium text-destructive">
