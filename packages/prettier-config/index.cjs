@@ -14,6 +14,7 @@ module.exports = {
   importOrderSeparation: true,
   importOrderParserPlugins: ['typescript', 'decorators-legacy', 'jsx'],
   importOrder: [
+    '^server-only$',
     '^node:(.*)$',
     '^(next/(.*)$)|^(next$)',
     '^(react/(.*)$)|^(react$)',

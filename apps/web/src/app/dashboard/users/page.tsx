@@ -1,34 +1,23 @@
 import 'server-only';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { DataTable } from '@/components/ui/table/data-table';
 import { Typography } from '@/components/ui/typography';
-import { getClient } from '@/lib/server/apollo-client';
+import { ServerPermissionBoundry } from '@/lib/server/server-permission-boundry';
 
-import { columns } from './columns';
-import { TableSelectionActions } from './table-selection-actions';
-import * as queries from './user-queries';
-import { UsersTableToolbar } from './users-table-toolbar';
+import { UserReadFallback } from './fallbacks/user-read-fallback';
+import { UsersTable } from './users-table';
 
-export default async function DashboardUsersPage() {
-  const { data } = await getClient().query({
-    query: queries.getAllUsers,
-  });
-
+export default function DashboardUsersPage() {
   return (
-    <ScrollArea className="flex min-h-0 grow items-center justify-center">
-      <main className="flex grow flex-col items-center justify-center gap-10 px-4">
-        <Typography variant="h1" className="mb-4 self-start">
-          Users
-        </Typography>
-        <DataTable
-          columns={columns}
-          data={data.users}
-          className="w-full"
-          defaultSorting={[{ id: 'accountType', desc: false }]}
-          components={{ ToolBar: UsersTableToolbar, SelectionActions: TableSelectionActions }}
-        />
-      </main>
-    </ScrollArea>
+    <ServerPermissionBoundry permission="accounts.read" fallback={<UserReadFallback />}>
+      <ScrollArea className="flex min-h-0 grow items-center justify-center">
+        <main className="flex grow flex-col items-center justify-center gap-10 px-4">
+          <Typography variant="h1" className="mb-4 self-start">
+            Users
+          </Typography>
+          <UsersTable />
+        </main>
+      </ScrollArea>
+    </ServerPermissionBoundry>
   );
 }
