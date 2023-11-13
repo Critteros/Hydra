@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-import { AccountType } from '$gql/types';
 import { useMutation } from '@apollo/client';
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
 import type { Table } from '@tanstack/react-table';
@@ -17,8 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { DataTableViewOptions } from '@/components/ui/table/data-table-view-options';
-
-import { useCurrentUser } from '../current-user-context';
+import { ClientPermissiosnBoundry } from '@/lib/client/client-permission-boundry';
 
 import { RoleModifyForm, type FormSchema } from './role-modify-form';
 import { createRoleMutation } from './roles-mutations';
@@ -30,7 +28,6 @@ type RolesTableToorbarProps<TData> = {
 export function RolesTableToolbar<TData>({ table }: RolesTableToorbarProps<TData>) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [addNewRole] = useMutation(createRoleMutation);
-  const currentUser = useCurrentUser();
   const isFiltered = table.getState().columnFilters.length > 0;
 
   const addNewRoleMutation = async (values: FormSchema) => {
@@ -64,7 +61,7 @@ export function RolesTableToolbar<TData>({ table }: RolesTableToorbarProps<TData
         )}
       </div>
       <div className="flex gap-2">
-        {currentUser.accountType === AccountType.Admin && (
+        <ClientPermissiosnBoundry permission="roles.create" fallback={<></>}>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" className="lg:px- h-8 px-2">
@@ -82,7 +79,7 @@ export function RolesTableToolbar<TData>({ table }: RolesTableToorbarProps<TData
               />
             </DialogContent>
           </Dialog>
-        )}
+        </ClientPermissiosnBoundry>
         <DataTableViewOptions table={table} />
       </div>
     </div>

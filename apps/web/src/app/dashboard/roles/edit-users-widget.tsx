@@ -19,6 +19,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransferList } from '@/components/ui/transfer-list';
 import { useToast } from '@/components/ui/use-toast';
+import { usePermissions } from '@/lib/client/hooks/permissions';
 
 import { assignUsersToRoleMutation } from './roles-mutations';
 import { queryRoleMembers } from './roles-queries';
@@ -28,6 +29,7 @@ type EditUsersWidgetProps = {
   roleUid: string;
 };
 export function EditUsersWidget({ userCount, roleUid }: EditUsersWidgetProps) {
+  const { hasPermission } = usePermissions();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const { refetch: refetchRoleMembers, data } = useQuery(queryRoleMembers, {
@@ -48,7 +50,7 @@ export function EditUsersWidget({ userCount, roleUid }: EditUsersWidgetProps) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" disabled={!hasPermission('roles.assignUsers')}>
           <Users className="mr-2 h-4 w-4" />
           <span>{userCount}</span>
         </Button>
