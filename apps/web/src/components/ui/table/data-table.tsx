@@ -35,6 +35,7 @@ type DataTableProps<TData, TValue> = {
   className?: string;
   components?: {
     ToolBar?: ComponentType<{ table: TableType<TData> }>;
+    SelectionActions?: ComponentType<{ table: TableType<TData> }>;
   };
   defaultSorting?: SortingState;
 };
@@ -117,7 +118,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination table={table} SelectionActions={components?.SelectionActions} />
     </div>
   );
 }

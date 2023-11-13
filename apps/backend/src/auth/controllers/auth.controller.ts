@@ -3,21 +3,21 @@ import { promisify } from 'node:util';
 import { Controller, Get, Post, UseGuards, Session, HttpStatus, HttpCode } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
 
-import { User, type AuthenticatedUser } from '@/user';
+import { User as InjectUser } from '@/user/decorators/user.decorator';
+import type { AuthenticatedUser } from '@/user/types';
 
-import { PublicRoute } from '../decorators/public.decorator';
+import { PublicHandler } from '../decorators/public.decorator';
 import { UserLoginDto } from '../dto/user-login.dto';
-import { UserAuthenticated } from '../guards';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  @PublicRoute()
+  @PublicHandler()
   @HttpCode(HttpStatus.OK)
   @ApiBody({ type: UserLoginDto })
-  async login(@User() user: AuthenticatedUser) {
+  async login(@InjectUser() user: AuthenticatedUser) {
     return {
       ...user,
     };
@@ -29,8 +29,7 @@ export class AuthController {
   }
 
   @Get('session')
-  @UseGuards(UserAuthenticated)
-  session(@User() { email, name, uid }: AuthenticatedUser) {
+  session(@InjectUser() { email, name, uid }: AuthenticatedUser) {
     return {
       uid,
       name,

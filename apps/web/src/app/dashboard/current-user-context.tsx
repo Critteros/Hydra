@@ -2,7 +2,7 @@
 
 import { useContext, createContext, type PropsWithChildren } from 'react';
 
-import type { CurrentUser } from './queries';
+import type { CurrentUser } from './dashboard-queries';
 
 const CurrentUserContext = createContext<CurrentUser | null>(null);
 

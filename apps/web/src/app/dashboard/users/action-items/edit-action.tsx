@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import { type ComponentProps, useState } from 'react';
 
+import { AccountType } from '$gql/types';
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { StatusCodes } from 'http-status-codes';
@@ -11,7 +12,6 @@ import { PencilLine } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { AccountType } from '@/__generated__/graphql';
 import { Button } from '@/components/ui/button';
 import {
   DialogContent,
@@ -38,10 +38,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
+import { ClientAdminBoundry } from '@/lib/client/client-admin-boundry';
+import { usePermissions } from '@/lib/client/hooks/permissions';
 
-import type { User } from '../queries';
-
-import { updateUserInfoMutation } from './mutations';
+import { updateUserInfoMutation } from '../user-mutations';
+import type { User } from '../user-queries';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -56,6 +57,7 @@ type ChangePasswordActionProps = { user: User } & Pick<
 >;
 
 export function EditAction({ user, onOpenChange, ...props }: ChangePasswordActionProps) {
+  const { hasAdminAccess } = usePermissions();
   const [dialogOpen, setDialogOpen] = useState(false);
   const { refresh } = useRouter();
   const [updateUserInfo] = useMutation(updateUserInfoMutation);
@@ -76,18 +78,17 @@ export function EditAction({ user, onOpenChange, ...props }: ChangePasswordActio
     onOpenChange?.(open);
   };
 
-  const onSubmit = async (values: FormSchema) => {
+  const onSubmit = async ({ accountType, ...values }: FormSchema) => {
     const data = {
       ...values,
-      uid: user.uid,
       name: values.name === '' ? null : values.name,
+      ...(hasAdminAccess() && { accountType }),
     };
 
     await updateUserInfo({
       variables: {
-        userData: {
-          ...data,
-        },
+        input: data,
+        uid: user.uid,
       },
     });
     toast({
@@ -148,28 +149,29 @@ export function EditAction({ user, onOpenChange, ...props }: ChangePasswordActio
                 </FormItem>
               )}
             />
-
-            <FormField
-              name="accountType"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="grid grid-cols-4 items-center gap-4">
-                  <FormLabel className="text-right">Account type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="col-span-3">
-                        <SelectValue placeholder="Select tpe of an account" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value={AccountType.Admin}>Admin Account</SelectItem>
-                      <SelectItem value={AccountType.Standard}>Standard Account</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage className="col-span-3 col-start-2" />
-                </FormItem>
-              )}
-            />
+            <ClientAdminBoundry fallback={<></>}>
+              <FormField
+                name="accountType"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-4 items-center gap-4">
+                    <FormLabel className="text-right">Account type</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Select tpe of an account" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value={AccountType.Admin}>Admin Account</SelectItem>
+                        <SelectItem value={AccountType.Standard}>Standard Account</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage className="col-span-3 col-start-2" />
+                  </FormItem>
+                )}
+              />
+            </ClientAdminBoundry>
             {form.formState.errors.root?.serverError?.type ==
               StatusCodes.UNAUTHORIZED.toString() && (
               <span className="text-sm font-medium text-destructive">

@@ -1,14 +1,14 @@
-import { Controller, UsePipes, Body, Post, ConflictException } from '@nestjs/common';
+import { Controller, Body, Post, ConflictException } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
 
-import { CreateAccountDto } from '@hydra-ipxe/common/server/internal/dto/accounts.dto';
-import { MapErrors } from '@hydra-ipxe/common/shared/errors';
-import { ZodValidationPipe } from 'nestjs-zod';
+import { PublicHandler } from '@/auth/decorators/public.decorator';
+import { MapErrors } from '@/errors/map-errors.decorator';
+import { UserService, UserAlreadyExistsError } from '@/user/services/user.service';
 
-import { UserService, UserAlreadyExistsError } from '@/auth';
+import { CreateAccountDto } from './dto/account.dto';
 
 @Controller('accounts')
-@UsePipes(ZodValidationPipe)
+@PublicHandler()
 @ApiExcludeController(true)
 export class AccountsController {
   constructor(private readonly userService: UserService) {}

@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 
-import { DbModule } from '@/db/db.module';
+import { DatabaseModule } from '@/database/database.module';
+import { RbacModule } from '@/rbac/rbac.module';
 
-import { UserResolver } from './resolvers';
-import { UserService } from './services';
+// Resolvers
+import { UserResolver } from './resolvers/user.resolver';
+// Services
+import { UserService } from './services/user.service';
 
 @Module({
-  imports: [DbModule],
+  imports: [DatabaseModule, RbacModule],
   providers: [UserService, UserResolver],
   exports: [UserService],
 })

@@ -2,6 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Permission {
+  """Unique identifier and name of the permission"""
+  id: ID!
+
+  """Description of the permission"""
+  description: String!
+}
+
 type User {
   """Unique identifier of the user"""
   uid: ID!
@@ -14,6 +22,12 @@ type User {
 
   """Type of the user account"""
   accountType: AccountType!
+
+  """List of permissions assigned to the user"""
+  permissions: [Permission!]!
+
+  """Assigned permissions"""
+  permissionSet: [String!]!
 }
 
 """Type of the user account"""
@@ -22,36 +36,156 @@ enum AccountType {
   ADMIN
 }
 
+type AssignedPermission {
+  """Unique identifier and name of the permission"""
+  id: ID!
+
+  """Description of the permission"""
+  description: String!
+
+  """User who assigned specific permission"""
+  assignedBy: User
+
+  """Date when permission was assigned"""
+  assignedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Role {
+  """Role unique identifier"""
+  uid: ID!
+
+  """Role name"""
+  name: String!
+
+  """Role description"""
+  description: String!
+
+  """Members of a given role"""
+  members: [User!]!
+
+  """Number of members of a given role"""
+  memberCount: Int!
+
+  """Role permissions"""
+  permissions: [AssignedPermission!]!
+
+  """Number of permissions assigned to a given role"""
+  permissionsCount: Int!
+}
+
 type Query {
   users: [User!]!
-  user(uid: ID, email: String): User
+  user(
+    """Unique identifier of the user to update"""
+    uid: ID
+
+    """Email of the user to update"""
+    email: String
+  ): User
 
   """Returns the current user"""
   me: User!
+
+  """Get all permissions"""
+  permissions: [Permission!]!
+
+  """Get all roles"""
+  roles: [Role!]!
+
+  """Get a single role"""
+  role(
+    """Role unique identifier"""
+    uid: ID
+
+    """Role name"""
+    name: String
+  ): Role
 }
 
 type Mutation {
-  """Login as a user"""
-  adminLoginAsUser(uid: String!): Boolean!
-
   """Updates user data"""
-  updateUser(userData: UserUpdateInput!): User!
+  updateUser(
+    """Unique identifier of the user to update"""
+    uid: ID
+
+    """Email of the user to update"""
+    email: String
+    updateData: UpdateUserInput!
+  ): User!
 
   """Updates current user password"""
-  updateCurrentUserPassword(data: UpdatePasswordInput!): Boolean!
+  updateCurrentUserPassword(
+    """Current password"""
+    currentPassword: String!
+
+    """New password"""
+    newPassword: String!
+  ): Boolean!
 
   """Admin updates user password"""
-  adminUpdateUserPassword(uid: String!, password: String!): Boolean!
+  adminUpdateUserPassword(
+    """Unique identifier of the user to update"""
+    uid: ID
+
+    """Email of the user to update"""
+    email: String
+
+    """New password"""
+    password: String!
+  ): Boolean!
 
   """Creates a new user"""
-  createNewUser(userData: CreateUserInput!): User!
+  createUser(data: CreateUserInput!): User!
+
+  """Delete multiple users"""
+  deleteMultipleUsers(uids: [ID!]!): Boolean!
+
+  """Create a new role"""
+  createRole(data: CreateRoleInput!): Role!
+
+  """Delete a role"""
+  deleteRole(
+    """Role unique identifier"""
+    uid: ID
+
+    """Role name"""
+    name: String
+  ): Boolean!
+
+  """Delete many roles"""
+  deleteMultipleRoles(uids: [String!]!): Int!
+
+  """Assign permissions to a role"""
+  assignPermissionsToRole(
+    """Role unique identifier"""
+    uid: ID
+
+    """Role name"""
+    name: String
+    permissionIds: [String!]!
+  ): Boolean!
+
+  """Assign users to a role"""
+  assignUsersToRole(
+    """Role unique identifier"""
+    uid: ID
+
+    """Role name"""
+    name: String
+    userUids: [String!]!
+  ): Boolean!
+
+  """Login as a user"""
+  adminLoginAsUser(uid: String!): Boolean!
 }
 
-input UserUpdateInput {
-  """Unique identifier of the user"""
-  uid: ID
-
-  """Email address of the user"""
+input UpdateUserInput {
+  """New email address of the user"""
   email: String
 
   """Nickname for the user"""
@@ -61,17 +195,9 @@ input UserUpdateInput {
   accountType: AccountType
 }
 
-input UpdatePasswordInput {
-  """Current password"""
-  currentPassword: String!
-
-  """New password"""
-  newPassword: String!
-}
-
 input CreateUserInput {
-  """Email address of the user"""
-  email: String!
+  """New email address of the user"""
+  email: String
 
   """Password for the user"""
   password: String!
@@ -80,5 +206,13 @@ input CreateUserInput {
   name: String
 
   """Type of the user account"""
-  accountType: AccountType
+  accountType: AccountType! = STANDARD
+}
+
+input CreateRoleInput {
+  """Role name"""
+  name: String!
+
+  """Role description"""
+  description: String!
 }

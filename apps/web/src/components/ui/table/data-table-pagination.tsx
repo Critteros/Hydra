@@ -1,5 +1,7 @@
 'use client';
 
+import type { ComponentType } from 'react';
+
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -19,10 +21,12 @@ import {
 
 type DataTablePaginationProps<TableDataType> = {
   table: Table<TableDataType>;
+  SelectionActions?: ComponentType<{ table: Table<TableDataType> }>;
 };
 
 export function DataTablePagination<TableDataType>({
   table,
+  SelectionActions = () => <></>,
 }: DataTablePaginationProps<TableDataType>) {
   const selectedRows = table.getFilteredSelectedRowModel().rows;
   const allRows = table.getFilteredRowModel().rows;
@@ -31,8 +35,11 @@ export function DataTablePagination<TableDataType>({
 
   return (
     <div className="flex items-center justify-between p-4">
-      <div className="flex-1 text-sm text-muted-foreground">
-        {selectedRows.length} of {allRows.length} row(s) selected.
+      <div className="flex flex-1 items-center justify-start gap-10">
+        <div className="text-sm text-muted-foreground">
+          {selectedRows.length} of {allRows.length} row(s) selected.
+        </div>
+        <SelectionActions table={table} />
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">

@@ -22,7 +22,11 @@
     "test:watch": "jest --watch",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:push": "prisma db push"
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seeder.ts"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seeder.ts"
   },
   "prettier": "@hydra-ipxe/prettier-config",
   "jest": {
@@ -59,6 +63,7 @@
     "@nestjs/swagger": "^7.1.13",
     "@prisma/client": "5.4.2",
     "bcrypt": "^5.1.1",
+    "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "connect-redis": "^7.1.0",
     "cookie": "^0.5.0",
@@ -82,6 +87,7 @@
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
     "@hydra-ipxe/prettier-config": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",
+    "@mermaid-js/mermaid-cli": "^10.6.0",
     "@nestjs/cli": "^10.1.18",
     "@nestjs/schematics": "^10.0.2",
     "@nestjs/testing": "^10.2.7",
@@ -104,12 +110,14 @@
     "jest": "^29.7.0",
     "jest-mock-extended": "^3.0.5",
     "prisma": "^5.4.2",
+    "prisma-erd-generator": "^1.11.1",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
     "ts-loader": "^9.5.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
+    "tsx": "^3.14.0",
     "type-fest": "^4.5.0",
     "typescript": "latest"
   }

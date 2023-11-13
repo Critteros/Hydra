@@ -4,7 +4,7 @@ import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
 import { Prisma, type User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-import { PrismaService } from '@/db/prisma.service';
+import { PrismaService } from '@/database/prisma.service';
 import { PrismaErrorCode, remapPrismaError } from '@/utils/prisma/errors';
 
 export const UserAlreadyExistsError = makeCustomError('UserAlreadyExistsError');
@@ -15,10 +15,27 @@ export const UserPasswordDoesNotMatch = makeCustomError('UserPasswordDoesNotMatc
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
+  /**
+   * Finds a user by unique identifier
+   *
+   * @param where User selector
+   * @returns User or null if not found
+   */
   async find(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
     return this.prisma.user.findUnique({ where });
   }
 
+  /**
+   * Finds multiple users
+   *
+   * @param params Parameters
+   * @param params.skip Number of records to skip
+   * @param params.take Number of records to take
+   * @param params.cursor Cursor to use for pagination
+   * @param params.where Where clause
+   * @param params.orderBy Order by clause
+   * @returns Found users
+   */
   async findMany(params: {
     skip?: number;
     take?: number;
@@ -36,6 +53,13 @@ export class UserService {
     });
   }
 
+  /**
+   * Creates user
+   *
+   * @param data User data
+   * @param hashPassword If the password should be hashed
+   * @returns User
+   */
   async createUser(data: Prisma.UserCreateInput, hashPassword = true): Promise<User> {
     let { password } = data;
 
@@ -60,6 +84,15 @@ export class UserService {
     }
   }
 
+  /**
+   * Updated user data
+   *
+   * @param params Parameters
+   * @param params.where User selector
+   * @param params.data User data
+   * @returns User
+   * @throws UserNotFound if user is not found
+   */
   async updateUser(params: {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
@@ -80,6 +113,13 @@ export class UserService {
     }
   }
 
+  /**
+   * Delete single user
+   *
+   * @param where User selector
+   * @returns Deleted user
+   * @throws UserNotFound if user is not found
+   */
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
     try {
       return await this.prisma.user.delete({
@@ -95,6 +135,33 @@ export class UserService {
     }
   }
 
+  /**
+   * Deletes multiple users
+   *
+   * @param params Parameters
+   * @param params.userUids User uids to be deleted
+   * @returns Number of deleted users
+   */
+  async deleteMultipleUsers({ userUids }: { userUids: Array<User['uid']> }) {
+    const res = await this.prisma.user.deleteMany({
+      where: {
+        uid: {
+          in: userUids,
+        },
+      },
+    });
+
+    return res.count;
+  }
+
+  /**
+   * Updates user profile information
+   *
+   * @param where User selector
+   * @param data Data to be updated
+   * @returns User
+   * @throws UserNotFound if user is not found
+   */
   async updateUserInfo(
     where: Prisma.UserWhereUniqueInput,
     data: Pick<Prisma.UserUpdateInput, 'email' | 'accountType' | 'name'>,
@@ -114,6 +181,16 @@ export class UserService {
     }
   }
 
+  /**
+   * Updates password if the old password matches
+   *
+   * @param where User selector
+   * @param params Parameters
+   * @param params.oldPassword Old password
+   * @param params.newPassword New password
+   * @returns User
+   * @throws UserNotFound if user is not found
+   */
   async updatePasswordChecked(
     where: Prisma.UserWhereUniqueInput,
     {
@@ -150,6 +227,14 @@ export class UserService {
     });
   }
 
+  /**
+   * Forcefully updates password without checking the old password
+   *
+   * @param where User selector
+   * @param newPassword New password to be used
+   * @returns User
+   * @throws UserNotFound if user is not found
+   */
   async updatePasswordUnckecked(where: Prisma.UserWhereUniqueInput, newPassword: string) {
     const password = await bcrypt.hash(newPassword, 10);
 

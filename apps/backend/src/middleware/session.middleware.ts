@@ -4,7 +4,7 @@ import RedisStore from 'connect-redis';
 import type { Request, Response, NextFunction } from 'express';
 import session from 'express-session';
 
-import { type RedisClient, RedisClientToken } from '@/db/redis.constants';
+import { type RedisClient, RedisClientToken } from '@/redis/redis.constants';
 
 @Injectable()
 export class SessionMiddleware implements NestMiddleware {

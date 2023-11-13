@@ -1,22 +1,22 @@
-import { UseGuards, BadRequestException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Mutation, Resolver, Args } from '@nestjs/graphql';
 
 import type { Request } from 'express';
 
-import { AdminUserGuard } from '@/user/guards';
+import { AdministratorOnly } from '@/rbac/decorators/administrator-only.decorator';
 import { UserService } from '@/user/services/user.service';
 import { exclude } from '@/utils/objects';
 import { InjectRequest } from '@/utils/request.decorator';
-
-import { UserAuthenticated } from '../guards/user-authenticated.guard';
 
 @Resolver()
 export class AuthResolver {
   constructor(private readonly userService: UserService) {}
 
+  // ================================ Queries ================================
+  // ================================ Mutations ==============================
+
   @Mutation(() => Boolean, { name: 'adminLoginAsUser', description: 'Login as a user' })
-  @UseGuards(UserAuthenticated)
-  @UseGuards(AdminUserGuard)
+  @AdministratorOnly()
   async loginAs(@Args('uid') uid: string, @InjectRequest() request: Request) {
     const user = await this.userService.find({ uid });
 
@@ -36,4 +36,6 @@ export class AuthResolver {
 
     return true;
   }
+
+  // ================================ Resolvers ================================
 }

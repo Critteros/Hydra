@@ -28,9 +28,8 @@ import { Icons } from '@/components/ui/icons';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 
-import type { User } from '../queries';
-
-import { adminChangeUserPasswordMutation } from './mutations';
+import { adminChangeUserPasswordMutation } from '../user-mutations';
+import type { User } from '../user-queries';
 
 const formSchema = z
   .object({

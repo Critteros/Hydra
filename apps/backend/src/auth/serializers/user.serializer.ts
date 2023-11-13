@@ -3,7 +3,8 @@ import { PassportSerializer } from '@nestjs/passport';
 
 import { debug } from 'debug';
 
-import { UserService, type AuthenticatedUser } from '@/user';
+import { UserService } from '@/user/services/user.service';
+import type { AuthenticatedUser } from '@/user/types';
 
 type UserInSession = {
   uid: AuthenticatedUser['uid'];

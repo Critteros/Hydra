@@ -1,11 +1,13 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 
+import { AccountType } from '$gql/types';
 import { type ApolloError, useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { AccountType } from '@/__generated__/graphql';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -25,8 +27,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
+import { ClientAdminBoundry } from '@/lib/client/client-admin-boundry';
 
-import { createNewUserMutation } from './mutations';
+import { createNewUserMutation } from './user-mutations';
 
 const formSchema = z
   .object({
@@ -67,7 +70,7 @@ export function CreateUserForm({ closeDialog }: CreateUserFormProps) {
     try {
       await createNewUser({
         variables: {
-          userData: {
+          input: {
             email: data.email,
             password: data.password,
             name: data.name,
@@ -180,7 +183,9 @@ export function CreateUserForm({ closeDialog }: CreateUserFormProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value={AccountType.Admin}>Admin Account</SelectItem>
+                  <ClientAdminBoundry fallback={<></>}>
+                    <SelectItem value={AccountType.Admin}>Admin Account</SelectItem>
+                  </ClientAdminBoundry>
                   <SelectItem value={AccountType.Standard}>Standard Account</SelectItem>
                 </SelectContent>
               </Select>

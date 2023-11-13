@@ -9,7 +9,7 @@ export class BaseError extends Error {
   public errorStack: Array<unknown> = [];
 }
 
-type RemapInput = {
+export type RemapInput = {
   if: Constructor<Error>;
   then: unknown;
 };
@@ -64,29 +64,4 @@ export function makeCustomError(
   };
   Object.defineProperty(definition, 'name', { value: name });
   return definition;
-}
-
-export function MapErrors<FnT extends (...args: unknown[]) => unknown>(
-  mapping: Parameters<typeof remapErrors>[0],
-): MethodDecorator {
-  const remapper = remapErrors(mapping);
-
-  return ((target, propertyKey, descriptor: TypedPropertyDescriptor<FnT>) => {
-    const originalFn = descriptor.value;
-
-    descriptor.value = function (...args: unknown[]) {
-      try {
-        // @ts-expect-error Required call using .call method for not to loase this context
-        const res = originalFn?.call(this, ...args);
-
-        if (res instanceof Promise) {
-          return res.catch((e) => {
-            throw remapper(e);
-          });
-        }
-      } catch (e) {
-        throw remapper(e);
-      }
-    } as FnT;
-  }) as MethodDecorator;
 }
