@@ -19,6 +19,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransferList } from '@/components/ui/transfer-list';
 import { useToast } from '@/components/ui/use-toast';
+import { usePermissions } from '@/lib/client/hooks/permissions';
 
 import { assignPermissionsToRoleMutation } from './roles-mutations';
 import { queryRolePermissions } from './roles-queries';
@@ -30,6 +31,7 @@ type EditPermissionsWidgetProps = {
 export function EditPermissionsWidget({ permissionCount, roleUid }: EditPermissionsWidgetProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const { hasPermission } = usePermissions();
   const [assignPermissionsToRole] = useMutation(assignPermissionsToRoleMutation);
   const { refresh } = useRouter();
   const { toast } = useToast();
@@ -49,7 +51,7 @@ export function EditPermissionsWidget({ permissionCount, roleUid }: EditPermissi
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" disabled={!hasPermission('roles.assignPermissions')}>
           <Key className="mr-2 h-4 w-4" />
           <span>{permissionCount}</span>
         </Button>

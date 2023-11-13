@@ -13,6 +13,7 @@ export const queryPermissionsSummary = gql(`
       description
     }
     me {
+      uid
       permissions {
         id
         description

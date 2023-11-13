@@ -12,10 +12,15 @@ const keyPath = {
     edit: {},
   },
   roles: {
+    /* Prevents the table of roles from being displayed */
     read: {},
+    /* Hides Add Role button */
     create: {},
+    /* Hides Delete button in role table selection actions */
     delete: {},
+    /* AssignUsers widget is read-only */
     assignUsers: {},
+    /* AssignPermissions widget is read-only */
     assignPermissions: {},
   },
 } as const;
