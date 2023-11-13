@@ -4,6 +4,7 @@ export const serverClientBridgeQuery = gql(`
   query ServerClientBridgeQuery {
     me {
       permissionSet
+      accountType
     }
   }
 `);

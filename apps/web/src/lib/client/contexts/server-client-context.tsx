@@ -2,10 +2,12 @@
 
 import { createContext, useContext, type PropsWithChildren } from 'react';
 
+import type { AccountType } from '$gql/types';
 import type { Permissions } from '@hydra-ipxe/common/shared/permissions';
 
 export type ServerClientBridge = {
   permissions: Permissions[];
+  accountType: AccountType;
 };
 
 const ServerClientBridgeContext = createContext<ServerClientBridge | null>(null);

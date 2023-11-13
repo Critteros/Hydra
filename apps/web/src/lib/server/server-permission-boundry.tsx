@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 
 import type { Permissions } from '@hydra-ipxe/common/shared/permissions';
 
-import { getUserPermissions } from './permissions';
+import { hasPermission } from './permissions';
 
 type ServerPermissionBoundryProps = {
   permission: Permissions;
@@ -17,9 +17,7 @@ export async function ServerPermissionBoundry({
   fallback,
   children,
 }: ServerPermissionBoundryProps) {
-  const permissions = await getUserPermissions();
-
-  if (permissions.includes(permission)) {
+  if (await hasPermission(permission)) {
     return <>{children}</>;
   }
 

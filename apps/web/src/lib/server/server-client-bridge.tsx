@@ -4,11 +4,11 @@ import type { ReactNode } from 'react';
 
 import { ServerClientBridgeProvider } from '@/lib/client/contexts/server-client-context';
 
-import { getUserPermissions } from './permissions';
+import { getUserPermissionInfo } from './permissions';
 
 export async function ServerClientBridge({ children }: { children?: ReactNode }) {
   return (
-    <ServerClientBridgeProvider permissions={await getUserPermissions()}>
+    <ServerClientBridgeProvider {...await getUserPermissionInfo()}>
       {children}
     </ServerClientBridgeProvider>
   );
