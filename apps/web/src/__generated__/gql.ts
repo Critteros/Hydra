@@ -30,6 +30,7 @@ const documents = {
     "\n  mutation AdminChangeUserPassword($uid: ID!, $newPassword: String!) {\n    adminUpdateUserPassword(uid: $uid, password: $newPassword)\n  }\n": types.AdminChangeUserPasswordDocument,
     "\n  mutation DeleteMultipleUsers($uids: [ID!]!) {\n    deleteMultipleUsers(uids: $uids)\n  }\n": types.DeleteMultipleUsersDocument,
     "\n  query Users {\n    users {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n": types.UsersDocument,
+    "\n  query ServerClientBridgeQuery {\n    me {\n      permissionSet\n    }\n  }\n": types.ServerClientBridgeQueryDocument,
 };
 
 /**
@@ -114,6 +115,10 @@ export function gql(source: "\n  mutation DeleteMultipleUsers($uids: [ID!]!) {\n
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query Users {\n    users {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"): (typeof documents)["\n  query Users {\n    users {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query ServerClientBridgeQuery {\n    me {\n      permissionSet\n    }\n  }\n"): (typeof documents)["\n  query ServerClientBridgeQuery {\n    me {\n      permissionSet\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
