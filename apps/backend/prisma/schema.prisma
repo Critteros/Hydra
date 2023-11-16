@@ -82,6 +82,37 @@ model Permission {
   roles       PermissionsOnRoles[]
 }
 
+model Computer {
+  id              String               @id @default(cuid()) @db.VarChar(256)
+  name            String               @unique @db.VarChar(256)
+  mac             String               @unique @db.VarChar(64)
+  ipv4            String?              @unique @db.VarChar(32)
+  computerGroup   ComputerGroup?       @relation(fields: [computerGroupId], references: [id])
+  computerGroupId String?              @map("computer_group_id") @db.VarChar(256)
+  viewOptions     ComputerViewOptions?
+}
+
+model ComputerViewOptions {
+  id         Int      @id @default(autoincrement())
+  computer   Computer @relation(fields: [computerId], references: [id])
+  computerId String   @unique @map("computer_id") @db.VarChar(256)
+  order      Int      @default(0)
+}
+
+model ComputerGroup {
+  id          String                    @id @default(cuid()) @db.VarChar(256)
+  name        String                    @unique @db.VarChar(256)
+  computers   Computer[]
+  viewOptions ComputerGroupViewOptions?
+}
+
+model ComputerGroupViewOptions {
+  id              Int           @id @default(autoincrement())
+  computerGroup   ComputerGroup @relation(fields: [computerGroupId], references: [id])
+  computerGroupId String        @unique @map("computer_group_id") @db.VarChar(256)
+  order           Int           @default(0)
+}
+
 enum AccountType {
   STANDARD
   ADMIN
