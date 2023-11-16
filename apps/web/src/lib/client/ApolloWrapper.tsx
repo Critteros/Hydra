@@ -11,6 +11,7 @@ import {
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr';
 
+import { cacheConfig } from '../shared/graphql-cache';
 import { getIsServer } from '../utils';
 
 type SessionProp = { cookieName: string; cookie?: string };
@@ -30,7 +31,8 @@ function makeClient({ cookieName, cookie }: SessionProp) {
     });
 
     return new NextSSRApolloClient({
-      cache: new NextSSRInMemoryCache(),
+      connectToDevTools: !isServer,
+      cache: new NextSSRInMemoryCache(cacheConfig),
       link:
         typeof window === 'undefined'
           ? ApolloLink.from([
