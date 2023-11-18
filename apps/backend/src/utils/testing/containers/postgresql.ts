@@ -1,10 +1,11 @@
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 
-import type { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { debug } from 'debug';
 
+import { seed } from '@/../prisma/seed/main';
 import { PerfCounter } from '@/utils/perf-counter';
 import type { PrismaCtx } from '@/utils/prisma/types';
 
@@ -14,8 +15,8 @@ async function createDBSchema(env: Record<string, string>) {
   await execAsync('npx prisma db push --skip-generate', { env });
 }
 
-async function seedDB(env: Record<string, string>) {
-  await execAsync('npx prisma db seed', { env });
+async function seedDB(client: PrismaClient) {
+  await seed(client);
 }
 
 export async function truncateTable(client: PrismaCtx, tablename: string) {
@@ -60,10 +61,7 @@ export class PostgreSQLTestDB {
     });
   }
 
-  async setup({
-    createSchema = true,
-    seed = true,
-  }: { createSchema?: boolean; seed?: boolean } = {}) {
+  async setup({ createSchema = true }: { createSchema?: boolean } = {}) {
     const perfCounter = new PerfCounter();
     this.startedContainer = await this.container.start();
     const DATABASE_URL = this.startedContainer.getConnectionUri();
@@ -74,20 +72,27 @@ export class PostgreSQLTestDB {
     if (createSchema) {
       await createDBSchema(env);
     }
-    if (seed) {
-      await seedDB(env);
-    }
     const timeTaken = perfCounter.stop();
     this.log(`Setup took ${timeTaken.to('ms')}ms`);
   }
 
-  async reset(client: PrismaClient) {
+  async seed(client: PrismaClient) {
+    const perfCounter = new PerfCounter();
+    await seedDB(client);
+    const timeTaken = perfCounter.stop();
+    this.log(`Seed took ${timeTaken.to('ms')}ms`);
+  }
+
+  async reset(client: PrismaClient, reseed = true) {
     const perfCounter = new PerfCounter();
     await client.$transaction(async (prisma) => {
       const tables = await queryTables(prisma);
       await Promise.all(tables.map((table) => truncateTable(prisma, table)));
       await resetSequences(prisma);
     });
+    if (reseed) {
+      await this.seed(client);
+    }
     const timeTaken = perfCounter.stop();
     this.log(`Reset took ${timeTaken.to('ms')}ms`);
   }

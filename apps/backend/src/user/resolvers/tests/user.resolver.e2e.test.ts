@@ -3,7 +3,6 @@ import { HttpStatus, Module } from '@nestjs/common';
 import { AccountType } from '@prisma/client';
 import { gql } from 'graphql-tag';
 
-import { PrismaService } from '@/database/prisma.service';
 import { UserModule } from '@/user/user.module';
 import { E2ETestManager } from '@/utils/testing/e2e-test-manager';
 import { userFactory } from '@/utils/testing/factories';
@@ -14,14 +13,9 @@ import { userFactory } from '@/utils/testing/factories';
 class TestModule {}
 
 describe('Test UserResolver', () => {
-  let prismaService: PrismaService;
   const manager = new E2ETestManager(TestModule);
 
   manager.installHooks();
-
-  beforeEach(() => {
-    prismaService = manager.app.get(PrismaService);
-  });
 
   it('requires authentication', async () => {
     const query = gql`
@@ -37,7 +31,7 @@ describe('Test UserResolver', () => {
   });
 
   it('resolves to logged in user', async () => {
-    const user = await userFactory(prismaService, { accountType: AccountType.ADMIN });
+    const user = await userFactory(manager.moduleRef, { accountType: AccountType.ADMIN });
     await manager.login(user);
 
     const query = gql`
@@ -53,6 +47,42 @@ describe('Test UserResolver', () => {
       me: {
         uid: user.uid,
       },
+    });
+  });
+
+  describe('Query users', () => {
+    const query = gql`
+      query {
+        users {
+          uid
+          email
+        }
+      }
+    `;
+
+    it('does not resolve without "accounts.read" permissions', async () => {
+      const user = await userFactory(manager.moduleRef, { accountType: AccountType.STANDARD });
+      await manager.login(user);
+
+      const { errors } = await manager.gql.query(query);
+      expect(errors?.[0]?.extensions?.originalError?.statusCode).toBe(HttpStatus.FORBIDDEN);
+    });
+
+    it('resolve with "accounts.read" permissions', async () => {
+      const user = await userFactory(manager.moduleRef, { accountType: AccountType.ADMIN }, [
+        'accounts.read',
+      ]);
+      await manager.login(user);
+
+      const { data } = await manager.gql.query(query).expectNoErrors();
+      expect(data).toMatchObject({
+        users: [
+          {
+            uid: user.uid,
+            email: user.email,
+          },
+        ],
+      });
     });
   });
 });

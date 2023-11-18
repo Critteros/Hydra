@@ -1,5 +1,6 @@
 import { ApolloDriver } from '@nestjs/apollo';
 import { MiddlewareConsumer, Module, type NestModule, type INestApplication } from '@nestjs/common';
+import { NestApplicationContext } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { Test } from '@nestjs/testing';
 
@@ -49,6 +50,7 @@ export class E2ETestManager {
   private _app!: INestApplication<Express>;
   private httpServer!: Express;
   private agent!: request.SuperAgentTest;
+  private _moduleRef!: NestApplicationContext;
 
   constructor(private readonly testModule: Constructor<any>) {
     this.testDbContainer = new PostgreSQLTestDB();
@@ -68,6 +70,7 @@ export class E2ETestManager {
         console.error(error);
       });
       await Promise.all([this.dbClient.$connect(), this.redisClient.connect()]);
+      await this.testDbContainer.seed(this.dbClient);
     });
 
     afterAll(async () => {
@@ -85,6 +88,7 @@ export class E2ETestManager {
         .overrideProvider(RedisOptionsToken)
         .useValue({ url: this.testRedisContainer.connectionUri } as RedisOptions)
         .compile();
+      this._moduleRef = moduleRef;
 
       this._app = moduleRef.createNestApplication();
       this._app.setGlobalPrefix('api');
@@ -112,6 +116,10 @@ export class E2ETestManager {
 
   get app() {
     return this._app;
+  }
+
+  get moduleRef() {
+    return this._moduleRef;
   }
 
   async login({ email, password }: Pick<User, 'email' | 'password'>) {
