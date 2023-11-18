@@ -83,6 +83,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.2.0",
+    "eslint": "^8.51.0",
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
     "@hydra-ipxe/prettier-config": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",

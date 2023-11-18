@@ -33,8 +33,7 @@ describe('Test UserResolver', () => {
     `;
     const { data, errors } = await manager.gql.query(query);
     expect(data).toBeNull();
-    expect(errors).toHaveLength(1);
-    expect((errors![0] as any).code).toBe(HttpStatus.UNAUTHORIZED);
+    expect(errors?.[0]?.extensions?.originalError?.statusCode).toBe(HttpStatus.UNAUTHORIZED);
   });
 
   it('resolves to logged in user', async () => {

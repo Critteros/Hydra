@@ -6,7 +6,6 @@ import { Test } from '@nestjs/testing';
 import { PrismaClient } from '@prisma/client';
 import type { User } from '@prisma/client';
 import type { Express } from 'express';
-import { GraphQLFormattedError } from 'graphql';
 import { createClient, type RedisClientType } from 'redis';
 import request from 'supertest';
 import { SuperTestGraphQL } from 'supertest-graphql';
@@ -17,6 +16,8 @@ import { PassportMiddleware } from '@/middleware/passport.middleware';
 import { SessionMiddleware } from '@/middleware/session.middleware';
 import { RedisOptionsToken } from '@/redis/redis.constants';
 import { RedisModule, RedisOptions } from '@/redis/redis.module';
+
+import { formatError } from '../graphql';
 
 import { PostgreSQLTestDB } from './containers/postgresql';
 import { RedisTestCache } from './containers/redis';
@@ -29,25 +30,7 @@ import { RedisTestCache } from './containers/redis';
       driver: ApolloDriver,
       autoSchemaFile: true,
       path: '/api/graphql',
-      formatError: (error: GraphQLFormattedError) => {
-        const originalError = error.extensions?.originalError as
-          | { message: string; error: string; statusCode: number }
-          | undefined;
-
-        if (!originalError) {
-          return {
-            message: error.message,
-            code: error.extensions?.code,
-            path: error.path,
-          };
-        }
-
-        return {
-          message: originalError.message,
-          code: originalError.statusCode,
-          path: error.path,
-        };
-      },
+      formatError,
     }),
   ],
 })
