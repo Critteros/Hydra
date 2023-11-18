@@ -47,13 +47,15 @@ export async function queryTables(client: PrismaCtx, schema = 'public') {
   return records.map(({ tablename }) => tablename);
 }
 
+const POSTGRESQL_IMAGE_TAG = 'postgres:16-alpine';
+
 export class PostgreSQLTestDB {
   private readonly log = debug('test:containers:postgresql');
   private readonly container: PostgreSqlContainer;
-  private startedContainer: StartedPostgreSqlContainer | undefined;
+  private startedContainer?: StartedPostgreSqlContainer;
 
   constructor() {
-    this.container = new PostgreSqlContainer('postgres:16-alpine').withTmpFs({
+    this.container = new PostgreSqlContainer(POSTGRESQL_IMAGE_TAG).withTmpFs({
       '/var/lib/postgresql/data': 'rw,noexec,nosuid,size=100m',
     });
   }

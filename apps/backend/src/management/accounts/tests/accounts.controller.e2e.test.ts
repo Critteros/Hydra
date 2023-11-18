@@ -1,52 +1,37 @@
-import { INestApplication, HttpStatus } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
+import { HttpStatus, Module } from '@nestjs/common';
 
 import { faker } from '@faker-js/faker';
-import request from 'supertest';
 
 import { PrismaService } from '@/database/prisma.service';
 import { ErrorsModule } from '@/errors/errors.module';
 import { UserModule } from '@/user/user.module';
-import { prismaTruncateDB, createMockDB, type StartedPostgreSqlContainer } from '@/utils/test';
+import { E2ETestManager } from '@/utils/testing/e2e-test-manager';
 
 import { AccountsController } from '../accounts.controller';
 
+@Module({
+  controllers: [AccountsController],
+  imports: [UserModule, ErrorsModule],
+})
+class TestModule {}
+
 describe('Test management AccountsController', () => {
-  let dbService: StartedPostgreSqlContainer;
   let prisma: PrismaService;
-  let app: INestApplication;
 
-  beforeAll(async () => {
-    const { container } = await createMockDB();
-    dbService = container;
+  const manager = new E2ETestManager(TestModule);
+
+  manager.installHooks();
+
+  beforeEach(() => {
+    prisma = manager.app.get(PrismaService);
   });
 
-  afterAll(async () => {
-    await dbService.stop();
-  });
-
-  beforeEach(async () => {
-    const moduleRef = await Test.createTestingModule({
-      controllers: [AccountsController],
-      imports: [UserModule, ErrorsModule],
-    }).compile();
-    prisma = moduleRef.get(PrismaService);
-    app = moduleRef.createNestApplication();
-    await app.init();
-  });
-
-  afterEach(async () => {
-    await prismaTruncateDB(prisma);
-    await prisma.$disconnect();
-    await app.close();
-  });
-
-  describe('POST /accounts/create-admin-account', () => {
-    const url = '/accounts/create-admin-account';
+  describe('POST /api/accounts/create-admin-account', () => {
+    const url = '/api/accounts/create-admin-account';
 
     it('should return 200 and create account', async () => {
       await expect(prisma.user.count()).resolves.toBe(0);
-      await request(app.getHttpServer())
+      await manager.req
         .post(url)
         .expect(HttpStatus.CREATED)
         .send({
@@ -65,14 +50,14 @@ describe('Test management AccountsController', () => {
     });
 
     it('should return 400 if email is malformed', () => {
-      return request(app.getHttpServer()).post(url).expect(HttpStatus.BAD_REQUEST).send({
+      return manager.req.post(url).expect(HttpStatus.BAD_REQUEST).send({
         email: 'malformed email',
         password: 'testpass',
       });
     });
 
     it('should return 400 if password is omitted', () => {
-      return request(app.getHttpServer()).post(url).expect(HttpStatus.BAD_REQUEST).send({
+      return manager.req.post(url).expect(HttpStatus.BAD_REQUEST).send({
         email: 'user@example.com',
       });
     });
@@ -86,19 +71,19 @@ describe('Test management AccountsController', () => {
         },
       });
 
-      await request(app.getHttpServer())
+      await manager.req
         .post(url)
         .expect(HttpStatus.CONFLICT)
         .send({ email: user.email, password: faker.internet.password() });
     });
   });
 
-  describe('POST /accounts/create-standard-account', () => {
-    const url = '/accounts/create-standard-account';
+  describe('POST /api/accounts/create-standard-account', () => {
+    const url = '/api/accounts/create-standard-account';
 
     it('should return 200 and create account', async () => {
       await expect(prisma.user.count()).resolves.toBe(0);
-      await request(app.getHttpServer())
+      await manager.req
         .post(url)
         .expect(HttpStatus.CREATED)
         .send({
@@ -123,7 +108,7 @@ describe('Test management AccountsController', () => {
         },
       });
 
-      await request(app.getHttpServer())
+      await manager.req
         .post(url)
         .expect(HttpStatus.CONFLICT)
         .send({ email: user.email, password: faker.internet.password() });
