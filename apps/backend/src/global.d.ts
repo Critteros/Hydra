@@ -10,3 +10,13 @@ declare global {
     }
   }
 }
+
+declare module 'graphql' {
+  interface GraphQLErrorExtensions {
+    status?: string;
+    originalError?: {
+      statusCode: number;
+      message: string;
+    };
+  }
+}

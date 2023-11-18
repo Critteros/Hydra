@@ -2,14 +2,14 @@ import { exit } from 'node:process';
 
 import { PrismaClient } from '@prisma/client';
 
-import { run as seedPermissions } from './seed/permissions.seed';
+import { seed } from './seed/main';
 
 async function main() {
   const prisma = new PrismaClient();
   await prisma.$connect();
 
   try {
-    await seedPermissions(prisma);
+    await seed(prisma);
   } catch (e) {
     console.error(e);
     await prisma.$disconnect();

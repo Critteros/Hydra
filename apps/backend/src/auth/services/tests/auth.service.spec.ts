@@ -2,41 +2,25 @@ import { Test } from '@nestjs/testing';
 
 import type { User } from '@prisma/client';
 
-import { PrismaService } from '@/database/prisma.service';
 import { UserService } from '@/user/services/user.service';
-import { prismaTruncateDB, createMockDB, type StartedPostgreSqlContainer } from '@/utils/test';
+import { IntegrationTestManager } from '@/utils/testing/integration-test-manager';
 
 import { AuthModule } from '../../auth.module';
 import { AuthService } from '../auth.service';
 
 describe('Test AuthService', () => {
-  let dbService: StartedPostgreSqlContainer;
-  let prisma: PrismaService;
   let authService: AuthService;
   let userService: UserService;
 
-  beforeAll(async () => {
-    const { container } = await createMockDB();
-    dbService = container;
-  });
-
-  afterAll(async () => {
-    await dbService.stop();
-  });
+  new IntegrationTestManager().installHooks();
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AuthModule],
     }).compile();
 
-    prisma = moduleRef.get(PrismaService);
     authService = moduleRef.get(AuthService);
     userService = moduleRef.get(UserService);
-  });
-
-  afterEach(async () => {
-    await prismaTruncateDB(prisma);
-    await prisma.$disconnect();
   });
 
   describe('validateUser', () => {

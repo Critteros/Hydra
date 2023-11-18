@@ -3,9 +3,11 @@ name: CI
 on:
   pull_request:
     types: [opened, synchronize]
+  push:
+    branches: [main]
 
 env:
-  DISABLE_ERD: "true"
+  DISABLE_ERD: 'true'
 
 jobs:
   test:

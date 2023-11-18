@@ -5,25 +5,17 @@ import type { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from '@/database/prisma.service';
-import { createMockDB, type StartedPostgreSqlContainer, prismaTruncateDB } from '@/utils/test';
+import { IntegrationTestManager } from '@/utils/testing/integration-test-manager';
 
 import { UserService, UserAlreadyExistsError, UserNotFound } from '../user.service';
 
 jest.mock('bcrypt');
 
 describe('Test UserService', () => {
-  let postgresqlContainer: StartedPostgreSqlContainer;
   let userService: UserService;
   let prisma: PrismaService;
 
-  beforeAll(async () => {
-    const { container } = await createMockDB();
-    postgresqlContainer = container;
-  });
-
-  afterAll(async () => {
-    await postgresqlContainer.stop();
-  });
+  new IntegrationTestManager().installHooks();
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -32,11 +24,6 @@ describe('Test UserService', () => {
 
     userService = moduleRef.get<UserService>(UserService);
     prisma = moduleRef.get<PrismaService>(PrismaService);
-  });
-
-  afterEach(async () => {
-    await prismaTruncateDB(prisma);
-    await prisma.$disconnect();
   });
 
   describe('Finds user', () => {

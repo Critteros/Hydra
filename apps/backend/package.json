@@ -41,7 +41,7 @@
     ],
     "rootDir": "src",
     "testEnvironment": "node",
-    "testRegex": ".*\\.spec\\.ts$",
+    "testRegex": ".*\\.(spec|unit.test|intg.test|e2e.test)\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
@@ -71,7 +71,6 @@
     "express-session": "^1.17.3",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
-    "ms": "^2.1.3",
     "nestjs-zod": "^3.0.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
@@ -84,6 +83,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.2.0",
+    "eslint": "^8.51.0",
     "@hydra-ipxe/eslint-config-hydra": "workspace:*",
     "@hydra-ipxe/prettier-config": "workspace:*",
     "@hydra-ipxe/tsconfig": "workspace:*",

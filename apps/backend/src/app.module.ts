@@ -15,31 +15,14 @@ import { SessionMiddleware } from './middleware/session.middleware';
 import { RbacModule } from './rbac/rbac.module';
 import { RedisModule } from './redis/redis.module';
 import { UserModule } from './user/user.module';
+import { formatError } from './utils/graphql';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: resolve(process.cwd(), 'schema.gql'),
-      formatError: (error) => {
-        const originalError = error.extensions?.originalError as
-          | { message: string; error: string; statusCode: number }
-          | undefined;
-
-        if (!originalError) {
-          return {
-            message: error.message,
-            code: error.extensions?.code,
-            path: error.path,
-          };
-        }
-
-        return {
-          message: originalError.message,
-          code: originalError.statusCode,
-          path: error.path,
-        };
-      },
+      formatError,
       path: '/api/graphql',
       playground: {
         settings: {
