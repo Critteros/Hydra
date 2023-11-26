@@ -2,7 +2,7 @@ import 'server-only';
 
 import type { ReactNode } from 'react';
 
-import { Users, Key, UserCog } from 'lucide-react';
+import { Users, Key, UserCog, Laptop2 as ComputerIcon } from 'lucide-react';
 
 import { AppBar } from '@/components/app-bar';
 import { getClient } from '@/lib/server/apollo-client';
@@ -28,6 +28,13 @@ const sidebarConfig: SidebarGrouping = {
       href: '/dashboard/permissions',
       icon: <Key size={16} />,
       title: 'Permissions',
+    },
+  ],
+  IPXE: [
+    {
+      href: '/dashboard/ipxe/computers',
+      icon: <ComputerIcon size={16} />,
+      title: 'Computers',
     },
   ],
 };
