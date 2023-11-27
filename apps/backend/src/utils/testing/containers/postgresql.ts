@@ -24,7 +24,7 @@ export async function truncateTable(client: PrismaCtx, tablename: string) {
 }
 
 export async function resetSequences(client: PrismaCtx) {
-  const results = await client.$queryRawUnsafe<Array<{ record: { relname: string } }>>(
+  const results = await client.$queryRawUnsafe<Array<{ relname: string }>>(
     `SELECT c.relname
      FROM pg_class AS c
               JOIN pg_namespace AS n ON c.relnamespace = n.oid
@@ -33,7 +33,7 @@ export async function resetSequences(client: PrismaCtx) {
   );
 
   await Promise.all(
-    results.map(({ record: { relname } }) =>
+    results.map(({ relname }) =>
       client.$executeRawUnsafe(`ALTER SEQUENCE "public"."${relname}" RESTART WITH 1;`),
     ),
   );
