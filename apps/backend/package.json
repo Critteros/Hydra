@@ -48,7 +48,10 @@
     "moduleNameMapper": {
       "@/(.*)$": "<rootDir>/$1"
     },
-    "testTimeout": 1200000
+    "testTimeout": 1200000,
+    "setupFiles": [
+      "<rootDir>/../setupTestEnv.ts"
+    ]
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
