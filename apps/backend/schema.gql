@@ -78,6 +78,33 @@ type Role {
   permissionsCount: Int!
 }
 
+"""Presentation configuration for a computer"""
+type ComputerViewOptions {
+  """Whether to show the computer in the list"""
+  id: ID!
+
+  """Whether to show the computer in the list"""
+  order: Float!
+}
+
+"""Represent a computer which participates in the network boot process"""
+type Computer {
+  """Unique identifier of the computer"""
+  uid: ID!
+
+  """Name of the computer set by the user"""
+  name: String!
+
+  """MAC address of the computer"""
+  mac: String!
+
+  """IP address of the computer"""
+  ipv4: String!
+
+  """Presentation configuration for a computer"""
+  viewOptions: ComputerViewOptions
+}
+
 type Query {
   users: [User!]!
   user(
@@ -105,6 +132,19 @@ type Query {
     """Role name"""
     name: String
   ): Role
+
+  """Get all computers"""
+  computers: [Computer!]!
+
+  """Get a single computer"""
+  computer(where: WhereUniqueComputerInput!): Computer
+}
+
+input WhereUniqueComputerInput {
+  uid: String
+  name: String
+  mac: String
+  ipv4: String
 }
 
 type Mutation {
@@ -182,6 +222,12 @@ type Mutation {
 
   """Login as a user"""
   adminLoginAsUser(uid: String!): Boolean!
+
+  """Create a new computer"""
+  createComputer(data: ComputerCreateInput!): Computer!
+
+  """Change the view options of a computer"""
+  changeComputerViewOptions(where: WhereUniqueComputerInput!, data: ComputerViewOptionsUpdateInput!): ComputerViewOptions!
 }
 
 input UpdateUserInput {
@@ -215,4 +261,28 @@ input CreateRoleInput {
 
   """Role description"""
   description: String!
+}
+
+input ComputerCreateInput {
+  """Name of the computer"""
+  name: String!
+
+  """MAC address of the computer"""
+  mac: String!
+
+  """IP address of the computer"""
+  ipv4: String!
+
+  """Presentation configuration for a computer"""
+  viewOptions: ComputerViewOptionsCreateInput
+}
+
+input ComputerViewOptionsCreateInput {
+  """Order of the computer in the list"""
+  order: Float!
+}
+
+input ComputerViewOptionsUpdateInput {
+  """Order of the computer in the list"""
+  order: Float!
 }

@@ -36,6 +36,46 @@ export type AssignedPermission = {
   id: Scalars['ID']['output'];
 };
 
+/** Represent a computer which participates in the network boot process */
+export type Computer = {
+  __typename?: 'Computer';
+  /** IP address of the computer */
+  ipv4: Scalars['String']['output'];
+  /** MAC address of the computer */
+  mac: Scalars['String']['output'];
+  /** Name of the computer set by the user */
+  name: Scalars['String']['output'];
+  /** Unique identifier of the computer */
+  uid: Scalars['ID']['output'];
+  /** Presentation configuration for a computer */
+  viewOptions?: Maybe<ComputerViewOptions>;
+};
+
+export type ComputerCreateInput = {
+  /** IP address of the computer */
+  ipv4: Scalars['String']['input'];
+  /** MAC address of the computer */
+  mac: Scalars['String']['input'];
+  /** Name of the computer */
+  name: Scalars['String']['input'];
+  /** Presentation configuration for a computer */
+  viewOptions?: InputMaybe<ComputerViewOptionsCreateInput>;
+};
+
+/** Presentation configuration for a computer */
+export type ComputerViewOptions = {
+  __typename?: 'ComputerViewOptions';
+  /** Whether to show the computer in the list */
+  id: Scalars['ID']['output'];
+  /** Whether to show the computer in the list */
+  order: Scalars['Float']['output'];
+};
+
+export type ComputerViewOptionsCreateInput = {
+  /** Order of the computer in the list */
+  order: Scalars['Float']['input'];
+};
+
 export type CreateRoleInput = {
   /** Role description */
   description: Scalars['String']['input'];
@@ -64,6 +104,10 @@ export type Mutation = {
   assignPermissionsToRole: Scalars['Boolean']['output'];
   /** Assign users to a role */
   assignUsersToRole: Scalars['Boolean']['output'];
+  /** Change the view options of a computer */
+  changeViewOptions: ComputerViewOptions;
+  /** Create a new computer */
+  createComputer: Computer;
   /** Create a new role */
   createRole: Role;
   /** Creates a new user */
@@ -104,6 +148,11 @@ export type MutationAssignUsersToRoleArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
   uid?: InputMaybe<Scalars['ID']['input']>;
   userUids: Array<Scalars['String']['input']>;
+};
+
+
+export type MutationCreateComputerArgs = {
+  createData: ComputerCreateInput;
 };
 
 
@@ -155,6 +204,10 @@ export type Permission = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Get a single computer */
+  computer?: Maybe<Computer>;
+  /** Get all computers */
+  computers: Array<Computer>;
   /** Returns the current user */
   me: User;
   /** Get all permissions */
@@ -165,6 +218,14 @@ export type Query = {
   roles: Array<Role>;
   user?: Maybe<User>;
   users: Array<User>;
+};
+
+
+export type QueryComputerArgs = {
+  ipv4?: InputMaybe<Scalars['String']['input']>;
+  mac?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['String']['input']>;
 };
 
 
