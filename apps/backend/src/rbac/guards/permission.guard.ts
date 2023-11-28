@@ -3,6 +3,7 @@ import {
   type CanActivate,
   type ExecutionContext,
   ForbiddenException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
@@ -29,7 +30,7 @@ export class PermissionGuard implements CanActivate {
 
     const { user, permissions: userPermissions } = extractRequest(context);
 
-    if (!user) throw new Error('Missing user in context');
+    if (!user) throw new UnauthorizedException('User is not authenticated');
     if (!userPermissions) throw new Error('Missing permissions in context');
 
     const { accountType } = user;
