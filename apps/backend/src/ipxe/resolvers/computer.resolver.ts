@@ -46,6 +46,7 @@ export class ComputerResolver {
   }
 
   @Mutation(() => ComputerViewOptions, { description: 'Change the view options of a computer' })
+  @RequirePermission('computers.edit')
   async changeComputerViewOptions(
     @Args('where') where: WhereUniqueComputerInput,
     @Args('data') data: ComputerViewOptionsUpdateInput,

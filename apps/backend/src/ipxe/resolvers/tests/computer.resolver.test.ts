@@ -221,6 +221,7 @@ describe('Test ComputerResolver', () => {
     beforeEach(async () => {
       user = await userFactory(manager.moduleRef, { accountType: AccountType.STANDARD }, [
         'computers.create',
+        'computers.edit',
       ]);
 
       await manager.login(user);

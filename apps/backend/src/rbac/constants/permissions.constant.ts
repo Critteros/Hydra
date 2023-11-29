@@ -35,4 +35,10 @@ export const permissionConfig = {
   'computers.create': {
     description: 'Allows to add new computers to the registry',
   },
+  'computers.edit': {
+    description: 'Allows to edit computer registry',
+  },
+  'computers.delete': {
+    description: 'Allows to delete computer registry',
+  },
 } as const satisfies Record<Permissions, Omit<Permission, 'id'>>;

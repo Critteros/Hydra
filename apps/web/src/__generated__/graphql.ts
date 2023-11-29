@@ -76,6 +76,11 @@ export type ComputerViewOptionsCreateInput = {
   order: Scalars['Float']['input'];
 };
 
+export type ComputerViewOptionsUpdateInput = {
+  /** Order of the computer in the list */
+  order: Scalars['Float']['input'];
+};
+
 export type CreateRoleInput = {
   /** Role description */
   description: Scalars['String']['input'];
@@ -105,7 +110,7 @@ export type Mutation = {
   /** Assign users to a role */
   assignUsersToRole: Scalars['Boolean']['output'];
   /** Change the view options of a computer */
-  changeViewOptions: ComputerViewOptions;
+  changeComputerViewOptions: ComputerViewOptions;
   /** Create a new computer */
   createComputer: Computer;
   /** Create a new role */
@@ -151,8 +156,14 @@ export type MutationAssignUsersToRoleArgs = {
 };
 
 
+export type MutationChangeComputerViewOptionsArgs = {
+  data: ComputerViewOptionsUpdateInput;
+  where: WhereUniqueComputerInput;
+};
+
+
 export type MutationCreateComputerArgs = {
-  createData: ComputerCreateInput;
+  data: ComputerCreateInput;
 };
 
 
@@ -222,10 +233,7 @@ export type Query = {
 
 
 export type QueryComputerArgs = {
-  ipv4?: InputMaybe<Scalars['String']['input']>;
-  mac?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  uid?: InputMaybe<Scalars['String']['input']>;
+  where: WhereUniqueComputerInput;
 };
 
 
@@ -281,6 +289,13 @@ export type User = {
   permissions: Array<Permission>;
   /** Unique identifier of the user */
   uid: Scalars['ID']['output'];
+};
+
+export type WhereUniqueComputerInput = {
+  ipv4?: InputMaybe<Scalars['String']['input']>;
+  mac?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;

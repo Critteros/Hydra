@@ -105,6 +105,30 @@ type Computer {
   viewOptions: ComputerViewOptions
 }
 
+"""Presentation configuration for a computer group"""
+type ComputerGroupViewOptions {
+  """Whether to show the computer group in the list"""
+  id: ID!
+
+  """Whether to show the computer group in the list"""
+  order: Float!
+}
+
+"""Represent a grouping of computers"""
+type ComputerGroup {
+  """Unique identifier of the computer group"""
+  uid: ID!
+
+  """Name of the computer group"""
+  name: String!
+
+  """Description of the computer group"""
+  computers: [Computer!]!
+
+  """Presentation configuration for a computer group"""
+  viewOptions: ComputerGroupViewOptions
+}
+
 type Query {
   users: [User!]!
   user(
@@ -138,6 +162,12 @@ type Query {
 
   """Get a single computer"""
   computer(where: WhereUniqueComputerInput!): Computer
+
+  """Get all computer groups"""
+  computerGroups: [ComputerGroup!]!
+
+  """Get a single computer group"""
+  computerGroup(where: WhereUniqueComputerGroupInput!): ComputerGroup
 }
 
 input WhereUniqueComputerInput {
@@ -145,6 +175,14 @@ input WhereUniqueComputerInput {
   name: String
   mac: String
   ipv4: String
+}
+
+input WhereUniqueComputerGroupInput {
+  """Unique ID of the computer group"""
+  uid: String
+
+  """Name of the computer group"""
+  name: String
 }
 
 type Mutation {
@@ -228,6 +266,24 @@ type Mutation {
 
   """Change the view options of a computer"""
   changeComputerViewOptions(where: WhereUniqueComputerInput!, data: ComputerViewOptionsUpdateInput!): ComputerViewOptions!
+
+  """Create a new computer group"""
+  createComputerGroup(data: ComputerGroupCreateInput!): ComputerGroup!
+
+  """Change the view options of a computer group"""
+  changeComputerGroupViewOptions(where: WhereUniqueComputerGroupInput!, data: ComputerGroupViewOptionsUpdateInput!): ComputerGroupViewOptions!
+
+  """Add computers to a computer group"""
+  addComputersToGroup(where: WhereUniqueComputerGroupInput!, computers: [WhereUniqueComputerInput!]!): ComputerGroup!
+
+  """Remove computers from a computer group"""
+  removeComputersFromGroup(where: WhereUniqueComputerGroupInput!, computers: [WhereUniqueComputerInput!]!): ComputerGroup!
+
+  """Move computers between groups"""
+  moveComputers(fromGroup: WhereUniqueComputerGroupInput!, toGroup: WhereUniqueComputerGroupInput!, computers: [WhereUniqueComputerInput!]!): [Computer!]!
+
+  """Delete a computer group"""
+  deleteComputerGroup(where: WhereUniqueComputerGroupInput!): ComputerGroup!
 }
 
 input UpdateUserInput {
@@ -284,5 +340,26 @@ input ComputerViewOptionsCreateInput {
 
 input ComputerViewOptionsUpdateInput {
   """Order of the computer in the list"""
+  order: Float!
+}
+
+input ComputerGroupCreateInput {
+  """Name of the computer group"""
+  name: String!
+
+  """Presentation configuration for a computer group"""
+  viewOptions: ComputerGroupViewOptionsCreateInput
+
+  """Computers to add to the group"""
+  computers: [WhereUniqueComputerInput!]
+}
+
+input ComputerGroupViewOptionsCreateInput {
+  """Order of the computer group in the list"""
+  order: Float!
+}
+
+input ComputerGroupViewOptionsUpdateInput {
+  """Order of the computer group in the list"""
   order: Float!
 }

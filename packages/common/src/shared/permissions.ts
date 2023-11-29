@@ -29,6 +29,12 @@ const keyPath = {
 
     /* Allows adding new computer to the computer registry */
     create: {},
+
+    /* Allows editing computer registry */
+    edit: {},
+
+    /* Allows deleting computer registry */
+    delete: {},
   },
 } as const;
 
