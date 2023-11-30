@@ -264,6 +264,9 @@ type Mutation {
   """Create a new computer"""
   createComputer(data: ComputerCreateInput!): Computer!
 
+  """Delete a computer"""
+  deleteComputers(where: [WhereUniqueComputerInput!]!): Int!
+
   """Change the view options of a computer"""
   changeComputerViewOptions(where: WhereUniqueComputerInput!, data: ComputerViewOptionsUpdateInput!): ComputerViewOptions!
 

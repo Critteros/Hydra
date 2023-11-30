@@ -27,6 +27,10 @@ export class ComputerService {
     return await this.prisma.computer.create({ data });
   }
 
+  async deleteComputers(where: Prisma.ComputerWhereInput) {
+    return await this.prisma.computer.deleteMany({ where });
+  }
+
   async changeComputerViewOptions(
     where: Prisma.ComputerWhereUniqueInput,
     updateData: Omit<Prisma.ComputerViewOptionsCreateInput, 'computer'>,

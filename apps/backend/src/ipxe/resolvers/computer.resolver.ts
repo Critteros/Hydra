@@ -1,7 +1,9 @@
-import { Resolver, Query, ResolveField, Parent, Mutation, Args } from '@nestjs/graphql';
+import { NotFoundException } from '@nestjs/common';
+import { Resolver, Query, ResolveField, Parent, Mutation, Args, Int } from '@nestjs/graphql';
 
 import type { Prisma } from '@prisma/client';
 
+import { MapErrors } from '@/errors/map-errors.decorator';
 import { RequirePermission } from '@/rbac/decorators/require-permissions.decorator';
 
 import {
@@ -10,7 +12,7 @@ import {
   ComputerViewOptionsUpdateInput,
 } from '../schemas/computer.input';
 import { Computer, ComputerViewOptions } from '../schemas/computer.object';
-import { ComputerService } from '../services/computer.service';
+import { ComputerService, ComputerNotFoundError } from '../services/computer.service';
 
 @Resolver(() => Computer)
 export class ComputerResolver {
@@ -45,7 +47,19 @@ export class ComputerResolver {
     });
   }
 
+  @Mutation(() => Int, { description: 'Delete a computer' })
+  @RequirePermission('computers.delete')
+  async deleteComputers(
+    @Args('where', { type: () => [WhereUniqueComputerInput] }) where: WhereUniqueComputerInput[],
+  ) {
+    return await this.computerService.deleteComputers({ OR: where }).then(({ count }) => count);
+  }
+
   @Mutation(() => ComputerViewOptions, { description: 'Change the view options of a computer' })
+  @MapErrors({
+    if: ComputerNotFoundError,
+    then: () => new NotFoundException('Rquested computer was not found'),
+  })
   @RequirePermission('computers.edit')
   async changeComputerViewOptions(
     @Args('where') where: WhereUniqueComputerInput,

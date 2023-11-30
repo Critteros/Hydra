@@ -222,6 +222,7 @@ describe('Test ComputerResolver', () => {
       user = await userFactory(manager.moduleRef, { accountType: AccountType.STANDARD }, [
         'computers.create',
         'computers.edit',
+        'computers.delete',
       ]);
 
       await manager.login(user);
@@ -383,6 +384,64 @@ describe('Test ComputerResolver', () => {
       expect(computer?.viewOptions).toMatchObject({
         order: 1,
       });
+    });
+
+    it('requires computer.delete permission to delete a computer', async () => {
+      const user = await userFactory(manager.moduleRef, { accountType: AccountType.STANDARD });
+      await manager.login(user);
+
+      const { uid } = await prismaService.computer.create({
+        data: {
+          name: 'computer-1',
+          mac: '00:00:00:00:00:00',
+        },
+      });
+
+      const mutation = gql`
+        mutation ($uid: String!) {
+          deleteComputers(where: [{ uid: $uid }]) {
+            uid
+          }
+        }
+      `;
+
+      const { data, errors } = await manager.gql.mutate(mutation, { uid });
+      expect(data).toBeNull();
+      expect(errors?.[0]?.extensions?.originalError?.statusCode).toBe(HttpStatus.FORBIDDEN);
+    });
+
+    it('can perform a bulk delete', async () => {
+      await manager.login(user);
+
+      const computers = await Promise.all([
+        prismaService.computer.create({
+          data: {
+            name: 'computer-1',
+            mac: '00:00:00:00:00:00',
+          },
+        }),
+        prismaService.computer.create({
+          data: {
+            name: 'computer-2',
+            mac: '00:00:00:00:00:01',
+          },
+        }),
+      ]);
+
+      const mutation = gql`
+        mutation ($where: [WhereUniqueComputerInput!]!) {
+          deleteComputers(where: $where)
+        }
+      `;
+      const { data } = await manager.gql.mutate(mutation, {
+        where: computers.map(({ uid }) => ({ uid })),
+      });
+      expect(data).toMatchObject({
+        deleteComputers: 2,
+      });
+
+      const remainingComputers = await prismaService.computer.count();
+      expect(remainingComputers).toBe(0);
     });
   });
 });
