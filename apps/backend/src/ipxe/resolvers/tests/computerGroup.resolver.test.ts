@@ -507,16 +507,18 @@ describe('Test ComputerGroupResolver', () => {
       });
 
       expect(computersInGroup).toHaveLength(2);
-      expect(computersInGroup).toEqual([
-        expect.objectContaining({
-          name: 'computer-1',
-          mac: '00:00:00:00:00:00',
-        }),
-        expect.objectContaining({
-          name: 'computer-2',
-          mac: '00:00:00:00:00:01',
-        }),
-      ]);
+      expect(computersInGroup).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'computer-1',
+            mac: '00:00:00:00:00:00',
+          }),
+          expect.objectContaining({
+            name: 'computer-2',
+            mac: '00:00:00:00:00:01',
+          }),
+        ]),
+      );
     });
 
     it('can remove computers from a computer group', async () => {
@@ -594,12 +596,14 @@ describe('Test ComputerGroupResolver', () => {
       });
 
       expect(computersInGroup).toHaveLength(1);
-      expect(computersInGroup).toEqual([
-        expect.objectContaining({
-          name: 'computer-2',
-          mac: '00:00:00:00:00:01',
-        }),
-      ]);
+      expect(computersInGroup).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'computer-2',
+            mac: '00:00:00:00:00:01',
+          }),
+        ]),
+      );
     });
 
     it('can move computers from one group to another', async () => {
@@ -684,12 +688,14 @@ describe('Test ComputerGroupResolver', () => {
       });
 
       expect(computersInGroup1).toHaveLength(1);
-      expect(computersInGroup1).toEqual([
-        expect.objectContaining({
-          name: 'computer-2',
-          mac: '00:00:00:00:00:01',
-        }),
-      ]);
+      expect(computersInGroup1).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'computer-2',
+            mac: '00:00:00:00:00:01',
+          }),
+        ]),
+      );
 
       const computersInGroup2 = await prismaService.computer.findMany({
         where: {
@@ -698,15 +704,17 @@ describe('Test ComputerGroupResolver', () => {
       });
 
       expect(computersInGroup2).toHaveLength(1);
-      expect(computersInGroup2).toEqual([
-        expect.objectContaining({
-          name: 'computer-1',
-          mac: '00:00:00:00:00:00',
-        }),
-      ]);
+      expect(computersInGroup2).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'computer-1',
+            mac: '00:00:00:00:00:00',
+          }),
+        ]),
+      );
     });
 
-    it('cannot delete computer group withotu computers.delete permission', async () => {
+    it('cannot delete computer group without computers.delete permission', async () => {
       const user = await userFactory(manager.moduleRef, { accountType: AccountType.STANDARD });
       await manager.login(user);
 

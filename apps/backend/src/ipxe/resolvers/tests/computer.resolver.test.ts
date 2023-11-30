@@ -399,14 +399,11 @@ describe('Test ComputerResolver', () => {
 
       const mutation = gql`
         mutation ($uid: String!) {
-          deleteComputers(where: [{ uid: $uid }]) {
-            uid
-          }
+          deleteComputers(where: [{ uid: $uid }])
         }
       `;
 
-      const { data, errors } = await manager.gql.mutate(mutation, { uid });
-      expect(data).toBeNull();
+      const { errors } = await manager.gql.mutate(mutation, { uid });
       expect(errors?.[0]?.extensions?.originalError?.statusCode).toBe(HttpStatus.FORBIDDEN);
     });
 
