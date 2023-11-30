@@ -286,7 +286,7 @@ type Mutation {
   moveComputers(fromGroup: WhereUniqueComputerGroupInput!, toGroup: WhereUniqueComputerGroupInput!, computers: [WhereUniqueComputerInput!]!): [Computer!]!
 
   """Delete a computer group"""
-  deleteComputerGroup(where: WhereUniqueComputerGroupInput!): ComputerGroup!
+  deleteComputerGroups(where: [WhereUniqueComputerGroupInput!]!): Int!
 }
 
 input UpdateUserInput {

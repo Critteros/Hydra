@@ -710,24 +710,20 @@ describe('Test ComputerGroupResolver', () => {
       const user = await userFactory(manager.moduleRef, { accountType: AccountType.STANDARD });
       await manager.login(user);
 
-      const group = await prismaService.computerGroup.create({
+      const { uid } = await prismaService.computerGroup.create({
         data: {
           name: 'test-group-1',
         },
       });
 
       const mutation = gql`
-        mutation ($where: WhereUniqueComputerGroupInput!) {
-          deleteComputerGroup(where: $where) {
-            uid
-          }
+        mutation ($uid: String!) {
+          deleteComputerGroups(where: [{ uid: $uid }])
         }
       `;
 
       const { data, errors } = await manager.gql.mutate(mutation, {
-        where: {
-          uid: group.uid,
-        },
+        uid,
       });
       expect(data).toBeNull();
       expect(errors?.[0]?.extensions?.originalError?.statusCode).toBe(HttpStatus.FORBIDDEN);
@@ -736,40 +732,37 @@ describe('Test ComputerGroupResolver', () => {
     it('can delete computer group', async () => {
       await manager.login(user);
 
-      const group = await prismaService.computerGroup.create({
-        data: {
-          name: 'test-group-1',
-        },
-      });
+      const groups = await Promise.all([
+        prismaService.computerGroup.create({
+          data: {
+            name: 'test-group-1',
+          },
+        }),
+        prismaService.computerGroup.create({
+          data: {
+            name: 'test-group-2',
+          },
+        }),
+      ]);
 
       const mutation = gql`
-        mutation ($where: WhereUniqueComputerGroupInput!) {
-          deleteComputerGroup(where: $where) {
-            uid
-          }
+        mutation ($where: [WhereUniqueComputerGroupInput!]!) {
+          deleteComputerGroups(where: $where)
         }
       `;
 
       const { data } = await manager.gql
         .mutate(mutation, {
-          where: {
-            uid: group.uid,
-          },
+          where: groups.map((group) => ({ uid: group.uid })),
         })
         .expectNoErrors();
 
       expect(data).toMatchObject({
-        deleteComputerGroup: {
-          uid: group.uid,
-        },
+        deleteComputerGroups: groups.length,
       });
 
-      const deletedGroup = await prismaService.computerGroup.findUnique({
-        where: {
-          uid: group.uid,
-        },
-      });
-      expect(deletedGroup).toBeNull();
+      const leftovers = await prismaService.computerGroup.count();
+      expect(leftovers).toBe(0);
     });
   });
 });

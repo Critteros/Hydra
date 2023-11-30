@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { Resolver, Query, Args, ResolveField, Parent, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Args, ResolveField, Parent, Mutation, Int } from '@nestjs/graphql';
 
 import { Prisma } from '@prisma/client';
 
@@ -134,12 +134,15 @@ export class ComputerGroupResolver {
     });
   }
 
-  @Mutation(() => ComputerGroup, { description: 'Delete a computer group' })
+  @Mutation(() => Int, { description: 'Delete a computer group' })
   @RequirePermission('computers.delete')
-  async deleteComputerGroup(@Args('where') where: WhereUniqueComputerGroupInput) {
-    return await this.computerGroupService.deleteComputerGroup(
-      where as Prisma.ComputerGroupWhereUniqueInput,
-    );
+  async deleteComputerGroups(
+    @Args('where', { type: () => [WhereUniqueComputerGroupInput] })
+    where: WhereUniqueComputerGroupInput[],
+  ) {
+    return await this.computerGroupService
+      .deleteComputerGroups({ OR: where })
+      .then(({ count }) => count);
   }
 
   // ================================ Resolvers ================================

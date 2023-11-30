@@ -179,7 +179,7 @@ export class ComputerGroupService {
     });
   }
 
-  async deleteComputerGroup(where: Prisma.ComputerGroupWhereUniqueInput) {
-    return await this.prisma.computerGroup.delete({ where });
+  async deleteComputerGroups(where: Prisma.ComputerGroupWhereInput) {
+    return await this.prisma.computerGroup.deleteMany({ where });
   }
 }
