@@ -46,11 +46,13 @@ export class ComputerGroupResolver {
   ) {
     return await this.computerGroupService.createComputerGroup({
       ...other,
-      viewOptions: {
-        create: {
-          ...viewOptions,
+      ...(viewOptions && {
+        viewOptions: {
+          create: {
+            ...viewOptions,
+          },
         },
-      },
+      }),
       computers: {
         connect: computers as Prisma.ComputerWhereUniqueInput[] | undefined,
       },

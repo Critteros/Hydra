@@ -22,7 +22,17 @@ export class ComputerResolver {
 
   @Query(() => [Computer], { description: 'Get all computers' })
   @RequirePermission('computers.read')
-  async computers() {
+  async computers(
+    @Args('standalone', {
+      nullable: true,
+      description: 'If teu then only the computers without a group assigement are returned',
+    })
+    standalone: boolean,
+  ) {
+    if (standalone) {
+      return await this.computerService.findMany({ where: { computerGroup: null } });
+    }
+
     return await this.computerService.findMany();
   }
 
@@ -39,11 +49,13 @@ export class ComputerResolver {
   async createComputer(@Args('data') { viewOptions, ...other }: ComputerCreateInput) {
     return await this.computerService.createComputer({
       ...other,
-      viewOptions: {
-        create: {
-          ...viewOptions,
+      ...(viewOptions && {
+        viewOptions: {
+          create: {
+            ...viewOptions,
+          },
         },
-      },
+      }),
     });
   }
 

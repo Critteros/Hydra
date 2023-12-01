@@ -158,7 +158,10 @@ type Query {
   ): Role
 
   """Get all computers"""
-  computers: [Computer!]!
+  computers(
+    """If teu then only the computers without a group assigement are returned"""
+    standalone: Boolean
+  ): [Computer!]!
 
   """Get a single computer"""
   computer(where: WhereUniqueComputerInput!): Computer

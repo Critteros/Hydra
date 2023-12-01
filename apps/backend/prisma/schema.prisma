@@ -94,7 +94,7 @@ model Computer {
 
 model ComputerViewOptions {
   id         Int      @id @default(autoincrement())
-  computer   Computer @relation(fields: [computerId], references: [uid])
+  computer   Computer @relation(fields: [computerId], references: [uid], onDelete: Cascade)
   computerId String   @unique @map("computer_id") @db.VarChar(256)
   order      Int      @default(0)
 }
@@ -108,7 +108,7 @@ model ComputerGroup {
 
 model ComputerGroupViewOptions {
   id              Int           @id @default(autoincrement())
-  computerGroup   ComputerGroup @relation(fields: [computerGroupId], references: [uid])
+  computerGroup   ComputerGroup @relation(fields: [computerGroupId], references: [uid], onDelete: Cascade)
   computerGroupId String        @unique @map("computer_group_id") @db.VarChar(256)
   order           Int           @default(0)
 }
