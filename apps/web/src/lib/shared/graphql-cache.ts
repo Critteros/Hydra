@@ -8,5 +8,11 @@ export const cacheConfig: InMemoryCacheConfig = {
     Role: {
       keyFields: ['uid'],
     },
+    Computer: {
+      keyFields: ['uid'],
+    },
+    ComputerGroup: {
+      keyFields: ['uid'],
+    },
   },
 };
