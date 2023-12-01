@@ -62,6 +62,47 @@ export type ComputerCreateInput = {
   viewOptions?: InputMaybe<ComputerViewOptionsCreateInput>;
 };
 
+/** Represent a grouping of computers */
+export type ComputerGroup = {
+  __typename?: 'ComputerGroup';
+  /** Description of the computer group */
+  computers: Array<Computer>;
+  /** Name of the computer group */
+  name: Scalars['String']['output'];
+  /** Unique identifier of the computer group */
+  uid: Scalars['ID']['output'];
+  /** Presentation configuration for a computer group */
+  viewOptions?: Maybe<ComputerGroupViewOptions>;
+};
+
+export type ComputerGroupCreateInput = {
+  /** Computers to add to the group */
+  computers?: InputMaybe<Array<WhereUniqueComputerInput>>;
+  /** Name of the computer group */
+  name: Scalars['String']['input'];
+  /** Presentation configuration for a computer group */
+  viewOptions?: InputMaybe<ComputerGroupViewOptionsCreateInput>;
+};
+
+/** Presentation configuration for a computer group */
+export type ComputerGroupViewOptions = {
+  __typename?: 'ComputerGroupViewOptions';
+  /** Whether to show the computer group in the list */
+  id: Scalars['ID']['output'];
+  /** Whether to show the computer group in the list */
+  order: Scalars['Float']['output'];
+};
+
+export type ComputerGroupViewOptionsCreateInput = {
+  /** Order of the computer group in the list */
+  order: Scalars['Float']['input'];
+};
+
+export type ComputerGroupViewOptionsUpdateInput = {
+  /** Order of the computer group in the list */
+  order: Scalars['Float']['input'];
+};
+
 /** Presentation configuration for a computer */
 export type ComputerViewOptions = {
   __typename?: 'ComputerViewOptions';
@@ -101,6 +142,8 @@ export type CreateUserInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Add computers to a computer group */
+  addComputersToGroup: ComputerGroup;
   /** Login as a user */
   adminLoginAsUser: Scalars['Boolean']['output'];
   /** Admin updates user password */
@@ -109,24 +152,42 @@ export type Mutation = {
   assignPermissionsToRole: Scalars['Boolean']['output'];
   /** Assign users to a role */
   assignUsersToRole: Scalars['Boolean']['output'];
+  /** Change the view options of a computer group */
+  changeComputerGroupViewOptions: ComputerGroupViewOptions;
   /** Change the view options of a computer */
   changeComputerViewOptions: ComputerViewOptions;
   /** Create a new computer */
   createComputer: Computer;
+  /** Create a new computer group */
+  createComputerGroup: ComputerGroup;
   /** Create a new role */
   createRole: Role;
   /** Creates a new user */
   createUser: User;
+  /** Delete a computer group */
+  deleteComputerGroups: Scalars['Int']['output'];
+  /** Delete a computer */
+  deleteComputers: Scalars['Int']['output'];
   /** Delete many roles */
   deleteMultipleRoles: Scalars['Int']['output'];
   /** Delete multiple users */
   deleteMultipleUsers: Scalars['Boolean']['output'];
   /** Delete a role */
   deleteRole: Scalars['Boolean']['output'];
+  /** Move computers between groups */
+  moveComputers: Array<Computer>;
+  /** Remove computers from a computer group */
+  removeComputersFromGroup: ComputerGroup;
   /** Updates current user password */
   updateCurrentUserPassword: Scalars['Boolean']['output'];
   /** Updates user data */
   updateUser: User;
+};
+
+
+export type MutationAddComputersToGroupArgs = {
+  computers: Array<WhereUniqueComputerInput>;
+  where: WhereUniqueComputerGroupInput;
 };
 
 
@@ -156,6 +217,12 @@ export type MutationAssignUsersToRoleArgs = {
 };
 
 
+export type MutationChangeComputerGroupViewOptionsArgs = {
+  data: ComputerGroupViewOptionsUpdateInput;
+  where: WhereUniqueComputerGroupInput;
+};
+
+
 export type MutationChangeComputerViewOptionsArgs = {
   data: ComputerViewOptionsUpdateInput;
   where: WhereUniqueComputerInput;
@@ -167,6 +234,11 @@ export type MutationCreateComputerArgs = {
 };
 
 
+export type MutationCreateComputerGroupArgs = {
+  data: ComputerGroupCreateInput;
+};
+
+
 export type MutationCreateRoleArgs = {
   data: CreateRoleInput;
 };
@@ -174,6 +246,16 @@ export type MutationCreateRoleArgs = {
 
 export type MutationCreateUserArgs = {
   data: CreateUserInput;
+};
+
+
+export type MutationDeleteComputerGroupsArgs = {
+  where: Array<WhereUniqueComputerGroupInput>;
+};
+
+
+export type MutationDeleteComputersArgs = {
+  where: Array<WhereUniqueComputerInput>;
 };
 
 
@@ -190,6 +272,19 @@ export type MutationDeleteMultipleUsersArgs = {
 export type MutationDeleteRoleArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
   uid?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type MutationMoveComputersArgs = {
+  computers: Array<WhereUniqueComputerInput>;
+  fromGroup: WhereUniqueComputerGroupInput;
+  toGroup: WhereUniqueComputerGroupInput;
+};
+
+
+export type MutationRemoveComputersFromGroupArgs = {
+  computers: Array<WhereUniqueComputerInput>;
+  where: WhereUniqueComputerGroupInput;
 };
 
 
@@ -217,6 +312,10 @@ export type Query = {
   __typename?: 'Query';
   /** Get a single computer */
   computer?: Maybe<Computer>;
+  /** Get a single computer group */
+  computerGroup?: Maybe<ComputerGroup>;
+  /** Get all computer groups */
+  computerGroups: Array<ComputerGroup>;
   /** Get all computers */
   computers: Array<Computer>;
   /** Returns the current user */
@@ -234,6 +333,16 @@ export type Query = {
 
 export type QueryComputerArgs = {
   where: WhereUniqueComputerInput;
+};
+
+
+export type QueryComputerGroupArgs = {
+  where: WhereUniqueComputerGroupInput;
+};
+
+
+export type QueryComputersArgs = {
+  standalone?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -291,6 +400,13 @@ export type User = {
   uid: Scalars['ID']['output'];
 };
 
+export type WhereUniqueComputerGroupInput = {
+  /** Name of the computer group */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Unique ID of the computer group */
+  uid?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type WhereUniqueComputerInput = {
   ipv4?: InputMaybe<Scalars['String']['input']>;
   mac?: InputMaybe<Scalars['String']['input']>;
@@ -302,6 +418,16 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CurrentUserQuery = { __typename?: 'Query', me: { __typename?: 'User', uid: string, email: string, name?: string | null, accountType: AccountType } };
+
+export type QueryComputersWithoutGroupQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type QueryComputersWithoutGroupQuery = { __typename?: 'Query', computers: Array<{ __typename?: 'Computer', uid: string, name: string, mac: string, ipv4: string, viewOptions?: { __typename?: 'ComputerViewOptions', order: number } | null }> };
+
+export type QueryComputerGroupsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type QueryComputerGroupsQuery = { __typename?: 'Query', computerGroups: Array<{ __typename?: 'ComputerGroup', uid: string, name: string, computers: Array<{ __typename?: 'Computer', uid: string, name: string, mac: string, ipv4: string, viewOptions?: { __typename?: 'ComputerViewOptions', order: number } | null }> }> };
 
 export type PermissionsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -419,6 +545,8 @@ export type ServerClientBridgeQueryQuery = { __typename?: 'Query', me: { __typen
 
 
 export const CurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"accountType"}}]}}]}}]} as unknown as DocumentNode<CurrentUserQuery, CurrentUserQueryVariables>;
+export const QueryComputersWithoutGroupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"QueryComputersWithoutGroup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"computers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"standalone"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"mac"}},{"kind":"Field","name":{"kind":"Name","value":"ipv4"}},{"kind":"Field","name":{"kind":"Name","value":"viewOptions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"order"}}]}}]}}]}}]} as unknown as DocumentNode<QueryComputersWithoutGroupQuery, QueryComputersWithoutGroupQueryVariables>;
+export const QueryComputerGroupsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"QueryComputerGroups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"computerGroups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"computers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"mac"}},{"kind":"Field","name":{"kind":"Name","value":"ipv4"}},{"kind":"Field","name":{"kind":"Name","value":"viewOptions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"order"}}]}}]}}]}}]}}]} as unknown as DocumentNode<QueryComputerGroupsQuery, QueryComputerGroupsQueryVariables>;
 export const PermissionsSummaryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PermissionsSummary"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"allPermissions"},"name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]}}]} as unknown as DocumentNode<PermissionsSummaryQuery, PermissionsSummaryQueryVariables>;
 export const CreateRoleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateRole"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateRoleInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createRole"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]} as unknown as DocumentNode<CreateRoleMutation, CreateRoleMutationVariables>;
 export const DeleteMultipleRolesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteMultipleRoles"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteMultipleRoles"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"uids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uids"}}}]}]}}]} as unknown as DocumentNode<DeleteMultipleRolesMutation, DeleteMultipleRolesMutationVariables>;

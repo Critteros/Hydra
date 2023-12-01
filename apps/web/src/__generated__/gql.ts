@@ -14,6 +14,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n": types.CurrentUserDocument,
+    "\n  query QueryComputersWithoutGroup {\n    computers(standalone: true) {\n      uid\n      name\n      mac\n      ipv4\n      viewOptions {\n        order\n      }\n    }\n  }\n": types.QueryComputersWithoutGroupDocument,
+    "\n  query QueryComputerGroups {\n    computerGroups {\n      uid\n      name\n      computers {\n        uid\n        name\n        mac\n        ipv4\n        viewOptions {\n          order\n        }\n      }\n    }\n  }\n": types.QueryComputerGroupsDocument,
     "\n  query PermissionsSummary {\n    allPermissions: permissions {\n      id\n      description\n    }\n    me {\n      uid\n      permissions {\n        id\n        description\n      }\n    }\n  }\n": types.PermissionsSummaryDocument,
     "\n  mutation CreateRole($input: CreateRoleInput!) {\n    createRole(data: $input) {\n      __typename\n    }\n  }\n": types.CreateRoleDocument,
     "\n  mutation DeleteMultipleRoles($uids: [String!]!) {\n    deleteMultipleRoles(uids: $uids)\n  }\n": types.DeleteMultipleRolesDocument,
@@ -51,6 +53,14 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"): (typeof documents)["\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query QueryComputersWithoutGroup {\n    computers(standalone: true) {\n      uid\n      name\n      mac\n      ipv4\n      viewOptions {\n        order\n      }\n    }\n  }\n"): (typeof documents)["\n  query QueryComputersWithoutGroup {\n    computers(standalone: true) {\n      uid\n      name\n      mac\n      ipv4\n      viewOptions {\n        order\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query QueryComputerGroups {\n    computerGroups {\n      uid\n      name\n      computers {\n        uid\n        name\n        mac\n        ipv4\n        viewOptions {\n          order\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query QueryComputerGroups {\n    computerGroups {\n      uid\n      name\n      computers {\n        uid\n        name\n        mac\n        ipv4\n        viewOptions {\n          order\n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
