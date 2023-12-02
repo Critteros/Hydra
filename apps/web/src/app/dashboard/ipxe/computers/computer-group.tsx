@@ -12,9 +12,14 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
-type ComputerGroupProps = { children: ReactNode } & Pick<GQLTypes.ComputerGroup, 'name'>;
+import { DeleteGroup } from './delete-group';
 
-export function ComputerGroup({ name, children }: ComputerGroupProps) {
+type ComputerGroupProps = { children: ReactNode; groupUid: string } & Pick<
+  GQLTypes.ComputerGroup,
+  'name'
+>;
+
+export function ComputerGroup({ name, children, groupUid }: ComputerGroupProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -22,14 +27,22 @@ export function ComputerGroup({ name, children }: ComputerGroupProps) {
       <tr>
         <TableCell colSpan={9999} className={cn('px-0', open && 'border-b-2 border-l-2')}>
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" className={cn('flex w-full gap-2', open && 'border-b-2')}>
-              <span className="font-bold">{name}</span>
-              {open ? (
-                <ChevronUpIcon width={20} height={20} />
-              ) : (
-                <ChevronDownIcon width={20} height={20} />
-              )}
-            </Button>
+            <span className="flex w-full">
+              <Button
+                variant="ghost"
+                className={cn('flex w-full justify-center gap-2', open && 'border-b-2')}
+              >
+                <span className="font-bold">{name}</span>
+                {open ? (
+                  <ChevronUpIcon width={20} height={20} />
+                ) : (
+                  <ChevronDownIcon width={20} height={20} />
+                )}
+              </Button>
+              <span className="mr-4">
+                <DeleteGroup groupUid={groupUid} />
+              </span>
+            </span>
           </CollapsibleTrigger>
           <CollapsibleContent>
             <div>{children}</div>

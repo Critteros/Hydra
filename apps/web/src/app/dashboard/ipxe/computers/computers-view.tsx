@@ -37,15 +37,15 @@ export async function ComputersView() {
     <Table>
       <TableHeader />
       <TableBody>
-        {sortedComputerGroups.map(({ uid: key, computers, ...groupParams }) => (
-          <ComputerGroup key={key} {...groupParams}>
+        {sortedComputerGroups.map(({ uid, computers, ...groupParams }) => (
+          <ComputerGroup key={uid} groupUid={uid} {...groupParams}>
             <ComputersTable
               computers={computers.map(({ viewOptions, ...rest }) => ({
                 ...rest,
                 ...(viewOptions && { viewOptions }),
               }))}
               noHeader
-              belongsToGroupUid={key}
+              belongsToGroupUid={uid}
             />
           </ComputerGroup>
         ))}

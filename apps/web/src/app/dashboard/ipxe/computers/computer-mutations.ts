@@ -32,3 +32,9 @@ export const createComputerGroupMutation = gql(`
     }
   }
 `);
+
+export const deleteComputerGroupMututation = gql(`
+  mutation DeleteComputerGroup($uid: String!) {
+    deleteComputerGroups(where: [{uid: $uid}])    
+  }
+`);

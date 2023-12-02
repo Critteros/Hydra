@@ -18,6 +18,7 @@ const documents = {
     "\n  mutation AddComputerToGroup($computerUid: String!, $groupUid: String!) {\n    addComputersToGroup(computers: [{uid: $computerUid}], where: {uid: $groupUid}) { \n      uid\n    }\n  }\n": types.AddComputerToGroupDocument,
     "\n  mutation DeleteComputer($uid: String!) {\n    deleteComputers(where: [{uid: $uid}])\n  }\n": types.DeleteComputerDocument,
     "\n  mutation CreateComputerGroup($data: ComputerGroupCreateInput!) {\n    createComputerGroup(data: $data) {\n      uid\n      name\n    }\n  }\n": types.CreateComputerGroupDocument,
+    "\n  mutation DeleteComputerGroup($uid: String!) {\n    deleteComputerGroups(where: [{uid: $uid}])    \n  }\n": types.DeleteComputerGroupDocument,
     "\n  query QueryComputersWithoutGroup {\n    computers(standalone: true) {\n      uid\n      name\n      mac\n      ipv4\n      viewOptions {\n        order\n      }\n    }\n  }\n": types.QueryComputersWithoutGroupDocument,
     "\n  query QueryComputerGroups {\n    computerGroups {\n      uid\n      name\n      computers {\n        uid\n        name\n        mac\n        ipv4\n        viewOptions {\n          order\n        }\n      }\n      viewOptions {\n        order\n      }\n    }\n  }\n": types.QueryComputerGroupsDocument,
     "\n  query PermissionsSummary {\n    allPermissions: permissions {\n      id\n      description\n    }\n    me {\n      uid\n      permissions {\n        id\n        description\n      }\n    }\n  }\n": types.PermissionsSummaryDocument,
@@ -73,6 +74,10 @@ export function gql(source: "\n  mutation DeleteComputer($uid: String!) {\n    d
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation CreateComputerGroup($data: ComputerGroupCreateInput!) {\n    createComputerGroup(data: $data) {\n      uid\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation CreateComputerGroup($data: ComputerGroupCreateInput!) {\n    createComputerGroup(data: $data) {\n      uid\n      name\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteComputerGroup($uid: String!) {\n    deleteComputerGroups(where: [{uid: $uid}])    \n  }\n"): (typeof documents)["\n  mutation DeleteComputerGroup($uid: String!) {\n    deleteComputerGroups(where: [{uid: $uid}])    \n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
