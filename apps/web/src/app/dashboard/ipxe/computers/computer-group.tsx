@@ -10,6 +10,7 @@ import { ChevronUpIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { TableCell } from '@/components/ui/table';
+import { Typography } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
 
 import { DeleteGroup } from './delete-group';
@@ -27,12 +28,15 @@ export function ComputerGroup({ name, children, groupUid }: ComputerGroupProps) 
       <tr>
         <TableCell colSpan={9999} className={cn('px-0', open && 'border-b-2 border-l-2')}>
           <CollapsibleTrigger asChild>
-            <span className="flex w-full">
+            <span className={cn('flex w-full rounded-md p-2', !open && 'border-2')}>
               <Button
                 variant="ghost"
-                className={cn('flex w-full justify-center gap-2', open && 'border-b-2')}
+                className={cn(
+                  'flex w-full justify-center gap-2 py-5',
+                  open && 'mb-5 border-b-2 pb-8',
+                )}
               >
-                <span className="font-bold">{name}</span>
+                <Typography variant="h3">{name}</Typography>
                 {open ? (
                   <ChevronUpIcon width={20} height={20} />
                 ) : (

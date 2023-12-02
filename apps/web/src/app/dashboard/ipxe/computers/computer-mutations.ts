@@ -38,3 +38,9 @@ export const deleteComputerGroupMututation = gql(`
     deleteComputerGroups(where: [{uid: $uid}])    
   }
 `);
+
+export const moveComputerAndUpdateOrderMutation = gql(`
+  mutation MoveComputerToGroupAndUpdateOrder($computerUid: String!, $groupUid: String, $order: Int!) {
+    moveComputerAndUpdateOrder(whichComputer: {uid: $computerUid}, computerGroupUid: $groupUid, newOrder: $order)
+  }
+`);

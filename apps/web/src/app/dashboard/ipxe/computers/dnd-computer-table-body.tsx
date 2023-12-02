@@ -8,6 +8,7 @@ import { createPortal } from 'react-dom';
 
 import { TableRow, TableCell, TableBody, Table } from '@/components/ui/table';
 import { ClientPermissionBoundry } from '@/lib/client/client-permission-boundry';
+import { usePermissions } from '@/lib/client/hooks/permissions';
 import { cn } from '@/lib/utils';
 
 import { AddComputer } from './add-computer';
@@ -36,12 +37,22 @@ const DraggerHandler = forwardRef<
 DraggerHandler.displayName = 'DraggerHandler';
 
 export function DnDComputerTableBody({ tableData, groupUid }: DnDComputerTableBodyProps) {
+  const { hasPermission } = usePermissions();
+
   return (
-    <Droppable droppableId={groupUid ?? UNGROUPED_COMPUTERS}>
+    <Droppable
+      droppableId={groupUid ?? UNGROUPED_COMPUTERS}
+      isDropDisabled={!hasPermission('computers.edit')}
+    >
       {(provided) => (
         <TableBody {...provided.droppableProps} ref={provided.innerRef}>
           {tableData.map(({ key, ipv4, mac, name }, index) => (
-            <Draggable key={key} draggableId={key} index={index}>
+            <Draggable
+              key={key}
+              draggableId={key}
+              index={index}
+              isDragDisabled={!hasPermission('computers.edit')}
+            >
               {(provided, { isDragging }) => (
                 <DraggerHandler
                   isDragging={isDragging}
