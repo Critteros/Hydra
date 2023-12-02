@@ -4,8 +4,12 @@ import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
 import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '@/database/prisma.service';
+import { remapPrismaError, prismaErrorSwitch, PrismaErrorCode } from '@/utils/prisma/errors';
 
 export const ComputerNotFoundError = makeCustomError('ComputerNotFoundError');
+export const ComputerNameAlreadyExistsError = makeCustomError('ComputerNameAlreadyExistsError');
+export const ComputerMacAlreadyExistsError = makeCustomError('ComputerMacAlreadyExistsError');
+export const ComputerIpV4AlreadyExistsError = makeCustomError('ComputerIpV4AlreadyExistsError');
 
 @Injectable()
 export class ComputerService {
@@ -24,7 +28,42 @@ export class ComputerService {
   }
 
   async createComputer(data: Prisma.ComputerCreateInput) {
-    return await this.prisma.computer.create({ data });
+    try {
+      return await this.prisma.computer.create({ data });
+    } catch (e) {
+      throw prismaErrorSwitch(e, [
+        (e) =>
+          remapPrismaError({
+            error: e,
+            toMatchError: Prisma.PrismaClientKnownRequestError,
+            code: PrismaErrorCode.UniqueConstraintViolation,
+            field: 'name',
+            throw: new ComputerNameAlreadyExistsError(
+              `Computer with name ${data.name} already exists`,
+            ),
+          }),
+        (e) =>
+          remapPrismaError({
+            error: e,
+            toMatchError: Prisma.PrismaClientKnownRequestError,
+            code: PrismaErrorCode.UniqueConstraintViolation,
+            field: 'mac',
+            throw: new ComputerMacAlreadyExistsError(
+              `Computer with mac ${data.mac} already exists`,
+            ),
+          }),
+        (e) =>
+          remapPrismaError({
+            error: e,
+            toMatchError: Prisma.PrismaClientKnownRequestError,
+            code: PrismaErrorCode.UniqueConstraintViolation,
+            field: 'ipV4',
+            throw: new ComputerIpV4AlreadyExistsError(
+              `Computer with ipV4 ${data.ipv4} already exists`,
+            ),
+          }),
+      ]);
+    }
   }
 
   async deleteComputers(where: Prisma.ComputerWhereInput) {

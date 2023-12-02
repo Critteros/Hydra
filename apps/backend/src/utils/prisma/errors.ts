@@ -99,4 +99,15 @@ export function remapPrismaError(params: {
   return originalError;
 }
 
+export function prismaErrorSwitch(error: unknown, callbacks: Array<(error: unknown) => unknown>) {
+  for (const callback of callbacks) {
+    const mappedError = callback(error);
+    if (mappedError !== error) {
+      return mappedError;
+    }
+  }
+
+  return error;
+}
+
 export { PrismaErrorCode } from './codes';

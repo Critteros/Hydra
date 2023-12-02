@@ -14,6 +14,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n": types.CurrentUserDocument,
+    "\n  mutation CreateComputer($data: ComputerCreateInput!) {\n    createComputer(data: $data) {\n      uid\n      name\n      mac\n    }\n  }\n": types.CreateComputerDocument,
+    "\n  mutation AddComputerToGroup($computerUid: String!, $groupUid: String!) {\n    addComputersToGroup(computers: [{uid: $computerUid}], where: {uid: $groupUid}) { \n      uid\n    }\n  }\n": types.AddComputerToGroupDocument,
     "\n  query QueryComputersWithoutGroup {\n    computers(standalone: true) {\n      uid\n      name\n      mac\n      ipv4\n      viewOptions {\n        order\n      }\n    }\n  }\n": types.QueryComputersWithoutGroupDocument,
     "\n  query QueryComputerGroups {\n    computerGroups {\n      uid\n      name\n      computers {\n        uid\n        name\n        mac\n        ipv4\n        viewOptions {\n          order\n        }\n      }\n    }\n  }\n": types.QueryComputerGroupsDocument,
     "\n  query PermissionsSummary {\n    allPermissions: permissions {\n      id\n      description\n    }\n    me {\n      uid\n      permissions {\n        id\n        description\n      }\n    }\n  }\n": types.PermissionsSummaryDocument,
@@ -53,6 +55,14 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"): (typeof documents)["\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateComputer($data: ComputerCreateInput!) {\n    createComputer(data: $data) {\n      uid\n      name\n      mac\n    }\n  }\n"): (typeof documents)["\n  mutation CreateComputer($data: ComputerCreateInput!) {\n    createComputer(data: $data) {\n      uid\n      name\n      mac\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation AddComputerToGroup($computerUid: String!, $groupUid: String!) {\n    addComputersToGroup(computers: [{uid: $computerUid}], where: {uid: $groupUid}) { \n      uid\n    }\n  }\n"): (typeof documents)["\n  mutation AddComputerToGroup($computerUid: String!, $groupUid: String!) {\n    addComputersToGroup(computers: [{uid: $computerUid}], where: {uid: $groupUid}) { \n      uid\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

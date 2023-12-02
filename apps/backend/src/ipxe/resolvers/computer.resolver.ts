@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Resolver, Query, ResolveField, Parent, Mutation, Args, Int } from '@nestjs/graphql';
 
 import type { Prisma } from '@prisma/client';
@@ -12,7 +12,13 @@ import {
   ComputerViewOptionsUpdateInput,
 } from '../schemas/computer.input';
 import { Computer, ComputerViewOptions } from '../schemas/computer.object';
-import { ComputerService, ComputerNotFoundError } from '../services/computer.service';
+import {
+  ComputerService,
+  ComputerNotFoundError,
+  ComputerIpV4AlreadyExistsError,
+  ComputerMacAlreadyExistsError,
+  ComputerNameAlreadyExistsError,
+} from '../services/computer.service';
 
 @Resolver(() => Computer)
 export class ComputerResolver {
@@ -46,6 +52,20 @@ export class ComputerResolver {
 
   @Mutation(() => Computer, { description: 'Create a new computer' })
   @RequirePermission('computers.create')
+  @MapErrors([
+    {
+      if: ComputerNameAlreadyExistsError,
+      then: (e: Error) => new BadRequestException(e.message),
+    },
+    {
+      if: ComputerMacAlreadyExistsError,
+      then: (e: Error) => new BadRequestException(e.message),
+    },
+    {
+      if: ComputerIpV4AlreadyExistsError,
+      then: (e: Error) => new BadRequestException(e.message),
+    },
+  ])
   async createComputer(@Args('data') { viewOptions, ...other }: ComputerCreateInput) {
     return await this.computerService.createComputer({
       ...other,
