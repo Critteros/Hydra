@@ -3,19 +3,27 @@ import 'server-only';
 import type { Computer } from '$gql/types';
 import type { PickDeep } from 'type-fest';
 
-import { Table, TableRow, TableCell, TableHeader, TableBody } from '@/components/ui/table';
+import { Conditional } from '@/components/conditional';
+import { Table, TableRow, TableCell, TableBody } from '@/components/ui/table';
 import { ServerPermissionBoundry } from '@/lib/server/server-permission-boundry';
 
 import { AddComputer } from './add-computer';
 import { DeleteComputer } from './delete-computer';
+import { TableHeader } from './table-header';
 
 type ComputerData = PickDeep<Computer, 'uid' | 'name' | 'mac' | 'ipv4' | 'viewOptions.order'>;
 
 export type ComputerListProps = {
   computers: ComputerData[];
+  noHeader?: boolean;
+  belongsToGroupUid?: string;
 };
 
-export function ComputersTable({ computers }: ComputerListProps) {
+export function ComputersTable({
+  computers,
+  noHeader = false,
+  belongsToGroupUid,
+}: ComputerListProps) {
   const tableData = computers
     .map(({ ipv4, mac, name, uid, viewOptions }) => ({
       key: uid,
@@ -33,16 +41,9 @@ export function ComputersTable({ computers }: ComputerListProps) {
 
   return (
     <Table>
-      <TableHeader>
-        <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell>IP Address</TableCell>
-          <TableCell>MAC Address</TableCell>
-          <ServerPermissionBoundry permission="computers.delete" fallback={<></>}>
-            <TableCell className="w-10">Actions</TableCell>
-          </ServerPermissionBoundry>
-        </TableRow>
-      </TableHeader>
+      <Conditional condition={!noHeader}>
+        <TableHeader />
+      </Conditional>
       <TableBody>
         {tableData.map(({ key, ipv4, mac, name }) => (
           <TableRow key={key}>
@@ -57,7 +58,7 @@ export function ComputersTable({ computers }: ComputerListProps) {
           </TableRow>
         ))}
         <ServerPermissionBoundry permission="computers.create" fallback={<></>}>
-          <AddComputer>Add Computer</AddComputer>
+          <AddComputer groupUid={belongsToGroupUid}>Add Computer</AddComputer>
         </ServerPermissionBoundry>
       </TableBody>
     </Table>

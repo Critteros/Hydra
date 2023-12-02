@@ -21,7 +21,7 @@ import { Icons } from '@/components/ui/icons';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 
-import { createComputerMutation } from './computer-mutations';
+import { createComputerMutation, addComputerToGroupMutation } from './computer-mutations';
 
 const formSchema = z.object({
   name: z
@@ -38,9 +38,10 @@ export type FormSchema = z.infer<typeof formSchema>;
 
 type CreateComputerFormProps = {
   afterSubmit?: () => void;
+  groupUid?: string;
 };
 
-export function CreateComputerForm({ afterSubmit }: CreateComputerFormProps) {
+export function CreateComputerForm({ afterSubmit, groupUid }: CreateComputerFormProps) {
   const { toast } = useToast();
   const { refresh } = useRouter();
   const form = useForm<FormSchema>({
@@ -52,17 +53,29 @@ export function CreateComputerForm({ afterSubmit }: CreateComputerFormProps) {
     },
   });
   const [createComputer] = useMutation(createComputerMutation);
+  const [addComputerToGroup] = useMutation(addComputerToGroupMutation);
   const { isSubmitting } = form.formState;
 
   const onSubmit = async (values: FormSchema) => {
     try {
-      await createComputer({
+      const { data } = await createComputer({
         variables: {
           data: {
             ...values,
           },
         },
       });
+      if (groupUid) {
+        if (!data?.createComputer.uid) {
+          throw new Error('Could not create computer');
+        }
+        await addComputerToGroup({
+          variables: {
+            groupUid,
+            computerUid: data.createComputer.uid,
+          },
+        });
+      }
       toast({
         title: 'Computer created',
         description: `Computer ${values.name} has been created`,

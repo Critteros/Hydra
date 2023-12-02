@@ -28,6 +28,9 @@ export const queryComputerGroups = gql(`
           order
         }
       }
+      viewOptions {
+        order
+      }
     }
   }
 `);

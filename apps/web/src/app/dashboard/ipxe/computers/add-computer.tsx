@@ -12,9 +12,10 @@ import { CreateComputerForm } from './create-computer-form';
 
 type AddComputerProps = {
   children: ReactNode;
+  groupUid?: string;
 };
 
-export function AddComputer({ children }: AddComputerProps) {
+export function AddComputer({ children, groupUid }: AddComputerProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
@@ -36,7 +37,7 @@ export function AddComputer({ children }: AddComputerProps) {
           <DialogHeader>
             <DialogTitle>Add Computer</DialogTitle>
           </DialogHeader>
-          <CreateComputerForm afterSubmit={() => setDialogOpen(false)} />
+          <CreateComputerForm afterSubmit={() => setDialogOpen(false)} groupUid={groupUid} />
         </DialogContent>
       </Dialog>
     </>
