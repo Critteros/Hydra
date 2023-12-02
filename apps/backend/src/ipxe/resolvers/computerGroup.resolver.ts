@@ -8,6 +8,7 @@ import { RequirePermission } from '@/rbac/decorators/require-permissions.decorat
 
 import { WhereUniqueComputerInput } from '../schemas/computer.input';
 import { Computer } from '../schemas/computer.object';
+import { MoveComputerAndUpdateOrderArgs } from '../schemas/computerGroup.args';
 import {
   WhereUniqueComputerGroupInput,
   ComputerGroupCreateInput,
@@ -150,6 +151,21 @@ export class ComputerGroupResolver {
     return await this.computerGroupService
       .deleteComputerGroups({ OR: where })
       .then(({ count }) => count);
+  }
+
+  @Mutation(() => Boolean, {
+    description: 'Moves computer to a specified group and updates its order',
+  })
+  @RequirePermission('computers.edit')
+  async moveComputerAndUpdateOrder(
+    @Args() { computerGroupUid, newOrder, whichComputer }: MoveComputerAndUpdateOrderArgs,
+  ) {
+    await this.computerGroupService.moveComputerAndUpdateOrder({
+      newOrder,
+      toGroupUid: computerGroupUid,
+      whichComputer: whichComputer as Prisma.ComputerWhereUniqueInput,
+    });
+    return true;
   }
 
   // ================================ Resolvers ================================

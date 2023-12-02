@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
 import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
-import { Prisma } from '@prisma/client';
+import { Prisma, type Computer } from '@prisma/client';
 
-import { PrismaService } from '@/database/prisma.service';
+import { PrismaService, type PrismaTransaction } from '@/database/prisma.service';
 import { PrismaErrorCode, remapPrismaError } from '@/utils/prisma/errors';
+
+import { ComputerService, ComputerNotFoundError } from './computer.service';
 
 export const ComputerGroupNotFoundError = makeCustomError('ComputerGroupNotFoundError');
 export const ComputerGroupNameAlreadyExistsError = makeCustomError(
@@ -13,7 +15,10 @@ export const ComputerGroupNameAlreadyExistsError = makeCustomError(
 
 @Injectable()
 export class ComputerGroupService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly computerService: ComputerService,
+  ) {}
 
   async find(where: Prisma.ComputerGroupWhereUniqueInput) {
     return await this.prisma.computerGroup.findUnique({ where });
@@ -124,16 +129,113 @@ export class ComputerGroupService {
     });
   }
 
-  async moveComputers({
-    from,
-    to,
-    computers,
-  }: {
-    from: Prisma.ComputerGroupWhereUniqueInput;
-    to: Prisma.ComputerGroupWhereUniqueInput;
-    computers: Prisma.ComputerWhereInput;
-  }) {
-    return await this.prisma.$transaction(async (tx) => {
+  async moveComputerAndUpdateOrder(
+    {
+      toGroupUid,
+      whichComputer,
+      newOrder,
+    }: {
+      toGroupUid: Computer['computerGroupId'];
+      whichComputer: Prisma.ComputerWhereUniqueInput;
+      newOrder: number;
+    },
+    transaction?: PrismaTransaction,
+  ) {
+    return await this.prisma.transactional(transaction, async (tx) => {
+      const computer = await tx.computer.findUnique({
+        where: whichComputer,
+        select: {
+          uid: true,
+          computerGroupId: true,
+        },
+      });
+
+      if (!computer) {
+        throw new ComputerNotFoundError('Requested computer was not found');
+      }
+
+      const fromGroupUid = computer.computerGroupId;
+
+      if (toGroupUid !== null) {
+        const toGroup = await tx.computerGroup.findUnique({
+          where: { uid: toGroupUid },
+          select: { uid: true },
+        });
+        if (!toGroup) {
+          throw new ComputerGroupNotFoundError('Destination computer group was not found');
+        }
+      }
+
+      if (fromGroupUid === toGroupUid) {
+        // We need only to update the group order
+        await this.computerService.updateComputerOrder(
+          { whichComputer: { uid: computer.uid }, order: newOrder, computerWasMoved: false },
+          tx,
+        );
+        return;
+      }
+
+      // Disconnect computer from the old group
+      if (fromGroupUid !== null) {
+        await tx.computerGroup.update({
+          where: { uid: fromGroupUid },
+          data: {
+            computers: {
+              disconnect: {
+                uid: computer.uid,
+              },
+            },
+          },
+        });
+      }
+
+      // Connect computer to the new group or set to null
+      if (toGroupUid !== null) {
+        await tx.computerGroup.update({
+          where: { uid: toGroupUid },
+          data: {
+            computers: {
+              connect: {
+                uid: computer.uid,
+              },
+            },
+          },
+        });
+      } else {
+        await tx.computer.update({
+          where: { uid: computer.uid },
+          data: {
+            computerGroupId: null,
+          },
+        });
+      }
+
+      // Update ordering in both groups
+      await Promise.all([
+        // Update in new group
+        this.computerService.updateComputerOrder(
+          { whichComputer: { uid: computer.uid }, order: newOrder, computerWasMoved: true },
+          tx,
+        ),
+        // Update old group order
+        this.computerService.updateComputerGroupOrdering(fromGroupUid, tx),
+      ]);
+    });
+  }
+
+  async moveComputers(
+    {
+      from,
+      to,
+      computers,
+    }: {
+      from: Prisma.ComputerGroupWhereUniqueInput;
+      to: Prisma.ComputerGroupWhereUniqueInput;
+      computers: Prisma.ComputerWhereInput;
+    },
+    transaction?: PrismaTransaction,
+  ) {
+    return await this.prisma.transactional(transaction, async (tx) => {
       const firstComputerGroup = await tx.computerGroup.findUnique({
         where: from,
         select: { uid: true },

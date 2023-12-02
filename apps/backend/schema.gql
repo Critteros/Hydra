@@ -290,6 +290,18 @@ type Mutation {
 
   """Delete a computer group"""
   deleteComputerGroups(where: [WhereUniqueComputerGroupInput!]!): Int!
+
+  """Moves computer to a specified group and updates its order"""
+  moveComputerAndUpdateOrder(
+    """UID of the group where the computer should be moved to"""
+    computerGroupUid: String = null
+
+    """Selector for computer that should be moved"""
+    whichComputer: WhereUniqueComputerInput!
+
+    """New order of the computer in the group"""
+    newOrder: Int!
+  ): Boolean!
 }
 
 input UpdateUserInput {
