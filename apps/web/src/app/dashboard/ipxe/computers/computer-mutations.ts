@@ -23,3 +23,12 @@ export const deleteComputerMutation = gql(`
     deleteComputers(where: [{uid: $uid}])
   }
 `);
+
+export const createComputerGroupMutation = gql(`
+  mutation CreateComputerGroup($data: ComputerGroupCreateInput!) {
+    createComputerGroup(data: $data) {
+      uid
+      name
+    }
+  }
+`);

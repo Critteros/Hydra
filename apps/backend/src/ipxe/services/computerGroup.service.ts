@@ -4,8 +4,12 @@ import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
 import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '@/database/prisma.service';
+import { PrismaErrorCode, remapPrismaError } from '@/utils/prisma/errors';
 
 export const ComputerGroupNotFoundError = makeCustomError('ComputerGroupNotFoundError');
+export const ComputerGroupNameAlreadyExistsError = makeCustomError(
+  'ComputerGroupNameAlreadyExistsError',
+);
 
 @Injectable()
 export class ComputerGroupService {
@@ -24,7 +28,19 @@ export class ComputerGroupService {
   }
 
   async createComputerGroup(data: Prisma.ComputerGroupCreateInput) {
-    return await this.prisma.computerGroup.create({ data });
+    try {
+      return await this.prisma.computerGroup.create({ data });
+    } catch (error) {
+      throw remapPrismaError({
+        error,
+        toMatchError: Prisma.PrismaClientKnownRequestError,
+        code: PrismaErrorCode.UniqueConstraintViolation,
+        field: 'name',
+        throw: new ComputerGroupNameAlreadyExistsError(
+          `Computer group with name ${data.name} already exists`,
+        ),
+      });
+    }
   }
 
   async changeComputerGroupViewOptions(

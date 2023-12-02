@@ -17,6 +17,7 @@ import { ComputerGroup, ComputerGroupViewOptions } from '../schemas/computerGrou
 import {
   ComputerGroupService,
   ComputerGroupNotFoundError,
+  ComputerGroupNameAlreadyExistsError,
 } from '../services/computerGroup.service';
 
 @Resolver(() => ComputerGroup)
@@ -41,6 +42,10 @@ export class ComputerGroupResolver {
 
   @Mutation(() => ComputerGroup, { description: 'Create a new computer group' })
   @RequirePermission('computers.create')
+  @MapErrors({
+    if: ComputerGroupNameAlreadyExistsError,
+    then: (e: Error) => new NotFoundException(e.message),
+  })
   async createComputerGroup(
     @Args('data') { computers, viewOptions, ...other }: ComputerGroupCreateInput,
   ) {

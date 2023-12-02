@@ -4,6 +4,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Typography } from '@/components/ui/typography';
 import { ServerPermissionBoundry } from '@/lib/server/server-permission-boundry';
 
+import { AddComputerGroup } from './add-group';
 import { ComputersView } from './computers-view';
 import { ComputersReadFallback } from './fallbacks/computers-read-fallback';
 
@@ -15,6 +16,11 @@ export default function ComputersPage() {
           <Typography variant="h1" className="mb-4 self-start">
             Computers
           </Typography>
+          <ServerPermissionBoundry permission="computers.create" fallback={<></>}>
+            <div className="flex justify-end">
+              <AddComputerGroup />
+            </div>
+          </ServerPermissionBoundry>
           <ComputersView />
         </main>
       </ScrollArea>

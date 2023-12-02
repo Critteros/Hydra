@@ -32,7 +32,7 @@ export function ComputersTable({
       name,
       order: viewOptions?.order ?? -1,
     }))
-    .sort((a, b) => {
+    .toSorted((a, b) => {
       if (a.order === -1 && b.order === -1) return 1;
       if (a.order === -1) return 1;
       if (b.order === -1) return -1;

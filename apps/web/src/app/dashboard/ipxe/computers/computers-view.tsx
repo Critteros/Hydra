@@ -21,7 +21,7 @@ export async function ComputersView() {
     query: queryComputerGroups,
   });
 
-  const sortedComputerGroups = computerGroups.sort(
+  const sortedComputerGroups = computerGroups.toSorted(
     ({ viewOptions: viewOptionsA }, { viewOptions: viewOptionsB }) => {
       const orderA = viewOptionsA?.order ?? -1;
       const orderB = viewOptionsB?.order ?? -1;
