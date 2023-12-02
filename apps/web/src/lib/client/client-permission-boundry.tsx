@@ -6,17 +6,17 @@ import type { Permissions } from '@hydra-ipxe/common/shared/permissions';
 
 import { usePermissions } from './hooks/permissions';
 
-type ClientPermissiosnBoundryProps = {
+type ClientPermissionBoundryProps = {
   permission: Permissions;
   fallback: ReactNode;
   children: ReactNode;
 };
 
-export function ClientPermissiosnBoundry({
+export function ClientPermissionBoundry({
   permission,
   fallback,
   children,
-}: ClientPermissiosnBoundryProps) {
+}: ClientPermissionBoundryProps) {
   const { hasPermission } = usePermissions();
 
   if (hasPermission(permission)) {

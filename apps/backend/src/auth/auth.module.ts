@@ -3,6 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { PassportModule } from '@nestjs/passport';
 
 import { MetadataModule } from '@/metadata/metadata.module';
+import { RbacModule } from '@/rbac/rbac.module';
 import { UserModule } from '@/user/user.module';
 
 // Controllers
@@ -19,7 +20,7 @@ import { AuthService } from './services/auth.service';
 import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
-  imports: [PassportModule.register({ session: true }), UserModule, MetadataModule],
+  imports: [PassportModule.register({ session: true }), UserModule, MetadataModule, RbacModule],
   providers: [
     AuthService,
     LocalStrategy,

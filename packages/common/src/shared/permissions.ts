@@ -23,6 +23,19 @@ const keyPath = {
     /* AssignPermissions widget is read-only */
     assignPermissions: {},
   },
+  computers: {
+    /* Prevents the display of computer lsit  */
+    read: {},
+
+    /* Allows adding new computer to the computer registry */
+    create: {},
+
+    /* Allows editing computer registry */
+    edit: {},
+
+    /* Allows deleting computer registry */
+    delete: {},
+  },
 } as const;
 
 export type Permissions = Exclude<Path<typeof keyPath>, keyof typeof keyPath>;

@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
 import { DatabaseModule } from './database/database.module';
 import { ErrorsModule } from './errors/errors.module';
+import { IpxeModule } from './ipxe/ipxe.module';
 import { ManagementModule } from './management/management.module';
 import { MetadataModule } from './metadata/metadata.module';
 import { PassportMiddleware } from './middleware/passport.middleware';
@@ -32,13 +33,14 @@ import { formatError } from './utils/graphql';
     }),
     ManagementModule,
     ConfigModule,
+    RbacModule,
     AuthModule,
     UserModule,
     RedisModule,
-    RbacModule,
     DatabaseModule,
     MetadataModule,
     ErrorsModule,
+    IpxeModule,
   ],
 })
 export class AppModule implements NestModule {

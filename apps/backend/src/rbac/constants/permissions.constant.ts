@@ -29,4 +29,16 @@ export const permissionConfig = {
   'roles.assignPermissions': {
     description: 'Allows to assign permissions to roles',
   },
+  'computers.read': {
+    description: 'Allows to read computers list',
+  },
+  'computers.create': {
+    description: 'Allows to add new computers to the registry',
+  },
+  'computers.edit': {
+    description: 'Allows to edit computer registry',
+  },
+  'computers.delete': {
+    description: 'Allows to delete computer registry',
+  },
 } as const satisfies Record<Permissions, Omit<Permission, 'id'>>;

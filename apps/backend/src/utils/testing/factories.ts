@@ -31,7 +31,7 @@ export async function userFactory(
   if (permissions) {
     const role = await rolesFactory(
       app,
-      { name: 'Default Role', description: 'Default role for testing' },
+      { name: faker.person.jobTitle(), description: 'Default role for testing' },
       permissions,
     );
     await prisma.rolesOnUser.create({

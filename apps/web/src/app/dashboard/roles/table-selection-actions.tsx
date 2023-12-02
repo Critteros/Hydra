@@ -8,7 +8,7 @@ import type { Table } from '@tanstack/react-table';
 import { DeleteButton } from '@/components/buttons/delete-button';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { ClientPermissiosnBoundry } from '@/lib/client/client-permission-boundry';
+import { ClientPermissionBoundry } from '@/lib/client/client-permission-boundry';
 
 import { deleteMultipleRolesMutation } from './roles-mutations';
 import type { RolePresentation } from './roles-queries';
@@ -42,11 +42,11 @@ export function TableSelectionActions({ table }: TableSelectionActions) {
 
   return (
     <div className="flex">
-      <ClientPermissiosnBoundry permission="roles.delete" fallback={<></>}>
+      <ClientPermissionBoundry permission="roles.delete" fallback={<></>}>
         <ConfirmDialog onConfirm={onConfirm}>
           <DeleteButton />
         </ConfirmDialog>
-      </ClientPermissiosnBoundry>
+      </ClientPermissionBoundry>
     </div>
   );
 }

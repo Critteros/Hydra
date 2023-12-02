@@ -31,7 +31,7 @@ export function remapErrors(mapping: RemapInput | Array<RemapInput>): (err: unkn
     let { then: mappedError } = entry;
 
     if (mappedError instanceof Function) {
-      mappedError = mappedError();
+      mappedError = mappedError(error);
     }
 
     if (mappedError instanceof BaseError) {

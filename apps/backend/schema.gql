@@ -78,6 +78,57 @@ type Role {
   permissionsCount: Int!
 }
 
+"""Presentation configuration for a computer"""
+type ComputerViewOptions {
+  """Whether to show the computer in the list"""
+  id: ID!
+
+  """Whether to show the computer in the list"""
+  order: Float!
+}
+
+"""Represent a computer which participates in the network boot process"""
+type Computer {
+  """Unique identifier of the computer"""
+  uid: ID!
+
+  """Name of the computer set by the user"""
+  name: String!
+
+  """MAC address of the computer"""
+  mac: String!
+
+  """IP address of the computer"""
+  ipv4: String!
+
+  """Presentation configuration for a computer"""
+  viewOptions: ComputerViewOptions
+}
+
+"""Presentation configuration for a computer group"""
+type ComputerGroupViewOptions {
+  """Whether to show the computer group in the list"""
+  id: ID!
+
+  """Whether to show the computer group in the list"""
+  order: Float!
+}
+
+"""Represent a grouping of computers"""
+type ComputerGroup {
+  """Unique identifier of the computer group"""
+  uid: ID!
+
+  """Name of the computer group"""
+  name: String!
+
+  """Description of the computer group"""
+  computers: [Computer!]!
+
+  """Presentation configuration for a computer group"""
+  viewOptions: ComputerGroupViewOptions
+}
+
 type Query {
   users: [User!]!
   user(
@@ -105,6 +156,36 @@ type Query {
     """Role name"""
     name: String
   ): Role
+
+  """Get all computers"""
+  computers(
+    """If teu then only the computers without a group assigement are returned"""
+    standalone: Boolean
+  ): [Computer!]!
+
+  """Get a single computer"""
+  computer(where: WhereUniqueComputerInput!): Computer
+
+  """Get all computer groups"""
+  computerGroups: [ComputerGroup!]!
+
+  """Get a single computer group"""
+  computerGroup(where: WhereUniqueComputerGroupInput!): ComputerGroup
+}
+
+input WhereUniqueComputerInput {
+  uid: String
+  name: String
+  mac: String
+  ipv4: String
+}
+
+input WhereUniqueComputerGroupInput {
+  """Unique ID of the computer group"""
+  uid: String
+
+  """Name of the computer group"""
+  name: String
 }
 
 type Mutation {
@@ -182,6 +263,45 @@ type Mutation {
 
   """Login as a user"""
   adminLoginAsUser(uid: String!): Boolean!
+
+  """Create a new computer"""
+  createComputer(data: ComputerCreateInput!): Computer!
+
+  """Delete a computer"""
+  deleteComputers(where: [WhereUniqueComputerInput!]!): Int!
+
+  """Change the view options of a computer"""
+  changeComputerViewOptions(where: WhereUniqueComputerInput!, data: ComputerViewOptionsUpdateInput!): ComputerViewOptions!
+
+  """Create a new computer group"""
+  createComputerGroup(data: ComputerGroupCreateInput!): ComputerGroup!
+
+  """Change the view options of a computer group"""
+  changeComputerGroupViewOptions(where: WhereUniqueComputerGroupInput!, data: ComputerGroupViewOptionsUpdateInput!): ComputerGroupViewOptions!
+
+  """Add computers to a computer group"""
+  addComputersToGroup(where: WhereUniqueComputerGroupInput!, computers: [WhereUniqueComputerInput!]!): ComputerGroup!
+
+  """Remove computers from a computer group"""
+  removeComputersFromGroup(where: WhereUniqueComputerGroupInput!, computers: [WhereUniqueComputerInput!]!): ComputerGroup!
+
+  """Move computers between groups"""
+  moveComputers(fromGroup: WhereUniqueComputerGroupInput!, toGroup: WhereUniqueComputerGroupInput!, computers: [WhereUniqueComputerInput!]!): [Computer!]!
+
+  """Delete a computer group"""
+  deleteComputerGroups(where: [WhereUniqueComputerGroupInput!]!): Int!
+
+  """Moves computer to a specified group and updates its order"""
+  moveComputerAndUpdateOrder(
+    """UID of the group where the computer should be moved to"""
+    computerGroupUid: String = null
+
+    """Selector for computer that should be moved"""
+    whichComputer: WhereUniqueComputerInput!
+
+    """New order of the computer in the group"""
+    newOrder: Int!
+  ): Boolean!
 }
 
 input UpdateUserInput {
@@ -215,4 +335,49 @@ input CreateRoleInput {
 
   """Role description"""
   description: String!
+}
+
+input ComputerCreateInput {
+  """Name of the computer"""
+  name: String!
+
+  """MAC address of the computer"""
+  mac: String!
+
+  """IP address of the computer"""
+  ipv4: String!
+
+  """Presentation configuration for a computer"""
+  viewOptions: ComputerViewOptionsCreateInput
+}
+
+input ComputerViewOptionsCreateInput {
+  """Order of the computer in the list"""
+  order: Float!
+}
+
+input ComputerViewOptionsUpdateInput {
+  """Order of the computer in the list"""
+  order: Float!
+}
+
+input ComputerGroupCreateInput {
+  """Name of the computer group"""
+  name: String!
+
+  """Presentation configuration for a computer group"""
+  viewOptions: ComputerGroupViewOptionsCreateInput
+
+  """Computers to add to the group"""
+  computers: [WhereUniqueComputerInput!]
+}
+
+input ComputerGroupViewOptionsCreateInput {
+  """Order of the computer group in the list"""
+  order: Float!
+}
+
+input ComputerGroupViewOptionsUpdateInput {
+  """Order of the computer group in the list"""
+  order: Float!
 }
