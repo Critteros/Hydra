@@ -21,8 +21,9 @@ export function AddComputer({ children }: AddComputerProps) {
     <>
       <TableRow>
         <Button variant="ghost" onClick={() => setDialogOpen(!dialogOpen)} asChild>
-          <TableCell colSpan={3} className="table-cell text-center">
-            <span className="flex justify-center">
+          {/* Colspan value higher then number ofcolumns will result in the row spanning the whole table */}
+          <TableCell colSpan={1000} className="table-cell text-center">
+            <span className="flex justify-center gap-2">
               <span>{children}</span>
               <PlusIcon width={20} height={20} />
             </span>
