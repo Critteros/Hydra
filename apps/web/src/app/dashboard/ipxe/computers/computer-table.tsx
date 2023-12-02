@@ -9,6 +9,7 @@ import { Table, TableRow, TableCell, TableHeader, TableBody } from '@/components
 import { ServerPermissionBoundry } from '@/lib/server/server-permission-boundry';
 
 import { AddComputer } from './add-computer';
+import { DeleteComputer } from './delete-computer';
 
 type ComputerData = PickDeep<Computer, 'uid' | 'name' | 'mac' | 'ipv4' | 'viewOptions.order'>;
 
@@ -41,6 +42,9 @@ export function ComputersTable({ computers }: ComputerListProps) {
           <TableCell>Name</TableCell>
           <TableCell>IP Address</TableCell>
           <TableCell>MAC Address</TableCell>
+          <ServerPermissionBoundry permission="computers.delete" fallback={<></>}>
+            <TableCell className="w-10">Actions</TableCell>
+          </ServerPermissionBoundry>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -49,6 +53,11 @@ export function ComputersTable({ computers }: ComputerListProps) {
             <TableCell>{name}</TableCell>
             <TableCell>{ipv4}</TableCell>
             <TableCell>{mac}</TableCell>
+            <ServerPermissionBoundry permission="computers.delete" fallback={<></>}>
+              <TableCell className="w-10">
+                <DeleteComputer computerUid={key} />
+              </TableCell>
+            </ServerPermissionBoundry>
           </TableRow>
         ))}
         <ServerPermissionBoundry permission="computers.create" fallback={<></>}>

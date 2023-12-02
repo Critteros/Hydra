@@ -17,3 +17,9 @@ export const addComputerToGroupMutation = gql(`
     }
   }
 `);
+
+export const deleteComputerMutation = gql(`
+  mutation DeleteComputer($uid: String!) {
+    deleteComputers(where: [{uid: $uid}])
+  }
+`);
