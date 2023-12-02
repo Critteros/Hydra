@@ -1,7 +1,5 @@
 import 'server-only';
 
-import { useMemo } from 'react';
-
 import type { Computer } from '$gql/types';
 import type { PickDeep } from 'type-fest';
 
@@ -18,22 +16,20 @@ export type ComputerListProps = {
 };
 
 export function ComputersTable({ computers }: ComputerListProps) {
-  const tableData = useMemo(() => {
-    return computers
-      .map(({ ipv4, mac, name, uid, viewOptions }) => ({
-        key: uid,
-        ipv4,
-        mac,
-        name,
-        order: viewOptions?.order ?? -1,
-      }))
-      .sort((a, b) => {
-        if (a.order === -1 && b.order === -1) return 1;
-        if (a.order === -1) return 1;
-        if (b.order === -1) return -1;
-        return a.order - b.order;
-      });
-  }, [computers]);
+  const tableData = computers
+    .map(({ ipv4, mac, name, uid, viewOptions }) => ({
+      key: uid,
+      ipv4,
+      mac,
+      name,
+      order: viewOptions?.order ?? -1,
+    }))
+    .sort((a, b) => {
+      if (a.order === -1 && b.order === -1) return 1;
+      if (a.order === -1) return 1;
+      if (b.order === -1) return -1;
+      return a.order - b.order;
+    });
 
   return (
     <Table>
