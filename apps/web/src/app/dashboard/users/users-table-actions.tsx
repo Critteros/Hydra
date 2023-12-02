@@ -20,7 +20,7 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/components/ui/use-toast';
-import { ClientPermissiosnBoundry } from '@/lib/client/client-permission-boundry';
+import { ClientPermissionBoundry } from '@/lib/client/client-permission-boundry';
 import { usePermissions } from '@/lib/client/hooks/permissions';
 
 import { AdminChangePasswordAction } from './action-items/admin-change-password';
@@ -97,7 +97,7 @@ export function UsersTableActions({ row }: UsersTableActionsProps) {
           <ClipboardCopy className="mr-2 h-4 w-4" />
           <span>Copy UID</span>
         </DropdownMenuItem>
-        <ClientPermissiosnBoundry permission="accounts.edit" fallback={<></>}>
+        <ClientPermissionBoundry permission="accounts.edit" fallback={<></>}>
           {(hasAdminAccess() || currentUser.uid === user.uid) && (
             <EditAction
               onOpenChange={handleDialogItemOpenChange}
@@ -105,7 +105,7 @@ export function UsersTableActions({ row }: UsersTableActionsProps) {
               user={user}
             />
           )}
-        </ClientPermissiosnBoundry>
+        </ClientPermissionBoundry>
         {(hasAdminAccess() || currentUser.uid === user.uid) && (
           <ChangePasswordActionComponent
             onOpenChange={handleDialogItemOpenChange}

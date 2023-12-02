@@ -6,6 +6,7 @@ import { getClient } from '@/lib/server/apollo-client';
 import { ComputerGroup } from './computer-group';
 import { queryComputersWithoutGroup, queryComputerGroups } from './computer-queries';
 import { ComputersTable } from './computer-table';
+import { DragContext } from './drag-context';
 import { TableHeader } from './table-header';
 
 export async function ComputersView() {
@@ -37,29 +38,31 @@ export async function ComputersView() {
     <Table>
       <TableHeader />
       <TableBody>
-        {sortedComputerGroups.map(({ uid, computers, ...groupParams }) => (
-          <ComputerGroup key={uid} groupUid={uid} {...groupParams}>
-            <ComputersTable
-              computers={computers.map(({ viewOptions, ...rest }) => ({
-                ...rest,
-                ...(viewOptions && { viewOptions }),
-              }))}
-              noHeader
-              belongsToGroupUid={uid}
-            />
-          </ComputerGroup>
-        ))}
-        <tr>
-          <TableCell colSpan={9999} className="p-0">
-            <ComputersTable
-              computers={computersWithoutGroup.map(({ viewOptions, ...rest }) => ({
-                ...rest,
-                ...(viewOptions && { viewOptions }),
-              }))}
-              noHeader
-            />
-          </TableCell>
-        </tr>
+        <DragContext>
+          {sortedComputerGroups.map(({ uid, computers, ...groupParams }) => (
+            <ComputerGroup key={uid} groupUid={uid} {...groupParams}>
+              <ComputersTable
+                computers={computers.map(({ viewOptions, ...rest }) => ({
+                  ...rest,
+                  ...(viewOptions && { viewOptions }),
+                }))}
+                noHeader
+                belongsToGroupUid={uid}
+              />
+            </ComputerGroup>
+          ))}
+          <tr>
+            <TableCell colSpan={9999} className="p-0">
+              <ComputersTable
+                computers={computersWithoutGroup.map(({ viewOptions, ...rest }) => ({
+                  ...rest,
+                  ...(viewOptions && { viewOptions }),
+                }))}
+                noHeader
+              />
+            </TableCell>
+          </tr>
+        </DragContext>
       </TableBody>
     </Table>
   );

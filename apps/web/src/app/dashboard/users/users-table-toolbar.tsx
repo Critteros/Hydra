@@ -18,7 +18,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { DataTableFilter, type OptionsRender } from '@/components/ui/table/data-table-filter';
 import { DataTableViewOptions } from '@/components/ui/table/data-table-view-options';
-import { ClientPermissiosnBoundry } from '@/lib/client/client-permission-boundry';
+import { ClientPermissionBoundry } from '@/lib/client/client-permission-boundry';
 
 import { CreateUserForm } from './create-user-form';
 import type { User } from './user-queries';
@@ -73,7 +73,7 @@ export function UsersTableToolbar<TData>({ table }: UsersTableToorbarProps<TData
         )}
       </div>
       <div className="flex gap-2">
-        <ClientPermissiosnBoundry permission="accounts.create" fallback={<></>}>
+        <ClientPermissionBoundry permission="accounts.create" fallback={<></>}>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" className="lg:px- h-8 px-2">
@@ -88,7 +88,7 @@ export function UsersTableToolbar<TData>({ table }: UsersTableToorbarProps<TData
               <CreateUserForm closeDialog={() => setDialogOpen(false)} />
             </DialogContent>
           </Dialog>
-        </ClientPermissiosnBoundry>
+        </ClientPermissionBoundry>
         <DataTableViewOptions table={table} />
       </div>
     </div>
