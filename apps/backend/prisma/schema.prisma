@@ -119,7 +119,7 @@ model IpxeAssets {
   mediaPath        String   @map("media_path") @db.VarChar(256)
   createdAt        DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
-  sha256           String   @unique @db.VarChar(256)
+  sha256           String   @db.VarChar(256)
   fileSize         Int      @map("file_size") @db.Integer
 }
 

@@ -5,27 +5,23 @@ import {
   ForbiddenException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 
-import { Permissions } from '@hydra-ipxe/common/shared/permissions';
 import { AccountType } from '@prisma/client';
 
+import { MetadataService } from '@/metadata/metadata.service';
 import { extractRequest } from '@/utils/context';
 
 import { RequirePermission } from '../decorators/require-permissions.decorator';
-import { PermissionService } from '../services/permission.service';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
-  constructor(
-    private readonly reflector: Reflector,
-    private readonly permissionsService: PermissionService,
-  ) {}
+  constructor(private readonly metadataService: MetadataService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredPermissions = this.reflector.get(RequirePermission, context.getHandler()) as
-      | Permissions[]
-      | undefined;
+    const requiredPermissions = this.metadataService.getDecoratorMetadata({
+      context,
+      decorator: RequirePermission,
+    });
     if (!requiredPermissions) return true;
 
     const { user, permissions: userPermissions } = extractRequest(context);

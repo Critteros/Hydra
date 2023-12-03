@@ -2,6 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
 import { DatabaseModule } from '@/database/database.module';
+import { MetadataModule } from '@/metadata/metadata.module';
 
 import { PermissionGuard } from './guards/permission.guard';
 // Middleware
@@ -14,7 +15,7 @@ import { PermissionService } from './services/permission.service';
 import { RolesService } from './services/roles.service';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, MetadataModule],
   providers: [
     PermissionResolver,
     PermissionService,

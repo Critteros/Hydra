@@ -7,16 +7,20 @@ import { diskStorage } from 'multer';
 
 import { ConfigModule } from '@/config/config.module';
 import { DatabaseModule } from '@/database/database.module';
+import { MetadataModule } from '@/metadata/metadata.module';
 
+import { IpxeAssetController } from './controllers/ipxe-asset.controler';
 import { uniqueFilename } from './files';
 import { ComputerResolver } from './resolvers/computer.resolver';
 import { ComputerGroupResolver } from './resolvers/computerGroup.resolver';
 import { ComputerService } from './services/computer.service';
 import { ComputerGroupService } from './services/computerGroup.service';
+import { FileUploadService } from './services/file-upload.service';
 
 @Module({
   imports: [
     DatabaseModule,
+    MetadataModule,
     MulterModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -39,6 +43,13 @@ import { ComputerGroupService } from './services/computerGroup.service';
       },
     }),
   ],
-  providers: [ComputerResolver, ComputerService, ComputerGroupResolver, ComputerGroupService],
+  providers: [
+    ComputerResolver,
+    ComputerService,
+    ComputerGroupResolver,
+    ComputerGroupService,
+    FileUploadService,
+  ],
+  controllers: [IpxeAssetController],
 })
 export class IpxeModule {}
