@@ -4,7 +4,7 @@
 # to keep conflciting configuration from being commited to the repository
 # I prefer to ingore this directory
 .idea
-
+media
 
 hydra.sock
 *.local.*
