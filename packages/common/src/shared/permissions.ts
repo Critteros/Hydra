@@ -36,6 +36,16 @@ const keyPath = {
     /* Allows deleting computer registry */
     delete: {},
   },
+  ipxeAssets: {
+    /* Prevents the display of ipxe assets list  */
+    read: {},
+
+    /* Allows adding new ipxe asset to the ipxe assets registry */
+    create: {},
+
+    /* Allows editing ipxe asset registry */
+    delete: {},
+  },
 } as const;
 
 export type Permissions = Exclude<Path<typeof keyPath>, keyof typeof keyPath>;
