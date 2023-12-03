@@ -5,6 +5,7 @@ import { Typography } from '@/components/ui/typography';
 import { ServerPermissionBoundry } from '@/lib/server/server-permission-boundry';
 
 import { IpxeAssetsReadFallback } from './fallbacks/ipxe-assets-fallback';
+import { FileUpload } from './file-upload';
 
 export default function IPXEAssetsPage() {
   return (
@@ -14,6 +15,9 @@ export default function IPXEAssetsPage() {
           <Typography variant="h1" className="mb-4 self-start">
             IPXE Assets
           </Typography>
+          <ServerPermissionBoundry permission="ipxeAssets.create" fallback={<></>}>
+            <FileUpload />
+          </ServerPermissionBoundry>
         </main>
       </ScrollArea>
     </ServerPermissionBoundry>
