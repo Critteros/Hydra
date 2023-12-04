@@ -8,6 +8,12 @@ declare global {
     interface Request {
       permissions?: Permissions[];
     }
+
+    namespace Multer {
+      interface File {
+        id: string;
+      }
+    }
   }
 }
 
