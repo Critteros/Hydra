@@ -17,7 +17,6 @@ import type { Response } from 'express';
 import { MapErrors } from '@/errors/map-errors.decorator';
 import { MetadataService } from '@/metadata/metadata.service';
 import { RequirePermission } from '@/rbac/decorators/require-permissions.decorator';
-import { ServerURL } from '@/utils/request.decorator';
 
 import { IpxeAssetService, FileNotFoundError } from '../services/ipxe-asset.service';
 
@@ -42,13 +41,10 @@ export class IpxeAssetController {
     type: FilesUploadDto,
   })
   @UseInterceptors(FilesInterceptor('files'))
-  async uploadAssets(
-    @UploadedFiles() files: Array<Express.Multer.File>,
-    @ServerURL() serverURL: string,
-  ) {
+  async uploadAssets(@UploadedFiles() files: Array<Express.Multer.File>) {
     const results = await this.ipxeAssetService.storeFiles(files);
     return results.map(({ id }) => {
-      return this.ipxeAssetService.getFulAssetUrl({ assetId: id, serverURL });
+      return this.ipxeAssetService.getFullAssetUrl({ assetId: id });
     });
   }
 
