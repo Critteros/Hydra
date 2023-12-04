@@ -21,6 +21,7 @@ export async function AssetsTable({ className }: { className?: string }) {
       data={ipxeAssets}
       className={cn('w-full', className)}
       components={{ SelectionActions: TableSelectionActions }}
+      defaultSorting={[{ id: 'updatedAt', desc: true }]}
     />
   );
 }

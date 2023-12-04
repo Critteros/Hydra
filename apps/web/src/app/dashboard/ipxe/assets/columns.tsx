@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 
 import type { IpxeAsset } from './assets-queries';
 import { CopyContents } from './table-components/copy-contents';
+import { IpxeTableActions } from './table-components/ipxe-table-actions';
 
 export const columns: ColumnDef<IpxeAsset>[] = [
   {
@@ -71,5 +72,9 @@ export const columns: ColumnDef<IpxeAsset>[] = [
         contents={getValue<string>()}
       />
     ),
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => <IpxeTableActions row={row} />,
   },
 ];
