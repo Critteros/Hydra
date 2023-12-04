@@ -8,15 +8,16 @@ import { diskStorage } from 'multer';
 import { ConfigModule } from '@/config/config.module';
 import { DatabaseModule } from '@/database/database.module';
 import { MetadataModule } from '@/metadata/metadata.module';
+import { Identity } from '@/utils/identity';
 
 import { IpxeAssetController } from './controllers/ipxe-asset.controler';
-import { uniqueFilename } from './files';
 import { ComputerResolver } from './resolvers/computer.resolver';
 import { ComputerGroupResolver } from './resolvers/computerGroup.resolver';
 import { IpxeAssetResolver } from './resolvers/ipxe-asset.resolver';
 import { ComputerService } from './services/computer.service';
 import { ComputerGroupService } from './services/computerGroup.service';
 import { IpxeAssetService } from './services/ipxe-asset.service';
+import { uniqueFilename } from './utils/file-storage';
 
 @Module({
   imports: [
@@ -31,7 +32,9 @@ import { IpxeAssetService } from './services/ipxe-asset.service';
             diskStorage({
               destination: configService.get('filestorage.basePath', { infer: true }),
               filename: (req, file, cb) => {
-                cb(null, uniqueFilename(file.originalname));
+                const fileId = Identity.compactUUID();
+                file.id = fileId;
+                cb(null, uniqueFilename(file.originalname, fileId));
               },
             }),
         };

@@ -130,8 +130,11 @@ type ComputerGroup {
 }
 
 type IpxeAsset {
-  """Asset ID"""
-  id: ID!
+  """Unique id of an asset"""
+  uid: ID!
+
+  """Resource id of an asset"""
+  resourceId: String!
 
   """Original filename of the asset"""
   filename: String!
@@ -328,6 +331,20 @@ type Mutation {
     """New order of the computer in the group"""
     newOrder: Int!
   ): Boolean!
+
+  """Update resource id"""
+  updateResourceId(
+    where: WhereUniqueIpxeAssetInput!
+
+    """New value for the resource id"""
+    resourceId: String!
+  ): String!
+
+  """Remove assets"""
+  removeAssets(where: [WhereUniqueIpxeAssetInput!]!): Int!
+
+  """Update asset metadata"""
+  updateAssetMetadata(where: WhereUniqueIpxeAssetInput!, data: UpdateIpxeAssetInput!): IpxeAsset!
 }
 
 input UpdateUserInput {
@@ -406,4 +423,20 @@ input ComputerGroupViewOptionsCreateInput {
 input ComputerGroupViewOptionsUpdateInput {
   """Order of the computer group in the list"""
   order: Float!
+}
+
+input WhereUniqueIpxeAssetInput {
+  """Unique id of an asset"""
+  uid: String
+
+  """Resource id of an asset"""
+  resourceId: String
+}
+
+input UpdateIpxeAssetInput {
+  """Resource id of an asset"""
+  resourceId: String
+
+  """Original filename of the asset"""
+  filename: String
 }

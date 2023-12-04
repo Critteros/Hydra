@@ -1,6 +1,6 @@
 import * as uuid from 'uuid';
 
-import { uniqueFilename } from '../files';
+import { uniqueFilename } from '../file-storage';
 
 jest.mock('uuid');
 

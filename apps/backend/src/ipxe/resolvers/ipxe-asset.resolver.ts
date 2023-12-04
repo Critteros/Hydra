@@ -1,23 +1,33 @@
-import { Resolver, Query } from '@nestjs/graphql';
+import { BadRequestException } from '@nestjs/common';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 
+import { Prisma } from '@prisma/client';
+
+import { MapErrors } from '@/errors/map-errors.decorator';
+
+import { ResourceIdUpdateArgs } from '../schemas/ipxe-asset.args';
+import { WhereUniqueIpxeAssetInput, UpdateIpxeAssetInput } from '../schemas/ipxe-asset.input';
 import { IpxeAsset } from '../schemas/ipxe-asset.object';
-import { IpxeAssetService } from '../services/ipxe-asset.service';
+import { IpxeAssetService, InvalidResourceIdError } from '../services/ipxe-asset.service';
 
-@Resolver()
+type NonResolvedType = Omit<IpxeAsset, 'url'>;
+
+@Resolver(() => IpxeAsset)
 export class IpxeAssetResolver {
   constructor(private readonly ipxeAssetService: IpxeAssetService) {}
 
   // ================================ Queries ================================
 
   @Query(() => [IpxeAsset], { description: 'Get all ipxe assets' })
-  async ipxeAssets(): Promise<IpxeAsset[]> {
-    const assets = await this.ipxeAssetService.findMany();
+  async ipxeAssets(): Promise<NonResolvedType[]> {
+    const assets = await this.ipxeAssetService.findMany({
+      where: {
+        isEntryValid: true,
+      },
+    });
     return assets.map((asset) => {
       return {
         ...asset,
-        url: this.ipxeAssetService.getFullAssetUrl({
-          assetId: asset.id,
-        }),
         filename: asset.originalFilename,
         fileSizeBytes: asset.fileSize,
       };
@@ -25,5 +35,54 @@ export class IpxeAssetResolver {
   }
 
   // ================================ Mutations ================================
+
+  @Mutation(() => String, { description: 'Update resource id' })
+  @MapErrors({
+    if: InvalidResourceIdError,
+    then: (error: Error) => new BadRequestException(error.message),
+  })
+  async updateResourceId(
+    @Args('where') where: WhereUniqueIpxeAssetInput,
+    @Args() { resourceId }: ResourceIdUpdateArgs,
+  ): Promise<string> {
+    return this.ipxeAssetService.updateResourceID(
+      where as Prisma.IpxeAssetsWhereUniqueInput,
+      resourceId,
+    );
+  }
+
+  @Mutation(() => Int, { description: 'Remove assets' })
+  async removeAssets(
+    @Args('where', { type: () => [WhereUniqueIpxeAssetInput] }) where: WhereUniqueIpxeAssetInput[],
+  ) {
+    return await this.ipxeAssetService
+      .removeFiles({
+        OR: where,
+      })
+      .then((data) => data.length);
+  }
+
+  @Mutation(() => IpxeAsset, { description: 'Update asset metadata' })
+  async updateAssetMetadata(
+    @Args('where') where: WhereUniqueIpxeAssetInput,
+    @Args('data') { filename, resourceId }: UpdateIpxeAssetInput,
+  ): Promise<NonResolvedType> {
+    return await this.ipxeAssetService
+      .updateAsset(where as Prisma.IpxeAssetsWhereUniqueInput, {
+        originalFilename: filename,
+        resourceId,
+      })
+      .then((asset) => ({
+        ...asset,
+        filename: asset.originalFilename,
+        fileSizeBytes: asset.fileSize,
+      }));
+  }
+
   // ================================ Resolvers ================================
+
+  @ResolveField(() => String, { description: 'URL of the asset' })
+  url(@Parent() { resourceId }: IpxeAsset) {
+    return this.ipxeAssetService.resolveAssetURL({ resourceId });
+  }
 }

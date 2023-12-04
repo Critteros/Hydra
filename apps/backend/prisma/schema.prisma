@@ -114,13 +114,15 @@ model ComputerGroupViewOptions {
 }
 
 model IpxeAssets {
-  id               String   @id @default(cuid()) @db.VarChar(256)
+  uid              String   @id @db.VarChar(256)
+  resourceId       String   @unique @map("resource_id") @db.VarChar(256)
   originalFilename String   @map("original_filename") @db.VarChar(256)
   mediaPath        String   @map("media_path") @db.VarChar(256)
   createdAt        DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
   sha256           String   @db.VarChar(256)
   fileSize         Int      @map("file_size") @db.Integer
+  isEntryValid     Boolean  @default(true) @map("is_entry_valid") @db.Boolean
 }
 
 enum AccountType {
