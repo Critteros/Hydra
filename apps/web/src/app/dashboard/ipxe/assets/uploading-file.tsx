@@ -59,9 +59,9 @@ export const UploadingFile = memo(
         <File className="col-span-1 h-6 w-6" />
         <p className="col-span-2 font-medium">{file.name}</p>
         <Typography className="col-span-2 whitespace-nowrap text-muted-foreground dark:text-white">
-          {(progress / 1024 / 1024).toFixed()} MB / {fileSizeMB.toFixed(2)} MB
+          {(progress / 1024 / 1024).toFixed(2)} MB / {fileSizeMB.toFixed(2)} MB
         </Typography>
-        <Progress className="col-span-6" value={progress / fileSizeMB} />
+        <Progress className="col-span-6" value={(progress / file.size) * 100} />
         <Button
           size="icon"
           className="col-span-1 flex-shrink-0"
