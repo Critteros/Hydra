@@ -14,5 +14,8 @@ export const cacheConfig: InMemoryCacheConfig = {
     ComputerGroup: {
       keyFields: ['uid'],
     },
+    IpxeAsset: {
+      keyFields: ['uid'],
+    },
   },
 };

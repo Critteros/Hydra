@@ -148,10 +148,12 @@ export type IpxeAsset = {
   fileSizeBytes: Scalars['Int']['output'];
   /** Original filename of the asset */
   filename: Scalars['String']['output'];
-  /** Asset ID */
-  id: Scalars['ID']['output'];
+  /** Resource id of an asset */
+  resourceId: Scalars['String']['output'];
   /** SHA256 hash of the asset */
   sha256: Scalars['String']['output'];
+  /** Unique id of an asset */
+  uid: Scalars['ID']['output'];
   /** Last update date of the asset */
   updatedAt: Scalars['DateTime']['output'];
   /** URL of the asset */
@@ -196,10 +198,16 @@ export type Mutation = {
   moveComputerAndUpdateOrder: Scalars['Boolean']['output'];
   /** Move computers between groups */
   moveComputers: Array<Computer>;
+  /** Remove assets */
+  removeAssets: Scalars['Int']['output'];
   /** Remove computers from a computer group */
   removeComputersFromGroup: ComputerGroup;
+  /** Update asset metadata */
+  updateAssetMetadata: IpxeAsset;
   /** Updates current user password */
   updateCurrentUserPassword: Scalars['Boolean']['output'];
+  /** Update resource id */
+  updateResourceId: Scalars['String']['output'];
   /** Updates user data */
   updateUser: User;
 };
@@ -309,15 +317,32 @@ export type MutationMoveComputersArgs = {
 };
 
 
+export type MutationRemoveAssetsArgs = {
+  where: Array<WhereUniqueIpxeAssetInput>;
+};
+
+
 export type MutationRemoveComputersFromGroupArgs = {
   computers: Array<WhereUniqueComputerInput>;
   where: WhereUniqueComputerGroupInput;
 };
 
 
+export type MutationUpdateAssetMetadataArgs = {
+  data: UpdateIpxeAssetInput;
+  where: WhereUniqueIpxeAssetInput;
+};
+
+
 export type MutationUpdateCurrentUserPasswordArgs = {
   currentPassword: Scalars['String']['input'];
   newPassword: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateResourceIdArgs = {
+  resourceId: Scalars['String']['input'];
+  where: WhereUniqueIpxeAssetInput;
 };
 
 
@@ -404,6 +429,13 @@ export type Role = {
   uid: Scalars['ID']['output'];
 };
 
+export type UpdateIpxeAssetInput = {
+  /** Original filename of the asset */
+  filename?: InputMaybe<Scalars['String']['input']>;
+  /** Resource id of an asset */
+  resourceId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateUserInput = {
   /** Type of the user account */
   accountType?: InputMaybe<AccountType>;
@@ -443,10 +475,22 @@ export type WhereUniqueComputerInput = {
   uid?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type WhereUniqueIpxeAssetInput = {
+  /** Resource id of an asset */
+  resourceId?: InputMaybe<Scalars['String']['input']>;
+  /** Unique id of an asset */
+  uid?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CurrentUserQuery = { __typename?: 'Query', me: { __typename?: 'User', uid: string, email: string, name?: string | null, accountType: AccountType } };
+
+export type AllAssetsQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllAssetsQueryQuery = { __typename?: 'Query', ipxeAssets: Array<{ __typename?: 'IpxeAsset', uid: string, resourceId: string, filename: string, createdAt: any, updatedAt: any, sha256: string, url: string, fileSizeBytes: number }> };
 
 export type CreateComputerMutationVariables = Exact<{
   data: ComputerCreateInput;
@@ -619,6 +663,7 @@ export type ServerClientBridgeQueryQuery = { __typename?: 'Query', me: { __typen
 
 
 export const CurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"accountType"}}]}}]}}]} as unknown as DocumentNode<CurrentUserQuery, CurrentUserQueryVariables>;
+export const AllAssetsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AllAssetsQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ipxeAssets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"resourceId"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"sha256"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"fileSizeBytes"}}]}}]}}]} as unknown as DocumentNode<AllAssetsQueryQuery, AllAssetsQueryQueryVariables>;
 export const CreateComputerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateComputer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ComputerCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createComputer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"mac"}}]}}]}}]} as unknown as DocumentNode<CreateComputerMutation, CreateComputerMutationVariables>;
 export const AddComputerToGroupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddComputerToGroup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"computerUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"groupUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addComputersToGroup"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"computers"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"computerUid"}}}]}]}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"groupUid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]} as unknown as DocumentNode<AddComputerToGroupMutation, AddComputerToGroupMutationVariables>;
 export const DeleteComputerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteComputer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteComputers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uid"}}}]}]}}]}]}}]} as unknown as DocumentNode<DeleteComputerMutation, DeleteComputerMutationVariables>;

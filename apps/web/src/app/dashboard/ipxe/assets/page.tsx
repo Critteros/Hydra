@@ -4,6 +4,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Typography } from '@/components/ui/typography';
 import { ServerPermissionBoundry } from '@/lib/server/server-permission-boundry';
 
+import { AssetsTable } from './assets-table';
 import { IpxeAssetsReadFallback } from './fallbacks/ipxe-assets-fallback';
 import { FileUpload } from './file-upload';
 
@@ -18,6 +19,7 @@ export default function IPXEAssetsPage() {
           <ServerPermissionBoundry permission="ipxeAssets.create" fallback={<></>}>
             <FileUpload />
           </ServerPermissionBoundry>
+          <AssetsTable />
         </main>
       </ScrollArea>
     </ServerPermissionBoundry>
