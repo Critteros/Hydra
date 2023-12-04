@@ -45,6 +45,9 @@ const keyPath = {
 
     /* Allows editing ipxe asset registry */
     delete: {},
+
+    /* Allows editing entires in ipxe asset registry */
+    edit: {},
   },
 } as const;
 

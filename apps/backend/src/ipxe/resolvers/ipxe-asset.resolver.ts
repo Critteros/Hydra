@@ -4,6 +4,7 @@ import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nes
 import { Prisma } from '@prisma/client';
 
 import { MapErrors } from '@/errors/map-errors.decorator';
+import { RequirePermission } from '@/rbac/decorators/require-permissions.decorator';
 
 import { ResourceIdUpdateArgs } from '../schemas/ipxe-asset.args';
 import { WhereUniqueIpxeAssetInput, UpdateIpxeAssetInput } from '../schemas/ipxe-asset.input';
@@ -19,6 +20,7 @@ export class IpxeAssetResolver {
   // ================================ Queries ================================
 
   @Query(() => [IpxeAsset], { description: 'Get all ipxe assets' })
+  @RequirePermission('ipxeAssets.read')
   async ipxeAssets(): Promise<NonResolvedType[]> {
     const assets = await this.ipxeAssetService.findMany({
       where: {
@@ -41,6 +43,7 @@ export class IpxeAssetResolver {
     if: InvalidResourceIdError,
     then: (error: Error) => new BadRequestException(error.message),
   })
+  @RequirePermission('ipxeAssets.edit')
   async updateResourceId(
     @Args('where') where: WhereUniqueIpxeAssetInput,
     @Args() { resourceId }: ResourceIdUpdateArgs,
@@ -52,6 +55,7 @@ export class IpxeAssetResolver {
   }
 
   @Mutation(() => Int, { description: 'Remove assets' })
+  @RequirePermission('ipxeAssets.delete')
   async removeAssets(
     @Args('where', { type: () => [WhereUniqueIpxeAssetInput] }) where: WhereUniqueIpxeAssetInput[],
   ) {
@@ -63,6 +67,7 @@ export class IpxeAssetResolver {
   }
 
   @Mutation(() => IpxeAsset, { description: 'Update asset metadata' })
+  @RequirePermission('ipxeAssets.edit')
   async updateAssetMetadata(
     @Args('where') where: WhereUniqueIpxeAssetInput,
     @Args('data') { filename, resourceId }: UpdateIpxeAssetInput,

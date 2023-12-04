@@ -1,7 +1,5 @@
 'use client';
 
-import Link from 'next/link';
-
 import type { ColumnDef } from '@tanstack/react-table';
 
 import { buttonVariants } from '@/components/ui/button';
@@ -39,10 +37,14 @@ export const columns: ColumnDef<IpxeAsset>[] = [
     header: ({ column }) => <DataTableColumHeader column={column} title="Resource ID" />,
     cell: ({ getValue, row }) => {
       return (
-        <Link
-          className={cn('w-[120px]', buttonVariants({ variant: 'ghost' }))}
-          href={row.original.url}
-        >{`/${getValue<string>()}`}</Link>
+        <CopyContents
+          className={cn(
+            buttonVariants({ variant: 'ghost' }),
+            'inline-block w-[180px] overflow-hidden text-ellipsis text-start',
+          )}
+          toCopy={row.original.url}
+          contents={`/${getValue<string>()}`}
+        />
       );
     },
     enableSorting: false,

@@ -3,7 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { MulterModule } from '@nestjs/platform-express';
 
 import type { Config } from '@hydra-ipxe/common/server/config';
+import { unlink } from 'fs';
 import { diskStorage } from 'multer';
+import { join } from 'path';
 
 import { ConfigModule } from '@/config/config.module';
 import { DatabaseModule } from '@/database/database.module';
@@ -33,16 +35,20 @@ import { uniqueFilename } from './utils/file-storage';
               destination: configService.get('filestorage.basePath', { infer: true }),
               filename: (req, file, cb) => {
                 const fileId = Identity.compactUUID();
+                const fileName = uniqueFilename(file.originalname, fileId);
                 file.id = fileId;
-                cb(null, uniqueFilename(file.originalname, fileId));
+                req.on('aborted', () => {
+                  unlink(
+                    join(configService.get('filestorage.basePath', { infer: true })!, fileName),
+                    () => {},
+                  );
+                });
+                cb(null, fileName);
               },
             }),
         };
         return {
           storage: storages[configService.get('filestorage.engine', { infer: true })!](),
-          limits: {
-            fileSize: configService.get('filestorage.maxFileSize', { infer: true }),
-          },
         };
       },
     }),

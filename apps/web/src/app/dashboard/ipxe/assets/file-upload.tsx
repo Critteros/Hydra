@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { useState, useCallback } from 'react';
 
 import { FilesIcon } from 'lucide-react';
@@ -16,6 +18,7 @@ export type FileEntry = {
 
 export function FileUpload() {
   const [files, setFiles] = useState<FileEntry[]>([]);
+  const { refresh } = useRouter();
 
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: FileRejection[]) => {
     setFiles((prevFiles) => [
@@ -39,9 +42,13 @@ export function FileUpload() {
     setFiles((prevFiles) => prevFiles.filter((prevFile) => prevFile.file !== file));
   }, []);
 
-  const onUploadComplete = useCallback((file: File) => {
-    console.log(file);
-  }, []);
+  const onUploadComplete = useCallback(
+    (file: File) => {
+      setFiles((prevFiles) => prevFiles.filter((prevFile) => prevFile.file !== file));
+      refresh();
+    },
+    [refresh],
+  );
 
   return (
     <section className="container">
@@ -62,7 +69,7 @@ export function FileUpload() {
           <UploadingFile
             key={id}
             file={file}
-            onCancel={onCancel}
+            onDelete={onCancel}
             onUploadComplete={onUploadComplete}
           />
         ))}
