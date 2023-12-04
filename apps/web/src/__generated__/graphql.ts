@@ -140,6 +140,24 @@ export type CreateUserInput = {
   password: Scalars['String']['input'];
 };
 
+export type IpxeAsset = {
+  __typename?: 'IpxeAsset';
+  /** Creation date of the asset */
+  createdAt: Scalars['DateTime']['output'];
+  /** MIME type of the asset */
+  fileSizeBytes: Scalars['Int']['output'];
+  /** Original filename of the asset */
+  filename: Scalars['String']['output'];
+  /** Asset ID */
+  id: Scalars['ID']['output'];
+  /** SHA256 hash of the asset */
+  sha256: Scalars['String']['output'];
+  /** Last update date of the asset */
+  updatedAt: Scalars['DateTime']['output'];
+  /** URL of the asset */
+  url: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   /** Add computers to a computer group */
@@ -327,6 +345,8 @@ export type Query = {
   computerGroups: Array<ComputerGroup>;
   /** Get all computers */
   computers: Array<Computer>;
+  /** Get all ipxe assets */
+  ipxeAssets: Array<IpxeAsset>;
   /** Returns the current user */
   me: User;
   /** Get all permissions */

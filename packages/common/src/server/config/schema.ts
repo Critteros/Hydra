@@ -34,7 +34,7 @@ export const configSchema = z.object({
     .object({
       engine: z.literal('local').default(engine),
       basePath: z.string().default(basePath),
-      maxSize: z.number().default(maxFileSize),
+      maxFileSize: z.number().default(maxFileSize),
     })
     .default(filestorage),
 });
