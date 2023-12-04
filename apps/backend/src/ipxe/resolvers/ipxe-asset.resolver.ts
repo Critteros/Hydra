@@ -15,7 +15,7 @@ export class IpxeAssetResolver {
     return assets.map((asset) => {
       return {
         ...asset,
-        url: this.ipxeAssetService.getFullAssetUrl({
+        url: this.ipxeAssetService.getAssetURL({
           assetId: asset.id,
         }),
         filename: asset.originalFilename,

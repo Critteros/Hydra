@@ -9,11 +9,12 @@ import { CONTEXT } from '@nestjs/graphql';
 
 import type { Config } from '@hydra-ipxe/common/server/config';
 import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
-import type { IpxeAssets } from '@prisma/client';
+import type { IpxeAssets, Prisma } from '@prisma/client';
 import type { Request } from 'express';
 
 import { PrismaService, type PrismaTransaction } from '@/database/prisma.service';
 import { MetadataService } from '@/metadata/metadata.service';
+import { StringUtils } from '@/utils/string';
 
 import { IpxeAssetController } from '../controllers/ipxe-asset.controler';
 
@@ -40,15 +41,17 @@ export class IpxeAssetService {
 
   async storeFiles(files: Array<Express.Multer.File>, transaction?: PrismaTransaction) {
     return await this.prismaService.transactional(transaction, async (tx) => {
-      const promises = files.map(async ({ path, destination, size, originalname }) => {
+      const promises = files.map(async ({ path, destination, size, originalname, id }) => {
         const pathInMedia = relative(destination, path);
 
         return tx.ipxeAssets.create({
           data: {
+            resourceId: id,
+            uid: id,
             fileSize: size,
             mediaPath: pathInMedia,
             originalFilename: originalname,
-            sha256: await this.getFileHash(path),
+            sha256: await IpxeAssetService.getFileHash(path),
           },
         });
       });
@@ -57,30 +60,39 @@ export class IpxeAssetService {
     });
   }
 
-  getFullAssetUrl({ assetId }: { assetId: IpxeAssets['id'] }) {
+  resolveAssetURL({ resourceId }: Pick<IpxeAssets, 'resourceId'>) {
     const serverURL = this.serverURL;
     const mediaHandlerPath = this.metadataService.reverseControllerPath(
       IpxeAssetController,
       'getAsset',
     );
     if (!mediaHandlerPath) throw new Error('Media handler path not found');
-    return `${serverURL}/${mediaHandlerPath.replace(':assetId', assetId)}`;
+    return (
+      serverURL +
+      '/' +
+      mediaHandlerPath.replace(/\/:.*$/, `/${StringUtils.trimStart(resourceId, '/')}`)
+    );
   }
 
-  async getFileReadStream(assetId: IpxeAssets['id']) {
+  async getFileReadStream(whereAsset: Prisma.IpxeAssetsWhereUniqueInput) {
     const asset = await this.prismaService.ipxeAssets.findUnique({
-      where: { id: assetId },
+      where: whereAsset,
     });
 
     if (!asset) {
-      throw new FileNotFoundError(`Asset with id ${assetId} not found`);
+      throw new FileNotFoundError(`Requested asset was not found`);
     }
 
     const fsPath = this.getFsPath(asset.mediaPath);
 
     if (!(await this.fileExists(fsPath))) {
-      await this.prismaService.ipxeAssets.delete({ where: { id: assetId } });
-      throw new FileNotFoundError(`Asset with id ${assetId} not found`);
+      await this.prismaService.ipxeAssets.update({
+        where: whereAsset,
+        data: {
+          isEntryValid: false,
+        },
+      });
+      throw new FileNotFoundError(`Requested asset was not found`);
     }
 
     return {
@@ -89,7 +101,7 @@ export class IpxeAssetService {
     };
   }
 
-  async getFileHash(filepath: string) {
+  static async getFileHash(filepath: string) {
     return createHash('sha256')
       .update(await readFile(filepath))
       .digest('hex');
