@@ -1,14 +1,66 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { MulterModule } from '@nestjs/platform-express';
 
+import type { Config } from '@hydra-ipxe/common/server/config';
+import { unlink } from 'fs';
+import { diskStorage } from 'multer';
+import { join } from 'path';
+
+import { ConfigModule } from '@/config/config.module';
 import { DatabaseModule } from '@/database/database.module';
+import { MetadataModule } from '@/metadata/metadata.module';
+import { Identity } from '@/utils/identity';
 
+import { IpxeAssetController } from './controllers/ipxe-asset.controler';
 import { ComputerResolver } from './resolvers/computer.resolver';
 import { ComputerGroupResolver } from './resolvers/computerGroup.resolver';
+import { IpxeAssetResolver } from './resolvers/ipxe-asset.resolver';
 import { ComputerService } from './services/computer.service';
 import { ComputerGroupService } from './services/computerGroup.service';
+import { IpxeAssetService } from './services/ipxe-asset.service';
+import { uniqueFilename } from './utils/file-storage';
 
 @Module({
-  imports: [DatabaseModule],
-  providers: [ComputerResolver, ComputerService, ComputerGroupResolver, ComputerGroupService],
+  imports: [
+    DatabaseModule,
+    MetadataModule,
+    MulterModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService<Config>) => {
+        const storages = {
+          local: () =>
+            diskStorage({
+              destination: configService.get('filestorage.basePath', { infer: true }),
+              filename: (req, file, cb) => {
+                const fileId = Identity.compactUUID();
+                const fileName = uniqueFilename(file.originalname, fileId);
+                file.id = fileId;
+                req.on('aborted', () => {
+                  unlink(
+                    join(configService.get('filestorage.basePath', { infer: true })!, fileName),
+                    () => {},
+                  );
+                });
+                cb(null, fileName);
+              },
+            }),
+        };
+        return {
+          storage: storages[configService.get('filestorage.engine', { infer: true })!](),
+        };
+      },
+    }),
+  ],
+  providers: [
+    ComputerResolver,
+    ComputerService,
+    ComputerGroupResolver,
+    ComputerGroupService,
+    IpxeAssetService,
+    IpxeAssetResolver,
+  ],
+  controllers: [IpxeAssetController],
 })
 export class IpxeModule {}

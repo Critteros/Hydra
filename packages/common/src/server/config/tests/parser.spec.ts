@@ -39,6 +39,11 @@ describe('Test HydraConfig', () => {
         enable: true,
         path: '/tmp/sockets/file',
       },
+      filestorage: {
+        engine: 'local',
+        basePath: expect.any(String),
+        maxFileSize: /* 10GB */ 10 * 1024 * 1024 * 1024,
+      },
     } satisfies Config);
   });
 
@@ -56,6 +61,11 @@ describe('Test HydraConfig', () => {
       socket: {
         enable: false,
         path: defaultConfig.socket.path,
+      },
+      filestorage: {
+        engine: 'local',
+        basePath: expect.any(String),
+        maxFileSize: /* 10GB */ 10 * 1024 * 1024 * 1024,
       },
     } satisfies Config);
   });

@@ -41,4 +41,16 @@ export const permissionConfig = {
   'computers.delete': {
     description: 'Allows to delete computer registry',
   },
+  'ipxeAssets.create': {
+    description: 'Allows to create ipxe assets',
+  },
+  'ipxeAssets.read': {
+    description: 'Allows to read ipxe assets',
+  },
+  'ipxeAssets.delete': {
+    description: 'Allows to delete ipxe assets',
+  },
+  'ipxeAssets.edit': {
+    description: 'Allows to edit ipxe assets',
+  },
 } as const satisfies Record<Permissions, Omit<Permission, 'id'>>;

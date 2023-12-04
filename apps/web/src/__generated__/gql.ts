@@ -14,6 +14,9 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n": types.CurrentUserDocument,
+    "\n  mutation DeleteAssets($where: [WhereUniqueIpxeAssetInput!]!) {\n    removeAssets(where: $where)\n  }\n": types.DeleteAssetsDocument,
+    "\n  mutation EditAsset($where: WhereUniqueIpxeAssetInput!, $data: UpdateIpxeAssetInput!) {\n    updateAssetMetadata(where: $where, data: $data) {\n      uid\n      resourceId\n      filename\n    }\n  }\n": types.EditAssetDocument,
+    "\n  query AllAssetsQuery {\n    ipxeAssets {\n      uid\n      resourceId\n      filename\n      createdAt\n      updatedAt\n      sha256\n      url\n      fileSizeBytes\n    }\n  }\n": types.AllAssetsQueryDocument,
     "\n  mutation CreateComputer($data: ComputerCreateInput!) {\n    createComputer(data: $data) {\n      uid\n      name\n      mac\n    }\n  }\n": types.CreateComputerDocument,
     "\n  mutation AddComputerToGroup($computerUid: String!, $groupUid: String!) {\n    addComputersToGroup(computers: [{uid: $computerUid}], where: {uid: $groupUid}) { \n      uid\n    }\n  }\n": types.AddComputerToGroupDocument,
     "\n  mutation DeleteComputer($uid: String!) {\n    deleteComputers(where: [{uid: $uid}])\n  }\n": types.DeleteComputerDocument,
@@ -59,6 +62,18 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"): (typeof documents)["\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteAssets($where: [WhereUniqueIpxeAssetInput!]!) {\n    removeAssets(where: $where)\n  }\n"): (typeof documents)["\n  mutation DeleteAssets($where: [WhereUniqueIpxeAssetInput!]!) {\n    removeAssets(where: $where)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation EditAsset($where: WhereUniqueIpxeAssetInput!, $data: UpdateIpxeAssetInput!) {\n    updateAssetMetadata(where: $where, data: $data) {\n      uid\n      resourceId\n      filename\n    }\n  }\n"): (typeof documents)["\n  mutation EditAsset($where: WhereUniqueIpxeAssetInput!, $data: UpdateIpxeAssetInput!) {\n    updateAssetMetadata(where: $where, data: $data) {\n      uid\n      resourceId\n      filename\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query AllAssetsQuery {\n    ipxeAssets {\n      uid\n      resourceId\n      filename\n      createdAt\n      updatedAt\n      sha256\n      url\n      fileSizeBytes\n    }\n  }\n"): (typeof documents)["\n  query AllAssetsQuery {\n    ipxeAssets {\n      uid\n      resourceId\n      filename\n      createdAt\n      updatedAt\n      sha256\n      url\n      fileSizeBytes\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

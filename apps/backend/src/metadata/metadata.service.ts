@@ -1,7 +1,9 @@
 import { Injectable, type ExecutionContext } from '@nestjs/common';
+import { PATH_METADATA } from '@nestjs/common/constants';
 import { Reflector, type ReflectableDecorator } from '@nestjs/core';
 
 import { mergeArrayWithPriority } from '@hydra-ipxe/common/shared/object-utils';
+import type { Constructor } from 'type-fest';
 
 type ElementOrArrayElement<T> = T extends (infer ElementType)[] ? ElementType : T;
 
@@ -49,5 +51,16 @@ export class MetadataService {
       priorityArray: priorityList ?? [],
       selector,
     }) as TTrasnformed;
+  }
+
+  reverseControllerPath<T>(controller: Constructor<T>, methodName: keyof T) {
+    // TODO: Move api prefix to constants and read it from config
+    let routePath = ('api/' + Reflect.getMetadata(PATH_METADATA, controller)) as string | undefined;
+    if (!routePath) {
+      return;
+    }
+    // eslint-disable-next-line
+    routePath += '/' + Reflect.getMetadata(PATH_METADATA, controller.prototype[methodName]);
+    return routePath;
   }
 }
