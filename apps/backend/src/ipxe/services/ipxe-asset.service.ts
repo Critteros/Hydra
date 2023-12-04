@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { createReadStream } from 'node:fs';
-import { readFile, access, constants } from 'node:fs/promises';
+import { readFile, access, constants, unlink } from 'node:fs/promises';
 import { relative, join } from 'node:path';
 
 import { Injectable, Scope, Inject } from '@nestjs/common';
@@ -9,6 +9,7 @@ import { CONTEXT } from '@nestjs/graphql';
 
 import type { Config } from '@hydra-ipxe/common/server/config';
 import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
+import { RESOURCE_ID_REGEX } from '@hydra-ipxe/common/shared/regex';
 import type { IpxeAssets, Prisma } from '@prisma/client';
 import type { Request } from 'express';
 
@@ -19,6 +20,7 @@ import { StringUtils } from '@/utils/string';
 import { IpxeAssetController } from '../controllers/ipxe-asset.controler';
 
 export const FileNotFoundError = makeCustomError('FileNotFoundError');
+export const InvalidResourceIdError = makeCustomError('InvalidResourceIdError');
 
 @Injectable({ scope: Scope.REQUEST })
 export class IpxeAssetService {
@@ -35,8 +37,31 @@ export class IpxeAssetService {
     this.serverURL = `${request.protocol}://${request.get('host')}`;
   }
 
-  async findMany() {
-    return await this.prismaService.ipxeAssets.findMany();
+  async findMany(params?: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.IpxeAssetsWhereUniqueInput;
+    where?: Prisma.IpxeAssetsWhereInput;
+    orderBy?: Prisma.IpxeAssetsOrderByWithRelationInput;
+  }) {
+    return await this.prismaService.ipxeAssets.findMany(params);
+  }
+
+  async updateResourceID(where: Prisma.IpxeAssetsWhereUniqueInput, resourceId: string) {
+    if (!RESOURCE_ID_REGEX.test(resourceId)) {
+      throw new InvalidResourceIdError(`Invalid resource id: ${resourceId}`);
+    }
+    return await this.prismaService.ipxeAssets
+      .update({
+        where,
+        data: {
+          resourceId,
+        },
+        select: {
+          resourceId: true,
+        },
+      })
+      .then(({ resourceId }) => resourceId);
   }
 
   async storeFiles(files: Array<Express.Multer.File>, transaction?: PrismaTransaction) {
@@ -57,6 +82,40 @@ export class IpxeAssetService {
       });
 
       return Promise.all(promises);
+    });
+  }
+
+  async removeFiles(where: Prisma.IpxeAssetsWhereInput, transaction?: PrismaTransaction) {
+    return await this.prismaService.transactional(transaction, async (tx) => {
+      const assets = await tx.ipxeAssets.findMany({
+        where,
+        select: {
+          mediaPath: true,
+          uid: true,
+        },
+      });
+
+      const promises = assets.map(async ({ mediaPath, uid }) => {
+        const fsPath = this.getFsPath(mediaPath);
+        await unlink(fsPath);
+        return await tx.ipxeAssets.delete({
+          where: {
+            uid,
+          },
+        });
+      });
+
+      return Promise.all(promises);
+    });
+  }
+
+  async updateAsset(
+    where: Prisma.IpxeAssetsWhereUniqueInput,
+    data: Pick<Prisma.IpxeAssetsUpdateInput, 'resourceId' | 'originalFilename'>,
+  ) {
+    return await this.prismaService.ipxeAssets.update({
+      where,
+      data,
     });
   }
 

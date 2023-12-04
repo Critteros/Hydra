@@ -12,6 +12,7 @@ describe('StringUtils', () => {
     ${'aaa'}   | ${'a'}  | ${''}
     ${'aaa'}   | ${'aa'} | ${''}
     ${'aaabb'} | ${'a'}  | ${'bb'}
+    ${'/sdfsdf/sdfsdf'} | ${'/'}  | ${'sdfsdf/sdfsdf'}
   `(
     'uses trimStart to tring $str to $expected using char $char',
     ({ str, char, expected }: Record<'str' | 'char' | 'expected', string>) => {

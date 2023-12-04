@@ -2,8 +2,11 @@ import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 
 @ObjectType()
 export class IpxeAsset {
-  @Field(() => ID, { description: 'Asset ID' })
-  id!: string;
+  @Field(() => ID, { description: 'Unique id of an asset' })
+  uid!: string;
+
+  @Field({ description: 'Resource id of an asset' })
+  resourceId!: string;
 
   @Field({ description: 'Original filename of the asset' })
   filename!: string;
