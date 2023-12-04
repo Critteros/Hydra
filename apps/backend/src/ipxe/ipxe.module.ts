@@ -13,9 +13,10 @@ import { IpxeAssetController } from './controllers/ipxe-asset.controler';
 import { uniqueFilename } from './files';
 import { ComputerResolver } from './resolvers/computer.resolver';
 import { ComputerGroupResolver } from './resolvers/computerGroup.resolver';
+import { IpxeAssetResolver } from './resolvers/ipxe-asset.resolver';
 import { ComputerService } from './services/computer.service';
 import { ComputerGroupService } from './services/computerGroup.service';
-import { FileUploadService } from './services/file-upload.service';
+import { IpxeAssetService } from './services/ipxe-asset.service';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { FileUploadService } from './services/file-upload.service';
     ComputerService,
     ComputerGroupResolver,
     ComputerGroupService,
-    FileUploadService,
+    IpxeAssetService,
+    IpxeAssetResolver,
   ],
   controllers: [IpxeAssetController],
 })

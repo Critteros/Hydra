@@ -129,6 +129,29 @@ type ComputerGroup {
   viewOptions: ComputerGroupViewOptions
 }
 
+type IpxeAsset {
+  """Asset ID"""
+  id: ID!
+
+  """Original filename of the asset"""
+  filename: String!
+
+  """Creation date of the asset"""
+  createdAt: DateTime!
+
+  """Last update date of the asset"""
+  updatedAt: DateTime!
+
+  """SHA256 hash of the asset"""
+  sha256: String!
+
+  """URL of the asset"""
+  url: String!
+
+  """MIME type of the asset"""
+  fileSizeBytes: Int!
+}
+
 type Query {
   users: [User!]!
   user(
@@ -171,6 +194,9 @@ type Query {
 
   """Get a single computer group"""
   computerGroup(where: WhereUniqueComputerGroupInput!): ComputerGroup
+
+  """Get all ipxe assets"""
+  ipxeAssets: [IpxeAsset!]!
 }
 
 input WhereUniqueComputerInput {

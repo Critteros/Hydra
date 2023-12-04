@@ -11,15 +11,23 @@ import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
 import type { IpxeAssets } from '@prisma/client';
 
 import { PrismaService, type PrismaTransaction } from '@/database/prisma.service';
+import { MetadataService } from '@/metadata/metadata.service';
+
+import { IpxeAssetController } from '../controllers/ipxe-asset.controler';
 
 export const FileNotFoundError = makeCustomError('FileNotFoundError');
 
 @Injectable()
-export class FileUploadService {
+export class IpxeAssetService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly configService: ConfigService<Config>,
+    private readonly metadataService: MetadataService,
   ) {}
+
+  async findMany() {
+    return await this.prismaService.ipxeAssets.findMany();
+  }
 
   async storeFiles(files: Array<Express.Multer.File>, transaction?: PrismaTransaction) {
     return await this.prismaService.transactional(transaction, async (tx) => {
@@ -38,6 +46,15 @@ export class FileUploadService {
 
       return Promise.all(promises);
     });
+  }
+
+  getFulAssetUrl({ assetId, serverURL }: { assetId: IpxeAssets['id']; serverURL: string }) {
+    const mediaHandlerPath = this.metadataService.reverseControllerPath(
+      IpxeAssetController,
+      'getAsset',
+    );
+    if (!mediaHandlerPath) throw new Error('Media handler path not found');
+    return `${serverURL}/${mediaHandlerPath.replace(':assetId', assetId)}`;
   }
 
   async getFileReadStream(assetId: IpxeAssets['id']) {
