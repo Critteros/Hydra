@@ -125,6 +125,12 @@ model IpxeAssets {
   isEntryValid     Boolean  @default(true) @map("is_entry_valid") @db.Boolean
 }
 
+model IpxeStrategyTemplate {
+  id          String @id @db.VarChar(256)
+  name        String @unique @db.VarChar(256)
+  description String @db.VarChar(1024)
+}
+
 enum AccountType {
   STANDARD
   ADMIN
