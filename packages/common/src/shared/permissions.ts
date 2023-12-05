@@ -49,6 +49,19 @@ const keyPath = {
     /* Allows editing entires in ipxe asset registry */
     edit: {},
   },
+  ipxeStrategy: {
+    /* Prevents the display of ipxe strategy list  */
+    read: {},
+
+    /* Allows adding new ipxe strategy to the ipxe strategy registry */
+    create: {},
+
+    /* Allows deleting ipxe strategy from registry */
+    delete: {},
+
+    /* Allows applying ipxe strategy registry */
+    apply: {},
+  },
 } as const;
 
 export type Permissions = Exclude<Path<typeof keyPath>, keyof typeof keyPath>;

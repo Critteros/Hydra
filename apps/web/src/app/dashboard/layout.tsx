@@ -2,7 +2,15 @@ import 'server-only';
 
 import type { ReactNode } from 'react';
 
-import { Users, Key, UserCog, Laptop2 as ComputerIcon, FilesIcon } from 'lucide-react';
+import {
+  Users,
+  Key,
+  UserCog,
+  Laptop2 as ComputerIcon,
+  FilesIcon,
+  BookDashed as TemplateIcon,
+  Waypoints as WaypointsIcon,
+} from 'lucide-react';
 
 import { AppBar } from '@/components/app-bar';
 import { getClient } from '@/lib/server/apollo-client';
@@ -40,6 +48,16 @@ const sidebarConfig: SidebarGrouping = {
       href: '/dashboard/ipxe/assets',
       icon: <FilesIcon size={16} />,
       title: 'IPXE Assets',
+    },
+    {
+      href: '/dashboard/ipxe/strategy-templates',
+      icon: <TemplateIcon size={16} />,
+      title: 'Strategy Templates',
+    },
+    {
+      href: '/dashboard/ipxe/strategies',
+      icon: <WaypointsIcon size={16} />,
+      title: 'Strategies',
     },
   ],
 };
