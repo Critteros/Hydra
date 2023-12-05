@@ -155,6 +155,12 @@ type IpxeAsset {
   fileSizeBytes: Int!
 }
 
+type IpxeStrategyTemplate {
+  id: ID!
+  name: String!
+  description: String!
+}
+
 type Query {
   users: [User!]!
   user(
@@ -200,6 +206,9 @@ type Query {
 
   """Get all ipxe assets"""
   ipxeAssets: [IpxeAsset!]!
+
+  """Retrives ipxe strategy templates"""
+  ipxeStrategyTemplates: [IpxeStrategyTemplate!]!
 }
 
 input WhereUniqueComputerInput {
