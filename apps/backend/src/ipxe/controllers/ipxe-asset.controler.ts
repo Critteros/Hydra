@@ -14,8 +14,8 @@ import { ApiTags, ApiConsumes, ApiProperty, ApiBody } from '@nestjs/swagger';
 
 import type { Response } from 'express';
 
+import { PublicHandler } from '@/auth/decorators/public.decorator';
 import { MapErrors } from '@/errors/map-errors.decorator';
-import { MetadataService } from '@/metadata/metadata.service';
 import { RequirePermission } from '@/rbac/decorators/require-permissions.decorator';
 
 import { IpxeAssetService, FileNotFoundError } from '../services/ipxe-asset.service';
@@ -27,12 +27,8 @@ class FilesUploadDto {
 
 @Controller('ipxe')
 @ApiTags('ipxe')
-@RequirePermission('ipxeAssets.create')
 export class IpxeAssetController {
-  constructor(
-    private readonly ipxeAssetService: IpxeAssetService,
-    private readonly metadataService: MetadataService,
-  ) {}
+  constructor(private readonly ipxeAssetService: IpxeAssetService) {}
 
   @Post('upload')
   @ApiConsumes('multipart/form-data')
@@ -40,6 +36,7 @@ export class IpxeAssetController {
     description: 'List of uploaded files',
     type: FilesUploadDto,
   })
+  @RequirePermission('ipxeAssets.create')
   @UseInterceptors(FilesInterceptor('files'))
   async uploadAssets(@UploadedFiles() files: Array<Express.Multer.File>) {
     const results = await this.ipxeAssetService.storeFiles(files);
@@ -53,6 +50,7 @@ export class IpxeAssetController {
     if: FileNotFoundError,
     then: (error: Error) => new NotFoundException(error.message),
   })
+  @PublicHandler()
   async getAsset(@Res({ passthrough: true }) response: Response, @Param('path') resource: string) {
     const { stream, filename } = await this.ipxeAssetService.getFileReadStream({
       resourceId: resource,

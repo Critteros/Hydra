@@ -13,6 +13,7 @@ import { MetadataModule } from '@/metadata/metadata.module';
 import { Identity } from '@/utils/identity';
 
 import { IpxeAssetController } from './controllers/ipxe-asset.controler';
+import { IpxeBootControler } from './controllers/ipxe-boot.controler';
 import { ComputerResolver } from './resolvers/computer.resolver';
 import { ComputerGroupResolver } from './resolvers/computerGroup.resolver';
 import { IpxeAssetResolver } from './resolvers/ipxe-asset.resolver';
@@ -63,6 +64,6 @@ import { uniqueFilename } from './utils/file-storage';
     IpxeAssetResolver,
     IpxeStrategyTemplateResolver,
   ],
-  controllers: [IpxeAssetController],
+  controllers: [IpxeAssetController, IpxeBootControler],
 })
 export class IpxeModule {}

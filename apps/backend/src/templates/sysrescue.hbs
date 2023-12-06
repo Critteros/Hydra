@@ -1,0 +1,13 @@
+#!ipxe
+
+dhcp
+set ipparam BOOTIF=${netX/mac} ip=dhcp net.ifnames=0
+set url http://10.0.0.1:8000/api/ipxe/assets
+goto boot
+
+
+:boot
+imgfree
+kernel ${url}/vmlinuz archisobasedir=sysresccd ${ipparam} archiso_http_srv=${url} initrd=initrd ${cmdline}
+initrd ${url}/initrd
+boot
