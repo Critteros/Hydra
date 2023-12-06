@@ -36,7 +36,7 @@ export function TableSelectionActions({ table }: TableSelectionActions) {
     });
     toast({
       title: 'Assets deleted',
-      description: `Successfully deleted ${deletedCount.data?.removeAssets} roles.`,
+      description: `Successfully deleted ${deletedCount.data?.removeAssets} assets.`,
     });
     refresh();
   };
