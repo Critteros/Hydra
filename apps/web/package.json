@@ -43,6 +43,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
+    "dayjs": "^1.11.10",
     "debug": "^4.3.4",
     "graphql": "^16.8.1",
     "http-status-codes": "^2.3.0",
