@@ -1,5 +1,3 @@
-import { join } from 'node:path';
-
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -17,8 +15,6 @@ async function setupApi() {
   logger.log('Setting up API server');
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.setGlobalPrefix('api');
-  app.setViewEngine('hbs');
-  app.setBaseViewsDir(join(__dirname, 'templates'));
 
   const openApiConfig = new DocumentBuilder()
     .setTitle('Hydra iPXE REST API')

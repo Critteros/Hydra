@@ -126,9 +126,19 @@ model IpxeAssets {
 }
 
 model IpxeStrategyTemplate {
-  id          String @id @db.VarChar(256)
-  name        String @unique @db.VarChar(256)
-  description String @db.VarChar(1024)
+  id          String         @id @db.VarChar(256)
+  name        String         @unique @db.VarChar(256)
+  description String         @db.VarChar(1024)
+  strategies  IpxeStrategy[]
+}
+
+model IpxeStrategy {
+  uid                String               @id @default(cuid()) @db.VarChar(256)
+  name               String               @unique @db.VarChar(256)
+  description        String               @db.Text
+  strategyTemplate   IpxeStrategyTemplate @relation(fields: [strategyTemplateId], references: [id])
+  strategyTemplateId String               @map("strategy_template_id")
+  configurationData  Json                 @map("configuration_data") @db.Json
 }
 
 enum AccountType {
