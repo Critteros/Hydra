@@ -99,7 +99,7 @@ type Computer {
   mac: String!
 
   """IP address of the computer"""
-  ipv4: String!
+  ipv4: String
 
   """Presentation configuration for a computer"""
   viewOptions: ComputerViewOptions
@@ -397,7 +397,7 @@ input ComputerCreateInput {
   mac: String!
 
   """IP address of the computer"""
-  ipv4: String!
+  ipv4: String
 
   """Presentation configuration for a computer"""
   viewOptions: ComputerViewOptionsCreateInput

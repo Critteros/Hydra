@@ -62,7 +62,9 @@ export function DnDComputerTableBody({ tableData, groupUid }: DnDComputerTableBo
                 >
                   <TableRow className={cn(isDragging && 'table-row outline outline-red-500')}>
                     <TableCell>{name}</TableCell>
-                    <TableCell>{ipv4}</TableCell>
+                    <TableCell>
+                      {ipv4 ?? <p className="text-muted-foreground">{'<not set>'}</p>}
+                    </TableCell>
                     <TableCell>{mac}</TableCell>
                     <ClientPermissionBoundry permission="computers.delete" fallback={<></>}>
                       <TableCell className="w-10">

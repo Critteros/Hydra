@@ -20,8 +20,8 @@ export class Computer {
   @Field({ description: 'MAC address of the computer' })
   mac!: string;
 
-  @Field({ description: 'IP address of the computer' })
-  ipv4!: string;
+  @Field({ description: 'IP address of the computer', nullable: true })
+  ipv4?: string;
 
   @Field({
     description: 'Presentation configuration for a computer',

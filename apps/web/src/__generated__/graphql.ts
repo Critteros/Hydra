@@ -40,7 +40,7 @@ export type AssignedPermission = {
 export type Computer = {
   __typename?: 'Computer';
   /** IP address of the computer */
-  ipv4: Scalars['String']['output'];
+  ipv4?: Maybe<Scalars['String']['output']>;
   /** MAC address of the computer */
   mac: Scalars['String']['output'];
   /** Name of the computer set by the user */
@@ -53,7 +53,7 @@ export type Computer = {
 
 export type ComputerCreateInput = {
   /** IP address of the computer */
-  ipv4: Scalars['String']['input'];
+  ipv4?: InputMaybe<Scalars['String']['input']>;
   /** MAC address of the computer */
   mac: Scalars['String']['input'];
   /** Name of the computer */
@@ -569,12 +569,12 @@ export type MoveComputerToGroupAndUpdateOrderMutation = { __typename?: 'Mutation
 export type QueryComputersWithoutGroupQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type QueryComputersWithoutGroupQuery = { __typename?: 'Query', computers: Array<{ __typename?: 'Computer', uid: string, name: string, mac: string, ipv4: string, viewOptions?: { __typename?: 'ComputerViewOptions', order: number } | null }> };
+export type QueryComputersWithoutGroupQuery = { __typename?: 'Query', computers: Array<{ __typename?: 'Computer', uid: string, name: string, mac: string, ipv4?: string | null, viewOptions?: { __typename?: 'ComputerViewOptions', order: number } | null }> };
 
 export type QueryComputerGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type QueryComputerGroupsQuery = { __typename?: 'Query', computerGroups: Array<{ __typename?: 'ComputerGroup', uid: string, name: string, computers: Array<{ __typename?: 'Computer', uid: string, name: string, mac: string, ipv4: string, viewOptions?: { __typename?: 'ComputerViewOptions', order: number } | null }>, viewOptions?: { __typename?: 'ComputerGroupViewOptions', order: number } | null }> };
+export type QueryComputerGroupsQuery = { __typename?: 'Query', computerGroups: Array<{ __typename?: 'ComputerGroup', uid: string, name: string, computers: Array<{ __typename?: 'Computer', uid: string, name: string, mac: string, ipv4?: string | null, viewOptions?: { __typename?: 'ComputerViewOptions', order: number } | null }>, viewOptions?: { __typename?: 'ComputerGroupViewOptions', order: number } | null }> };
 
 export type PermissionsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 

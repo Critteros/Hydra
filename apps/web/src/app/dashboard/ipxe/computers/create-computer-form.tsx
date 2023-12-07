@@ -28,7 +28,12 @@ const formSchema = z.object({
     .string()
     .min(1, { message: 'Name cannot be empty' })
     .max(255, { message: 'Name is too long' }),
-  ipv4: z.string().ip({ version: 'v4', message: 'Invalid IPv4 address' }),
+  ipv4: z
+    .union([
+      z.string().length(0),
+      z.string().ip({ version: 'v4', message: 'Invalid IPv4 address' }),
+    ])
+    .transform((val) => (val === '' ? null : val)),
   mac: z
     .string()
     .regex(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/, { message: 'Invalid mac address' }),
@@ -113,11 +118,16 @@ export function CreateComputerForm({ afterSubmit, groupUid }: CreateComputerForm
         <FormField
           name="ipv4"
           control={form.control}
-          render={({ field }) => (
+          render={({ field: { value, ...rest } }) => (
             <FormItem className="grid grid-cols-4 items-center gap-4">
               <FormLabel className="text-right">Ipv4</FormLabel>
               <FormControl>
-                <Input className="col-span-3" placeholder="127.0.0.1" {...field} />
+                <Input
+                  className="col-span-3"
+                  placeholder="127.0.0.1"
+                  value={value ?? ''}
+                  {...rest}
+                />
               </FormControl>
               <FormMessage className="col-span-3 col-start-2" />
             </FormItem>
