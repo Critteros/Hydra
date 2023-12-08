@@ -6,12 +6,13 @@ import { Request } from 'express';
 
 import { MetadataService } from '@/metadata/metadata.service';
 
+import { BaseRenderer, type RendererConfig } from '../boot/base-renderer';
 import { BasicBootRenderer } from '../boot/basic-boot-renderer';
 import { IpxeAssetController } from '../controllers/ipxe-asset.controler';
 import { IpxeBootControler } from '../controllers/ipxe-boot.controler';
 
 @Injectable({ scope: Scope.REQUEST })
-export class IpxeBootService {
+export class IpxeRendererService {
   private readonly serverUrl: string;
   private readonly mediaUrl: string;
   private readonly bootUrl: string;
@@ -38,7 +39,15 @@ export class IpxeBootService {
     this.bootUrl = bootPath.split('/').slice(0, -1).join('/');
   }
 
-  instantiateRenderer(rendererClass: ReturnType<typeof IpxeBootService.prototype.getRenderer>) {
+  private getRendererConfig(): RendererConfig {
+    return {
+      serverbaseUrl: this.serverUrl,
+      bootPath: this.bootUrl,
+      mediaPath: this.mediaUrl,
+    };
+  }
+
+  instantiateRenderer(rendererClass: ReturnType<typeof IpxeRendererService.prototype.getRenderer>) {
     switch (rendererClass) {
       case BasicBootRenderer:
         return new BasicBootRenderer(
@@ -48,11 +57,7 @@ export class IpxeBootService {
             kernelParams:
               'archisobasedir=sysresccd ${ipparam} archiso_http_srv=${media_url} initrd=initrd ${cmdline}',
           },
-          {
-            serverbaseUrl: this.serverUrl,
-            bootPath: this.bootUrl,
-            mediaPath: this.mediaUrl,
-          },
+          this.getRendererConfig(),
         );
       default:
         throw new Error(`Could not instantiate ${rendererClass.toString()}`);
@@ -71,5 +76,9 @@ export class IpxeBootService {
     const instance = this.instantiateRenderer(renderer);
 
     return instance.render();
+  }
+
+  renderError(msg: string, statusCode?: number) {
+    return new BaseRenderer(this.getRendererConfig()).renderError(msg, statusCode);
   }
 }

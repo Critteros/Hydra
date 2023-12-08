@@ -1,3 +1,4 @@
+import dedent from 'dedent';
 import Handlebars from 'handlebars';
 
 import { StringUtils } from '@/utils/string';
@@ -15,7 +16,6 @@ const defaults = {
 
 const IpxeSetupTemplate = `#!ipxe
 
-dhcp
 set ipparam BOOTIF=\${netX/mac} ip=dhcp net.ifnames=0
 set server_url {{{server_url}}}
 set media_url  {{{media_url}}}
@@ -69,5 +69,22 @@ export class BaseRenderer {
       media_url: this.absoluteURL(mediaPath),
       boot_url: this.absoluteURL(bootPath),
     };
+  }
+
+  renderError(msg: string, status?: number) {
+    return this.renderer.compile(
+      dedent(
+        `{{> ipxe_setup }}
+
+        :boot
+        echo An exception was thrown when processing request with message: "${msg}" ${
+          status ? `and status code "${status}"` : ''
+        }
+        echo Computer will now boot using second boot option after 5 seconds
+        sleep 5
+        exit
+      `,
+      ),
+    )(this.getTemplateData());
   }
 }

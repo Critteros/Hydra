@@ -1,4 +1,4 @@
-import { Controller, Get, Param, NotFoundException, Req } from '@nestjs/common';
+import { Controller, Get, Param, NotFoundException, Req, UseFilters } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import type { Request } from 'express';
@@ -6,16 +6,18 @@ import { z } from 'zod';
 
 import { PublicHandler } from '@/auth/decorators/public.decorator';
 
-import { IpxeBootService } from '../services/ipxe-boot.service';
+import { IpxeExceptionFilter } from '../filters/ipxe-exception.filter';
+import { IpxeRendererService } from '../services/ipxe-renderer.service';
 
 @Controller('ipxe')
 @ApiTags('ipxe')
 export class IpxeBootControler {
   static readonly macRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
 
-  constructor(private readonly ipxeBootService: IpxeBootService) {}
+  constructor(private readonly ipxeBootService: IpxeRendererService) {}
 
   @Get('boot/:mac')
+  @UseFilters(IpxeExceptionFilter)
   @PublicHandler()
   boot(@Param('mac') mac: string, @Req() request: Request) {
     // For some unknown to me reason the regex validation in the @Get param does not work as expected and cuts off mac to something like cc:
