@@ -34,7 +34,24 @@ import { EditAssetMutation } from '../assets-mutations';
 import type { IpxeAsset } from '../assets-queries';
 
 const formSchema = z.object({
-  resourceId: z.string().regex(RESOURCE_ID_REGEX, 'Invalid resource ID'),
+  resourceId: z
+    .string()
+    .transform((value) => {
+      if (value.startsWith('/')) {
+        // TODO: Replace with StringUtil
+        return value.slice(1, value.length);
+      }
+      return value;
+    })
+    .pipe(
+      z
+        .string()
+        .regex(
+          RESOURCE_ID_REGEX,
+          'Invalid resource ID - resource id have to contain URL safe characters',
+        ),
+    ),
+
   filename: z.string().min(1),
 });
 type FormSchema = z.infer<typeof formSchema>;

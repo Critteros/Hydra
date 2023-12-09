@@ -1,3 +1,4 @@
+// TODO: REMOVE, it's in the common package
 export class StringUtils {
   static readonly ALPHANUMERIC_REGEX = /[a-z0-9]/gi;
   static readonly NOT_ALPHANUMERIC_REGEX = /[^a-z0-9]/gi;

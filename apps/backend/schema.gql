@@ -161,6 +161,29 @@ type IpxeStrategyTemplate {
   description: String!
 }
 
+type BasicBootStrategy {
+  """Unique identifier of a strategy"""
+  uid: ID!
+
+  """Template used for startegy"""
+  template: IpxeStrategyTemplate!
+
+  """Strategy name"""
+  name: String!
+
+  """Strategy descriptino"""
+  description: String!
+
+  """Relative path to kernel asset file"""
+  kernelPath: String!
+
+  """Relative path to initramfs asset file"""
+  initramfsPath: String!
+
+  """Kernel params passed to kernel commandline"""
+  kernelParams: String
+}
+
 type Query {
   users: [User!]!
   user(
@@ -209,7 +232,7 @@ type Query {
 
   """Retrives ipxe strategy templates"""
   ipxeStrategyTemplates: [IpxeStrategyTemplate!]!
-  sample: IpxeStrategy!
+  ipxeStrategies: [IpxeStrategy!]!
 }
 
 input WhereUniqueComputerInput {
@@ -228,29 +251,6 @@ input WhereUniqueComputerGroupInput {
 }
 
 union IpxeStrategy = BasicBootStrategy
-
-type BasicBootStrategy {
-  """Unique identifier of a strategy"""
-  uid: ID!
-
-  """Template used for startegy"""
-  template: IpxeStrategyTemplate!
-
-  """Strategy name"""
-  name: String!
-
-  """Strategy descriptino"""
-  description: String!
-
-  """Relative path to kernel asset file"""
-  kernelPath: String!
-
-  """Relative path to initramfs asset file"""
-  initramfsPath: String!
-
-  """Kernel params passed to kernel commandline"""
-  kernelParams: String
-}
 
 type Mutation {
   """Updates user data"""
@@ -366,6 +366,8 @@ type Mutation {
     """New order of the computer in the group"""
     newOrder: Int!
   ): Boolean!
+  createBasicBootStrategy(input: BasicBootStrategyCreateInput!): BasicBootStrategy!
+  updateBasicBootStrategy(where: WhereUniqueIpxeStrategy!, update: BasicBootStrategyUpdateInput!): BasicBootStrategy!
 
   """Update resource id"""
   updateResourceId(
@@ -380,6 +382,7 @@ type Mutation {
 
   """Update asset metadata"""
   updateAssetMetadata(where: WhereUniqueIpxeAssetInput!, data: UpdateIpxeAssetInput!): IpxeAsset!
+  deleteIpxeStrategy(where: WhereUniqueIpxeStrategy!): IpxeStrategy!
 }
 
 input UpdateUserInput {
@@ -458,6 +461,59 @@ input ComputerGroupViewOptionsCreateInput {
 input ComputerGroupViewOptionsUpdateInput {
   """Order of the computer group in the list"""
   order: Float!
+}
+
+input BasicBootStrategyCreateInput {
+  """Ipxe strategy template selector"""
+  template: WhereUniqueIpxeStrategyTemplate!
+
+  """Ipxe strategy name"""
+  name: String!
+
+  """Ipxe strategy description"""
+  description: String!
+
+  """Relative path to a kernel asset file"""
+  kernelPath: String!
+
+  """Relative path to a initamfs asset file"""
+  initramfsPath: String!
+
+  """Kernel params passed to kernel commandline"""
+  kernelParams: String
+}
+
+input WhereUniqueIpxeStrategyTemplate {
+  """Unique id of the ipxe strategy template"""
+  id: String
+
+  """Template name"""
+  name: String
+}
+
+input WhereUniqueIpxeStrategy {
+  uid: String
+  name: String
+}
+
+input BasicBootStrategyUpdateInput {
+  """Ipxe strategy template selector"""
+  template: WhereUniqueIpxeStrategyTemplate
+
+  """Ipxe strategy name"""
+  name: String
+
+  """Ipxe strategy description"""
+  description: String
+
+  """Relative path to a kernel asset file"""
+  kernelPath: String
+
+  """Relative path to a initamfs asset file"""
+  initramfsPath: String
+
+  """Kernel params passed to kernel commandline"""
+  kernelParams: String
 }
 
 input WhereUniqueIpxeAssetInput {

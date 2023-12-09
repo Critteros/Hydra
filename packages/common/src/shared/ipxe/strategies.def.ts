@@ -1,11 +1,32 @@
 import { z } from 'zod';
 
+import { RESOURCE_ID_REGEX } from '../regex';
+import { trimStart } from '../utils/string';
+
+export const IPXEStrategySchema = z.literal('strategy.basicBoot');
+
 export type BasicBootStrategy = 'strategy.basicBoot';
 export type IPXEStrategy = BasicBootStrategy;
 
 export const BasicBootInfoSchema = z.object({
-  kernelPath: z.string(),
-  initramfsPath: z.string(),
+  kernelPath: z
+    .string()
+    .transform((val) => {
+      if (val.startsWith('/')) {
+        return trimStart(val, '/');
+      }
+      return val;
+    })
+    .pipe(z.string().regex(RESOURCE_ID_REGEX)),
+  initramfsPath: z
+    .string()
+    .transform((val) => {
+      if (val.startsWith('/')) {
+        return trimStart(val, '/');
+      }
+      return val;
+    })
+    .pipe(z.string().regex(RESOURCE_ID_REGEX)),
 });
 
 export type BasicBootInfo = z.infer<typeof BasicBootInfoSchema>;

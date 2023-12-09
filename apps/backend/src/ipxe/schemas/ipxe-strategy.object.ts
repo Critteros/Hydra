@@ -1,11 +1,12 @@
 import { ObjectType, Field, ID, createUnionType } from '@nestjs/graphql';
 
 import { IPXEStrategy } from '@hydra-ipxe/common/shared/ipxe/strategies.def';
+import { IpxeStrategy as PrismaIpxeStrategy } from '@prisma/client';
 
 import { IpxeStrategyTemplate } from './ipxe-strategy-template.object';
 
 @ObjectType({ isAbstract: true })
-class StategyBase {
+export class StrategyBase {
   @Field(() => ID, { description: 'Unique identifier of a strategy' })
   uid!: string;
 
@@ -26,7 +27,7 @@ class StategyBase {
 }
 
 @ObjectType()
-export class BasicBootStrategy extends StategyBase {
+export class BasicBootStrategy extends StrategyBase {
   @Field(() => String, {
     description: 'Kernel params passed to kernel commandline',
     nullable: true,
@@ -37,8 +38,8 @@ export class BasicBootStrategy extends StategyBase {
 export const IpxeStrategy = createUnionType({
   name: 'IpxeStrategy',
   types: () => [BasicBootStrategy] as const,
-  resolveType: (value: BasicBootStrategy) => {
-    switch (value.template.name as IPXEStrategy) {
+  resolveType: (value: PrismaIpxeStrategy) => {
+    switch (value.strategyTemplateId as IPXEStrategy) {
       case 'strategy.basicBoot':
         return BasicBootStrategy;
       default:

@@ -174,7 +174,19 @@ export class IpxeAssetService {
     return join(this.mediaBasePath, mediaPath);
   }
 
-  async fileExists(fsPath: string) {
+  async assetExists(resourceId: string) {
+    const asset = await this.prismaService.ipxeAssets.findUnique({
+      where: { resourceId },
+      select: { isEntryValid: true },
+    });
+    if (!asset) {
+      return false;
+    }
+
+    return asset.isEntryValid;
+  }
+
+  private async fileExists(fsPath: string) {
     return await access(fsPath, constants.F_OK)
       .then(() => true)
       .catch(() => false);
