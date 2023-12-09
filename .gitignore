@@ -5,6 +5,8 @@
 # I prefer to ingore this directory
 .idea
 media
+draft
+
 
 hydra.sock
 *.local.*

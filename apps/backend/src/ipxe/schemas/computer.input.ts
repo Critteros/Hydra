@@ -41,11 +41,12 @@ export class ComputerCreateInput {
   @IsMACAddress()
   mac!: string;
 
-  @Field({ description: 'IP address of the computer' })
+  @Field({ description: 'IP address of the computer', nullable: true })
   @IsString()
   @IsIP(4)
   @Length(1, 32)
-  ipv4!: string;
+  @IsOptional()
+  ipv4?: string;
 
   @Field(() => ComputerViewOptionsCreateInput, {
     description: 'Presentation configuration for a computer',

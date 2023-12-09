@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import type { Config } from '@hydra-ipxe/common/server/config';
@@ -12,7 +13,7 @@ import { AppModule } from './app.module';
 async function setupApi() {
   const logger = new Logger('setupApi');
   logger.log('Setting up API server');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.setGlobalPrefix('api');
 
   const openApiConfig = new DocumentBuilder()

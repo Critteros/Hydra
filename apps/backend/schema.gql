@@ -99,7 +99,7 @@ type Computer {
   mac: String!
 
   """IP address of the computer"""
-  ipv4: String!
+  ipv4: String
 
   """Presentation configuration for a computer"""
   viewOptions: ComputerViewOptions
@@ -155,6 +155,12 @@ type IpxeAsset {
   fileSizeBytes: Int!
 }
 
+type IpxeStrategyTemplate {
+  id: ID!
+  name: String!
+  description: String!
+}
+
 type Query {
   users: [User!]!
   user(
@@ -200,6 +206,10 @@ type Query {
 
   """Get all ipxe assets"""
   ipxeAssets: [IpxeAsset!]!
+
+  """Retrives ipxe strategy templates"""
+  ipxeStrategyTemplates: [IpxeStrategyTemplate!]!
+  sample: IpxeStrategy!
 }
 
 input WhereUniqueComputerInput {
@@ -215,6 +225,31 @@ input WhereUniqueComputerGroupInput {
 
   """Name of the computer group"""
   name: String
+}
+
+union IpxeStrategy = BasicBootStrategy
+
+type BasicBootStrategy {
+  """Unique identifier of a strategy"""
+  uid: ID!
+
+  """Template used for startegy"""
+  template: IpxeStrategyTemplate!
+
+  """Strategy name"""
+  name: String!
+
+  """Strategy descriptino"""
+  description: String!
+
+  """Relative path to kernel asset file"""
+  kernelPath: String!
+
+  """Relative path to initramfs asset file"""
+  initramfsPath: String!
+
+  """Kernel params passed to kernel commandline"""
+  kernelParams: String
 }
 
 type Mutation {
@@ -388,7 +423,7 @@ input ComputerCreateInput {
   mac: String!
 
   """IP address of the computer"""
-  ipv4: String!
+  ipv4: String
 
   """Presentation configuration for a computer"""
   viewOptions: ComputerViewOptionsCreateInput

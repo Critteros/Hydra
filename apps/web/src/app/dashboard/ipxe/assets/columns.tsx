@@ -1,6 +1,7 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 
 import { buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -9,6 +10,7 @@ import { cn } from '@/lib/utils';
 
 import type { IpxeAsset } from './assets-queries';
 import { CopyContents } from './table-components/copy-contents';
+import { FilesizeDisplay } from './table-components/filesize-display';
 import { IpxeTableActions } from './table-components/ipxe-table-actions';
 
 export const columns: ColumnDef<IpxeAsset>[] = [
@@ -56,19 +58,21 @@ export const columns: ColumnDef<IpxeAsset>[] = [
     header: ({ column }) => <DataTableColumHeader column={column} title="Filename" />,
   },
   {
-    accessorKey: 'createdAt',
-    header: ({ column }) => <DataTableColumHeader column={column} title="Created At" />,
+    accessorKey: 'fileSizeBytes',
+    header: ({ column }) => <DataTableColumHeader column={column} title="Filesize" />,
+    cell: ({ getValue }) => <FilesizeDisplay filesizeBytes={getValue<number>()} />,
   },
   {
     accessorKey: 'updatedAt',
     header: ({ column }) => <DataTableColumHeader column={column} title="Updated At" />,
+    cell: ({ getValue }) => <span>{dayjs(getValue<string>()).format('DD-MM-YYYY HH:mm:ss')}</span>,
   },
   {
     accessorKey: 'sha256',
     header: ({ column }) => <DataTableColumHeader column={column} title="SHA256" />,
     cell: ({ getValue }) => (
       <CopyContents
-        className="inline-block w-[150px] overflow-hidden text-ellipsis whitespace-nowrap"
+        className="inline-block w-[200px] overflow-hidden text-ellipsis whitespace-nowrap"
         contents={getValue<string>()}
       />
     ),

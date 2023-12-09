@@ -13,12 +13,16 @@ import { MetadataModule } from '@/metadata/metadata.module';
 import { Identity } from '@/utils/identity';
 
 import { IpxeAssetController } from './controllers/ipxe-asset.controler';
+import { IpxeBootControler } from './controllers/ipxe-boot.controler';
 import { ComputerResolver } from './resolvers/computer.resolver';
 import { ComputerGroupResolver } from './resolvers/computerGroup.resolver';
 import { IpxeAssetResolver } from './resolvers/ipxe-asset.resolver';
+import { IpxeStrategyTemplateResolver } from './resolvers/ipxe-strategy-template.resolver';
+import { IpxeStrategyResolver } from './resolvers/ipxe-strategy.resolver';
 import { ComputerService } from './services/computer.service';
 import { ComputerGroupService } from './services/computerGroup.service';
 import { IpxeAssetService } from './services/ipxe-asset.service';
+import { IpxeRendererService } from './services/ipxe-renderer.service';
 import { uniqueFilename } from './utils/file-storage';
 
 @Module({
@@ -60,7 +64,10 @@ import { uniqueFilename } from './utils/file-storage';
     ComputerGroupService,
     IpxeAssetService,
     IpxeAssetResolver,
+    IpxeStrategyTemplateResolver,
+    IpxeRendererService,
+    IpxeStrategyResolver,
   ],
-  controllers: [IpxeAssetController],
+  controllers: [IpxeAssetController, IpxeBootControler],
 })
 export class IpxeModule {}

@@ -36,11 +36,29 @@ export type AssignedPermission = {
   id: Scalars['ID']['output'];
 };
 
+export type BasicBootStrategy = {
+  __typename?: 'BasicBootStrategy';
+  /** Strategy descriptino */
+  description: Scalars['String']['output'];
+  /** Relative path to initramfs asset file */
+  initramfsPath: Scalars['String']['output'];
+  /** Kernel params passed to kernel commandline */
+  kernelParams?: Maybe<Scalars['String']['output']>;
+  /** Relative path to kernel asset file */
+  kernelPath: Scalars['String']['output'];
+  /** Strategy name */
+  name: Scalars['String']['output'];
+  /** Template used for startegy */
+  template: IpxeStrategyTemplate;
+  /** Unique identifier of a strategy */
+  uid: Scalars['ID']['output'];
+};
+
 /** Represent a computer which participates in the network boot process */
 export type Computer = {
   __typename?: 'Computer';
   /** IP address of the computer */
-  ipv4: Scalars['String']['output'];
+  ipv4?: Maybe<Scalars['String']['output']>;
   /** MAC address of the computer */
   mac: Scalars['String']['output'];
   /** Name of the computer set by the user */
@@ -53,7 +71,7 @@ export type Computer = {
 
 export type ComputerCreateInput = {
   /** IP address of the computer */
-  ipv4: Scalars['String']['input'];
+  ipv4?: InputMaybe<Scalars['String']['input']>;
   /** MAC address of the computer */
   mac: Scalars['String']['input'];
   /** Name of the computer */
@@ -158,6 +176,15 @@ export type IpxeAsset = {
   updatedAt: Scalars['DateTime']['output'];
   /** URL of the asset */
   url: Scalars['String']['output'];
+};
+
+export type IpxeStrategy = BasicBootStrategy;
+
+export type IpxeStrategyTemplate = {
+  __typename?: 'IpxeStrategyTemplate';
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type Mutation = {
@@ -372,6 +399,8 @@ export type Query = {
   computers: Array<Computer>;
   /** Get all ipxe assets */
   ipxeAssets: Array<IpxeAsset>;
+  /** Retrives ipxe strategy templates */
+  ipxeStrategyTemplates: Array<IpxeStrategyTemplate>;
   /** Returns the current user */
   me: User;
   /** Get all permissions */
@@ -380,6 +409,7 @@ export type Query = {
   role?: Maybe<Role>;
   /** Get all roles */
   roles: Array<Role>;
+  sample: IpxeStrategy;
   user?: Maybe<User>;
   users: Array<User>;
 };
@@ -487,6 +517,11 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CurrentUserQuery = { __typename?: 'Query', me: { __typename?: 'User', uid: string, email: string, name?: string | null, accountType: AccountType } };
 
+export type IpxeTemplatesQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IpxeTemplatesQueryQuery = { __typename?: 'Query', ipxeStrategyTemplates: Array<{ __typename?: 'IpxeStrategyTemplate', id: string, name: string, description: string }> };
+
 export type DeleteAssetsMutationVariables = Exact<{
   where: Array<WhereUniqueIpxeAssetInput> | WhereUniqueIpxeAssetInput;
 }>;
@@ -555,12 +590,12 @@ export type MoveComputerToGroupAndUpdateOrderMutation = { __typename?: 'Mutation
 export type QueryComputersWithoutGroupQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type QueryComputersWithoutGroupQuery = { __typename?: 'Query', computers: Array<{ __typename?: 'Computer', uid: string, name: string, mac: string, ipv4: string, viewOptions?: { __typename?: 'ComputerViewOptions', order: number } | null }> };
+export type QueryComputersWithoutGroupQuery = { __typename?: 'Query', computers: Array<{ __typename?: 'Computer', uid: string, name: string, mac: string, ipv4?: string | null, viewOptions?: { __typename?: 'ComputerViewOptions', order: number } | null }> };
 
 export type QueryComputerGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type QueryComputerGroupsQuery = { __typename?: 'Query', computerGroups: Array<{ __typename?: 'ComputerGroup', uid: string, name: string, computers: Array<{ __typename?: 'Computer', uid: string, name: string, mac: string, ipv4: string, viewOptions?: { __typename?: 'ComputerViewOptions', order: number } | null }>, viewOptions?: { __typename?: 'ComputerGroupViewOptions', order: number } | null }> };
+export type QueryComputerGroupsQuery = { __typename?: 'Query', computerGroups: Array<{ __typename?: 'ComputerGroup', uid: string, name: string, computers: Array<{ __typename?: 'Computer', uid: string, name: string, mac: string, ipv4?: string | null, viewOptions?: { __typename?: 'ComputerViewOptions', order: number } | null }>, viewOptions?: { __typename?: 'ComputerGroupViewOptions', order: number } | null }> };
 
 export type PermissionsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -678,6 +713,7 @@ export type ServerClientBridgeQueryQuery = { __typename?: 'Query', me: { __typen
 
 
 export const CurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"accountType"}}]}}]}}]} as unknown as DocumentNode<CurrentUserQuery, CurrentUserQueryVariables>;
+export const IpxeTemplatesQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"IpxeTemplatesQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ipxeStrategyTemplates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]} as unknown as DocumentNode<IpxeTemplatesQueryQuery, IpxeTemplatesQueryQueryVariables>;
 export const DeleteAssetsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteAssets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"WhereUniqueIpxeAssetInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removeAssets"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}]}]}}]} as unknown as DocumentNode<DeleteAssetsMutation, DeleteAssetsMutationVariables>;
 export const EditAssetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"EditAsset"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"WhereUniqueIpxeAssetInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateIpxeAssetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateAssetMetadata"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"resourceId"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}}]}}]}}]} as unknown as DocumentNode<EditAssetMutation, EditAssetMutationVariables>;
 export const AllAssetsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AllAssetsQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ipxeAssets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"resourceId"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"sha256"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"fileSizeBytes"}}]}}]}}]} as unknown as DocumentNode<AllAssetsQueryQuery, AllAssetsQueryQueryVariables>;

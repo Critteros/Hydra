@@ -53,4 +53,16 @@ export const permissionConfig = {
   'ipxeAssets.edit': {
     description: 'Allows to edit ipxe assets',
   },
+  'ipxeStrategy.read': {
+    description: 'Allows to read ipxe strategy',
+  },
+  'ipxeStrategy.create': {
+    description: 'Allows to create ipxe strategy',
+  },
+  'ipxeStrategy.delete': {
+    description: 'Allows to delete ipxe strategy',
+  },
+  'ipxeStrategy.apply': {
+    description: 'Allows to apply ipxe strategy',
+  },
 } as const satisfies Record<Permissions, Omit<Permission, 'id'>>;

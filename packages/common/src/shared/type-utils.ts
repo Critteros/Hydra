@@ -19,3 +19,9 @@ export type PathValue<T, P extends Path<T>> = P extends `${infer Key}.${infer Re
   : P extends keyof T
   ? T[P]
   : never;
+
+export function staticImplements<T>() {
+  return <U extends T>(constructor: U) => {
+    constructor;
+  };
+}
