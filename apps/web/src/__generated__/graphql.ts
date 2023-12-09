@@ -36,6 +36,24 @@ export type AssignedPermission = {
   id: Scalars['ID']['output'];
 };
 
+export type BasicBootStrategy = {
+  __typename?: 'BasicBootStrategy';
+  /** Strategy descriptino */
+  description: Scalars['String']['output'];
+  /** Relative path to initramfs asset file */
+  initramfsPath: Scalars['String']['output'];
+  /** Kernel params passed to kernel commandline */
+  kernelParams?: Maybe<Scalars['String']['output']>;
+  /** Relative path to kernel asset file */
+  kernelPath: Scalars['String']['output'];
+  /** Strategy name */
+  name: Scalars['String']['output'];
+  /** Template used for startegy */
+  template: IpxeStrategyTemplate;
+  /** Unique identifier of a strategy */
+  uid: Scalars['ID']['output'];
+};
+
 /** Represent a computer which participates in the network boot process */
 export type Computer = {
   __typename?: 'Computer';
@@ -159,6 +177,8 @@ export type IpxeAsset = {
   /** URL of the asset */
   url: Scalars['String']['output'];
 };
+
+export type IpxeStrategy = BasicBootStrategy;
 
 export type IpxeStrategyTemplate = {
   __typename?: 'IpxeStrategyTemplate';
@@ -389,6 +409,7 @@ export type Query = {
   role?: Maybe<Role>;
   /** Get all roles */
   roles: Array<Role>;
+  sample: IpxeStrategy;
   user?: Maybe<User>;
   users: Array<User>;
 };

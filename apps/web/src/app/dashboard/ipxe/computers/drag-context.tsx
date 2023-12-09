@@ -26,8 +26,6 @@ export function DragContext({ children }: DragContextProps) {
     const destinationGroupUid =
       destination?.droppableId === UNGROUPED_COMPUTERS ? null : destination?.droppableId ?? null;
 
-    console.log(destination?.index);
-
     await moveComputer({
       variables: {
         computerUid,
