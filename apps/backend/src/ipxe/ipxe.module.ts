@@ -18,6 +18,7 @@ import { ComputerResolver } from './resolvers/computer.resolver';
 import { ComputerGroupResolver } from './resolvers/computerGroup.resolver';
 import { IpxeAssetResolver } from './resolvers/ipxe-asset.resolver';
 import { IpxeStrategyTemplateResolver } from './resolvers/ipxe-strategy-template.resolver';
+import { IpxeStrategyResolver } from './resolvers/ipxe-strategy.resolver';
 import { ComputerService } from './services/computer.service';
 import { ComputerGroupService } from './services/computerGroup.service';
 import { IpxeAssetService } from './services/ipxe-asset.service';
@@ -65,6 +66,7 @@ import { uniqueFilename } from './utils/file-storage';
     IpxeAssetResolver,
     IpxeStrategyTemplateResolver,
     IpxeRendererService,
+    IpxeStrategyResolver,
   ],
   controllers: [IpxeAssetController, IpxeBootControler],
 })
