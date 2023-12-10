@@ -38,7 +38,7 @@ const documents = {
     "\n  mutation UpdateGlobalStrategy($whichStrategy: WhereUniqueIpxeStrategyNullable) {\n    changeGlobalIpxeStrategy(whichStretgy: $whichStrategy) {\n      __typename\n    }\n  }\n": types.UpdateGlobalStrategyDocument,
     "\n  query GlobalStrategyName {\n    globalIpxeStrategy {\n      __typename\n      ...on BasicBootStrategy {\n        uid\n        name\n      }\n    }\n  }\n": types.GlobalStrategyNameDocument,
     "\n  query PermissionsSummary {\n    allPermissions: permissions {\n      id\n      description\n    }\n    me {\n      uid\n      permissions {\n        id\n        description\n      }\n    }\n  }\n": types.PermissionsSummaryDocument,
-    "\n  mutation CreateRole($input: CreateRoleInput!) {\n    createRole(data: $input) {\n      __typename\n    }\n  }\n": types.CreateRoleDocument,
+    "\n  mutation CreateRole($input: CreateRoleInput!) {\n    createRole(data: $input) {\n      __typename\n      uid\n    }\n  }\n": types.CreateRoleDocument,
     "\n  mutation DeleteMultipleRoles($uids: [String!]!) {\n    deleteMultipleRoles(uids: $uids)\n  }\n": types.DeleteMultipleRolesDocument,
     "\n  mutation AssignPermissionsToRole($roleUid: ID!, $permissionIds: [String!]!) {\n    assignPermissionsToRole(uid: $roleUid, permissionIds: $permissionIds)\n  }\n": types.AssignPermissionsToRoleDocument,
     "\n  mutation AssignUsersToRole($roleUid: ID!, $userUids: [String!]!) {\n    assignUsersToRole(uid: $roleUid, userUids: $userUids)\n  }\n": types.AssignUsersToRoleDocument,
@@ -173,7 +173,7 @@ export function gql(source: "\n  query PermissionsSummary {\n    allPermissions:
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation CreateRole($input: CreateRoleInput!) {\n    createRole(data: $input) {\n      __typename\n    }\n  }\n"): (typeof documents)["\n  mutation CreateRole($input: CreateRoleInput!) {\n    createRole(data: $input) {\n      __typename\n    }\n  }\n"];
+export function gql(source: "\n  mutation CreateRole($input: CreateRoleInput!) {\n    createRole(data: $input) {\n      __typename\n      uid\n    }\n  }\n"): (typeof documents)["\n  mutation CreateRole($input: CreateRoleInput!) {\n    createRole(data: $input) {\n      __typename\n      uid\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

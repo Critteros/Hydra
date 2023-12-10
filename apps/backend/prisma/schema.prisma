@@ -85,7 +85,7 @@ model Permission {
 model Computer {
   uid             String               @id @default(cuid()) @db.VarChar(256)
   name            String               @unique @db.VarChar(256)
-  mac             String               @unique @db.VarChar(64)
+  mac             String               @unique @db.Citext
   ipv4            String?              @unique @db.VarChar(32)
   computerGroup   ComputerGroup?       @relation(fields: [computerGroupId], references: [uid])
   computerGroupId String?              @map("computer_group_id") @db.VarChar(256)
