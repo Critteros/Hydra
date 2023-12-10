@@ -15,15 +15,21 @@ import {
   ComputerGroupViewOptionsUpdateInput,
 } from '../schemas/computerGroup.input';
 import { ComputerGroup, ComputerGroupViewOptions } from '../schemas/computerGroup.object';
+import { WhereUniqueIpxeStrategyNullable } from '../schemas/ipxe-strategy.input';
+import { IpxeStrategy } from '../schemas/ipxe-strategy.object';
 import {
   ComputerGroupService,
   ComputerGroupNotFoundError,
   ComputerGroupNameAlreadyExistsError,
 } from '../services/computerGroup.service';
+import { IpxeStrategySelectorService } from '../services/ipxe-strategy-selector.service';
 
 @Resolver(() => ComputerGroup)
 export class ComputerGroupResolver {
-  constructor(private readonly computerGroupService: ComputerGroupService) {}
+  constructor(
+    private readonly computerGroupService: ComputerGroupService,
+    private readonly ipxeStrategySelectorService: IpxeStrategySelectorService,
+  ) {}
 
   // ================================ Queries ================================
 
@@ -168,6 +174,28 @@ export class ComputerGroupResolver {
     return true;
   }
 
+  @Mutation(() => ComputerGroup)
+  @RequirePermission('ipxeStrategy.apply')
+  async changeComputerGroupStrategy(
+    @Args('whichComputerGroup', {
+      type: () => WhereUniqueComputerGroupInput,
+    })
+    whereComputerGroup: WhereUniqueComputerGroupInput,
+    @Args('whichStrategy', {
+      type: () => WhereUniqueIpxeStrategyNullable,
+      nullable: true,
+    })
+    whereStrategy: WhereUniqueIpxeStrategyNullable,
+  ) {
+    return await this.ipxeStrategySelectorService.setComputerGroupStrategy({
+      whereComputerGroup: whereComputerGroup as Prisma.ComputerGroupWhereUniqueInput,
+      whereStrategy:
+        Object.keys(whereStrategy).length !== 0
+          ? (whereStrategy as Prisma.IpxeStrategyWhereUniqueInput)
+          : null,
+    });
+  }
+
   // ================================ Resolvers ================================
   @ResolveField(() => [Computer])
   async computers(@Parent() computerGroup: ComputerGroup) {
@@ -178,6 +206,13 @@ export class ComputerGroupResolver {
   async viewOptions(@Parent() computerGroup: ComputerGroup) {
     return await this.computerGroupService.viewOptions({
       computerGroupId: computerGroup.uid,
+    });
+  }
+
+  @ResolveField(() => IpxeStrategy)
+  async strategy(@Parent() { uid }: ComputerGroup) {
+    return await this.ipxeStrategySelectorService.getDirectComputerGroupStrategy({
+      where: { uid },
     });
   }
 }

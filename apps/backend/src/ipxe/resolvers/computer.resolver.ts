@@ -12,6 +12,8 @@ import {
   ComputerViewOptionsUpdateInput,
 } from '../schemas/computer.input';
 import { Computer, ComputerViewOptions } from '../schemas/computer.object';
+import { WhereUniqueIpxeStrategyNullable } from '../schemas/ipxe-strategy.input';
+import { IpxeStrategy } from '../schemas/ipxe-strategy.object';
 import {
   ComputerService,
   ComputerNotFoundError,
@@ -19,10 +21,14 @@ import {
   ComputerMacAlreadyExistsError,
   ComputerNameAlreadyExistsError,
 } from '../services/computer.service';
+import { IpxeStrategySelectorService } from '../services/ipxe-strategy-selector.service';
 
 @Resolver(() => Computer)
 export class ComputerResolver {
-  constructor(private readonly computerService: ComputerService) {}
+  constructor(
+    private readonly computerService: ComputerService,
+    private readonly strategySelectorService: IpxeStrategySelectorService,
+  ) {}
 
   // ================================ Queries ================================
 
@@ -103,10 +109,39 @@ export class ComputerResolver {
     );
   }
 
+  @Mutation(() => Computer, { description: 'Changes computer ipxe strategy' })
+  @RequirePermission('ipxeStrategy.apply')
+  async changeComputerStrategy(
+    @Args('whichComputer', {
+      type: () => WhereUniqueComputerInput,
+    })
+    whereComputer: WhereUniqueComputerInput,
+    @Args('whichStrategy', {
+      type: () => WhereUniqueIpxeStrategyNullable,
+      nullable: true,
+    })
+    whereStrategy: WhereUniqueIpxeStrategyNullable,
+  ) {
+    // I hate class-validator
+    // if whereStrategy would be empty object then interpret it as null
+    return await this.strategySelectorService.setComputerStrategy({
+      whereComputer: whereComputer as Prisma.ComputerWhereUniqueInput,
+      whereStrategy:
+        Object.keys(whereStrategy).length !== 0
+          ? (whereStrategy as Prisma.IpxeStrategyWhereUniqueInput)
+          : null,
+    });
+  }
+
   // ================================ Resolvers ================================
 
   @ResolveField(() => ComputerViewOptions)
   async viewOptions(@Parent() computer: Computer) {
     return await this.computerService.viewOptions({ computerId: computer.uid });
+  }
+
+  @ResolveField(() => IpxeStrategy)
+  async strategy(@Parent() { uid }: Computer) {
+    return await this.strategySelectorService.getDirectComputerStrategy({ where: { uid } });
   }
 }

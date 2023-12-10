@@ -17,12 +17,14 @@ import { IpxeBootControler } from './controllers/ipxe-boot.controler';
 import { ComputerResolver } from './resolvers/computer.resolver';
 import { ComputerGroupResolver } from './resolvers/computerGroup.resolver';
 import { IpxeAssetResolver } from './resolvers/ipxe-asset.resolver';
+import { IpxeGlobalStrategyResolver } from './resolvers/ipxe-global-strategy.resolver';
 import { IpxeStrategyTemplateResolver } from './resolvers/ipxe-strategy-template.resolver';
 import { IpxeStrategyResolver, BasicStrategyResolver } from './resolvers/ipxe-strategy.resolver';
 import { ComputerService } from './services/computer.service';
 import { ComputerGroupService } from './services/computerGroup.service';
 import { IpxeAssetService } from './services/ipxe-asset.service';
 import { IpxeRendererService } from './services/ipxe-renderer.service';
+import { IpxeStrategySelectorService } from './services/ipxe-strategy-selector.service';
 import { IpxeStrategyTemplateService } from './services/ipxe-strategy-template.service';
 import { IpxeStrategyService } from './services/ipxe-strategy.service';
 import { uniqueFilename } from './utils/file-storage';
@@ -71,7 +73,9 @@ import { uniqueFilename } from './utils/file-storage';
     IpxeRendererService,
     IpxeStrategyResolver,
     IpxeStrategyService,
+    IpxeStrategySelectorService,
     IpxeStrategyTemplateService,
+    IpxeGlobalStrategyResolver,
   ],
   controllers: [IpxeAssetController, IpxeBootControler],
 })

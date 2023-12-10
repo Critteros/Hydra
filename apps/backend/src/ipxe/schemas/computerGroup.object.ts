@@ -1,6 +1,7 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 import { Computer } from './computer.object';
+import { IpxeStrategy } from './ipxe-strategy.object';
 
 @ObjectType({ description: 'Presentation configuration for a computer group' })
 export class ComputerGroupViewOptions {
@@ -27,4 +28,10 @@ export class ComputerGroup {
     nullable: true,
   })
   viewOptions?: ComputerGroupViewOptions;
+
+  @Field(() => IpxeStrategy, {
+    description: 'Ipxe strategy used when booting',
+    nullable: true,
+  })
+  strategy?: typeof IpxeStrategy;
 }
