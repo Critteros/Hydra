@@ -35,6 +35,8 @@ const documents = {
     "\n  query QueryComputersWithoutGroup {\n    computers(standalone: true) {\n      uid\n      name\n      mac\n      ipv4\n      viewOptions {\n        order\n      }\n      strategy {\n        __typename\n        ...on BasicBootStrategy {\n          uid\n          name\n        }\n      }\n    }\n  }\n": types.QueryComputersWithoutGroupDocument,
     "\n  query QueryComputerGroups {\n    computerGroups {\n      uid\n      name\n      computers {\n        uid\n        name\n        mac\n        ipv4\n        viewOptions {\n          order\n        }\n        strategy {\n          __typename\n          ...on BasicBootStrategy {\n            uid\n            name\n          }\n        }\n      }\n      strategy {\n        __typename\n        ...on BasicBootStrategy {\n          uid\n          name\n        }\n      }\n      viewOptions {\n        order\n      }\n    }\n  }\n": types.QueryComputerGroupsDocument,
     "\n  mutation UpdateComputerStrategy($computerUid: String!, $whichStrategy: WhereUniqueIpxeStrategyNullable) {\n    changeComputerStrategy(whichComputer: {uid: $computerUid}, whichStrategy: $whichStrategy) {\n      uid\n    }\n  }\n": types.UpdateComputerStrategyDocument,
+    "\n  mutation UpdateGlobalStrategy($whichStrategy: WhereUniqueIpxeStrategyNullable) {\n    changeGlobalIpxeStrategy(whichStretgy: $whichStrategy) {\n      __typename\n    }\n  }\n": types.UpdateGlobalStrategyDocument,
+    "\n  query GlobalStrategyName {\n    globalIpxeStrategy {\n      __typename\n      ...on BasicBootStrategy {\n        uid\n        name\n      }\n    }\n  }\n": types.GlobalStrategyNameDocument,
     "\n  query PermissionsSummary {\n    allPermissions: permissions {\n      id\n      description\n    }\n    me {\n      uid\n      permissions {\n        id\n        description\n      }\n    }\n  }\n": types.PermissionsSummaryDocument,
     "\n  mutation CreateRole($input: CreateRoleInput!) {\n    createRole(data: $input) {\n      __typename\n    }\n  }\n": types.CreateRoleDocument,
     "\n  mutation DeleteMultipleRoles($uids: [String!]!) {\n    deleteMultipleRoles(uids: $uids)\n  }\n": types.DeleteMultipleRolesDocument,
@@ -156,6 +158,14 @@ export function gql(source: "\n  query QueryComputerGroups {\n    computerGroups
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UpdateComputerStrategy($computerUid: String!, $whichStrategy: WhereUniqueIpxeStrategyNullable) {\n    changeComputerStrategy(whichComputer: {uid: $computerUid}, whichStrategy: $whichStrategy) {\n      uid\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateComputerStrategy($computerUid: String!, $whichStrategy: WhereUniqueIpxeStrategyNullable) {\n    changeComputerStrategy(whichComputer: {uid: $computerUid}, whichStrategy: $whichStrategy) {\n      uid\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateGlobalStrategy($whichStrategy: WhereUniqueIpxeStrategyNullable) {\n    changeGlobalIpxeStrategy(whichStretgy: $whichStrategy) {\n      __typename\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateGlobalStrategy($whichStrategy: WhereUniqueIpxeStrategyNullable) {\n    changeGlobalIpxeStrategy(whichStretgy: $whichStrategy) {\n      __typename\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GlobalStrategyName {\n    globalIpxeStrategy {\n      __typename\n      ...on BasicBootStrategy {\n        uid\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query GlobalStrategyName {\n    globalIpxeStrategy {\n      __typename\n      ...on BasicBootStrategy {\n        uid\n        name\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
