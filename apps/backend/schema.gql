@@ -78,83 +78,6 @@ type Role {
   permissionsCount: Int!
 }
 
-"""Presentation configuration for a computer"""
-type ComputerViewOptions {
-  """Whether to show the computer in the list"""
-  id: ID!
-
-  """Whether to show the computer in the list"""
-  order: Float!
-}
-
-"""Represent a computer which participates in the network boot process"""
-type Computer {
-  """Unique identifier of the computer"""
-  uid: ID!
-
-  """Name of the computer set by the user"""
-  name: String!
-
-  """MAC address of the computer"""
-  mac: String!
-
-  """IP address of the computer"""
-  ipv4: String
-
-  """Presentation configuration for a computer"""
-  viewOptions: ComputerViewOptions
-}
-
-"""Presentation configuration for a computer group"""
-type ComputerGroupViewOptions {
-  """Whether to show the computer group in the list"""
-  id: ID!
-
-  """Whether to show the computer group in the list"""
-  order: Float!
-}
-
-"""Represent a grouping of computers"""
-type ComputerGroup {
-  """Unique identifier of the computer group"""
-  uid: ID!
-
-  """Name of the computer group"""
-  name: String!
-
-  """Description of the computer group"""
-  computers: [Computer!]!
-
-  """Presentation configuration for a computer group"""
-  viewOptions: ComputerGroupViewOptions
-}
-
-type IpxeAsset {
-  """Unique id of an asset"""
-  uid: ID!
-
-  """Resource id of an asset"""
-  resourceId: String!
-
-  """Original filename of the asset"""
-  filename: String!
-
-  """Creation date of the asset"""
-  createdAt: DateTime!
-
-  """Last update date of the asset"""
-  updatedAt: DateTime!
-
-  """SHA256 hash of the asset"""
-  sha256: String!
-
-  """URL of the asset"""
-  url: String!
-
-  """MIME type of the asset"""
-  fileSizeBytes: Int!
-}
-
 type IpxeStrategyTemplate {
   id: ID!
   name: String!
@@ -182,6 +105,91 @@ type BasicBootStrategy {
 
   """Kernel params passed to kernel commandline"""
   kernelParams: String
+}
+
+"""Presentation configuration for a computer"""
+type ComputerViewOptions {
+  """Whether to show the computer in the list"""
+  id: ID!
+
+  """Whether to show the computer in the list"""
+  order: Float!
+}
+
+"""Represent a computer which participates in the network boot process"""
+type Computer {
+  """Unique identifier of the computer"""
+  uid: ID!
+
+  """Name of the computer set by the user"""
+  name: String!
+
+  """MAC address of the computer"""
+  mac: String!
+
+  """IP address of the computer"""
+  ipv4: String
+
+  """Presentation configuration for a computer"""
+  viewOptions: ComputerViewOptions
+
+  """Ipxe strategy used when booting"""
+  strategy: IpxeStrategy
+}
+
+union IpxeStrategy = BasicBootStrategy
+
+"""Presentation configuration for a computer group"""
+type ComputerGroupViewOptions {
+  """Whether to show the computer group in the list"""
+  id: ID!
+
+  """Whether to show the computer group in the list"""
+  order: Float!
+}
+
+"""Represent a grouping of computers"""
+type ComputerGroup {
+  """Unique identifier of the computer group"""
+  uid: ID!
+
+  """Name of the computer group"""
+  name: String!
+
+  """Description of the computer group"""
+  computers: [Computer!]!
+
+  """Presentation configuration for a computer group"""
+  viewOptions: ComputerGroupViewOptions
+
+  """Ipxe strategy used when booting"""
+  strategy: IpxeStrategy
+}
+
+type IpxeAsset {
+  """Unique id of an asset"""
+  uid: ID!
+
+  """Resource id of an asset"""
+  resourceId: String!
+
+  """Original filename of the asset"""
+  filename: String!
+
+  """Creation date of the asset"""
+  createdAt: DateTime!
+
+  """Last update date of the asset"""
+  updatedAt: DateTime!
+
+  """SHA256 hash of the asset"""
+  sha256: String!
+
+  """URL of the asset"""
+  url: String!
+
+  """MIME type of the asset"""
+  fileSizeBytes: Int!
 }
 
 type Query {
@@ -234,6 +242,9 @@ type Query {
   """Retrives ipxe strategy templates"""
   ipxeStrategyTemplates: [IpxeStrategyTemplate!]!
   ipxeStrategies: [IpxeStrategy!]!
+
+  """Global ipxe strategy"""
+  globalIpxeStrategy: IpxeStrategy
 }
 
 input WhereUniqueComputerInput {
@@ -255,8 +266,6 @@ input WhereUniqueIpxeStrategy {
   uid: String
   name: String
 }
-
-union IpxeStrategy = BasicBootStrategy
 
 type Mutation {
   """Updates user data"""
@@ -343,6 +352,9 @@ type Mutation {
   """Change the view options of a computer"""
   changeComputerViewOptions(where: WhereUniqueComputerInput!, data: ComputerViewOptionsUpdateInput!): ComputerViewOptions!
 
+  """Changes computer ipxe strategy"""
+  changeComputerStrategy(whichComputer: WhereUniqueComputerInput!, whichStrategy: WhereUniqueIpxeStrategyNullable): Computer!
+
   """Create a new computer group"""
   createComputerGroup(data: ComputerGroupCreateInput!): ComputerGroup!
 
@@ -372,6 +384,7 @@ type Mutation {
     """New order of the computer in the group"""
     newOrder: Int!
   ): Boolean!
+  changeComputerGroupStrategy(whichComputerGroup: WhereUniqueComputerGroupInput!, whichStrategy: WhereUniqueIpxeStrategyNullable): ComputerGroup!
   createBasicBootStrategy(input: BasicBootStrategyCreateInput!): BasicBootStrategy!
   updateBasicBootStrategy(where: WhereUniqueIpxeStrategy!, update: BasicBootStrategyUpdateInput!): BasicBootStrategy!
 
@@ -389,6 +402,9 @@ type Mutation {
   """Update asset metadata"""
   updateAssetMetadata(where: WhereUniqueIpxeAssetInput!, data: UpdateIpxeAssetInput!): IpxeAsset!
   deleteIpxeStrategy(where: WhereUniqueIpxeStrategy!): IpxeStrategy!
+
+  """Changes global ipxe strategy"""
+  changeGlobalIpxeStrategy(whichStretgy: WhereUniqueIpxeStrategyNullable): IpxeStrategy
 }
 
 input UpdateUserInput {
@@ -446,6 +462,11 @@ input ComputerViewOptionsCreateInput {
 input ComputerViewOptionsUpdateInput {
   """Order of the computer in the list"""
   order: Float!
+}
+
+input WhereUniqueIpxeStrategyNullable {
+  uid: String
+  name: String
 }
 
 input ComputerGroupCreateInput {

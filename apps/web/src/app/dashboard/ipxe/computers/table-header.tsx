@@ -10,6 +10,7 @@ export function TableHeader() {
         <TableCell>Name</TableCell>
         <TableCell>IP Address</TableCell>
         <TableCell>MAC Address</TableCell>
+        <TableCell>Strategy</TableCell>
         <ServerPermissionBoundry permission="computers.delete" fallback={<></>}>
           <TableCell className="w-10">Actions</TableCell>
         </ServerPermissionBoundry>

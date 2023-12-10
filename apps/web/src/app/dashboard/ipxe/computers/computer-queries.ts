@@ -10,6 +10,13 @@ export const queryComputersWithoutGroup = gql(`
       viewOptions {
         order
       }
+      strategy {
+        __typename
+        ...on BasicBootStrategy {
+          uid
+          name
+        }
+      }
     }
   }
 `);
@@ -26,6 +33,20 @@ export const queryComputerGroups = gql(`
         ipv4
         viewOptions {
           order
+        }
+        strategy {
+          __typename
+          ...on BasicBootStrategy {
+            uid
+            name
+          }
+        }
+      }
+      strategy {
+        __typename
+        ...on BasicBootStrategy {
+          uid
+          name
         }
       }
       viewOptions {

@@ -4,25 +4,37 @@
 // only ComputerGroup is imported.
 import { useState, type ReactNode } from 'react';
 
+// For some reason prettier is crashing if this is done in normal way
 import type * as GQLTypes from '$gql/types';
 import { ChevronUpIcon, ChevronDownIcon } from '@radix-ui/react-icons';
+import type { PickDeep } from 'type-fest';
 
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { TableCell } from '@/components/ui/table';
 import { Typography } from '@/components/ui/typography';
+import { ClientPermissionBoundry } from '@/lib/client/client-permission-boundry';
 import { cn } from '@/lib/utils';
 
+import { ComputerGroupStrategySelector } from './computer-group-strategy-selector';
 import { DeleteGroup } from './delete-group';
+import { ReadonlyStrategyView } from './fallbacks/readonly-strategy-view';
 
-type ComputerGroupProps = { children: ReactNode; groupUid: string } & Pick<
-  GQLTypes.ComputerGroup,
-  'name'
->;
+type ComputerGroupProps = {
+  children: ReactNode;
+  groupUid: string;
+  strategies: Array<Pick<GQLTypes.IpxeStrategy, 'name' | 'uid'>>;
+} & PickDeep<GQLTypes.ComputerGroup, 'name' | 'strategy.uid' | 'strategy.name'>;
 
-export function ComputerGroup({ name, children, groupUid }: ComputerGroupProps) {
+export function ComputerGroup({
+  name,
+  children,
+  groupUid,
+  strategy,
+  strategies,
+}: ComputerGroupProps) {
   const [open, setOpen] = useState(false);
-
+  // TODO: FIX STYLING, this component is a mess
   return (
     <Collapsible open={open} onOpenChange={setOpen} asChild>
       <tr>
@@ -36,16 +48,36 @@ export function ComputerGroup({ name, children, groupUid }: ComputerGroupProps) 
                   open && 'mb-5 border-b-2 pb-8',
                 )}
               >
-                <Typography variant="h3">{name}</Typography>
-                {open ? (
-                  <ChevronUpIcon width={20} height={20} />
-                ) : (
-                  <ChevronDownIcon width={20} height={20} />
-                )}
+                <span className="relative left-[150px] flex flex-row items-center gap-2">
+                  <Typography variant="h3">{name}</Typography>
+                  {open ? (
+                    <ChevronUpIcon width={20} height={20} />
+                  ) : (
+                    <ChevronDownIcon width={20} height={20} />
+                  )}
+                </span>
               </Button>
-              <span className="mr-4">
-                <DeleteGroup groupUid={groupUid} />
-              </span>
+              <div className={cn('flex flex-row gap-[40px]', open && 'mb-5 ml-[-3px] border-b-2')}>
+                <div className="flex w-[260px] flex-col items-start justify-start px-[50px]">
+                  <ClientPermissionBoundry
+                    permission="ipxeStrategy.apply"
+                    fallback={
+                      <span className="inline-flex items-center justify-center pt-[10px]">
+                        <ReadonlyStrategyView strategy={strategy} />
+                      </span>
+                    }
+                  >
+                    <ComputerGroupStrategySelector
+                      computerGroupUid={groupUid}
+                      strategies={strategies}
+                      strategy={strategy}
+                    />
+                  </ClientPermissionBoundry>
+                </div>
+                <span className="shrink-0">
+                  <DeleteGroup groupUid={groupUid} />
+                </span>
+              </div>
             </span>
           </CollapsibleTrigger>
           <CollapsibleContent>

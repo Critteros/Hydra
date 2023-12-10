@@ -10,14 +10,25 @@ import { WhereUniqueIpxeStrategyTemplate } from './ipxe-strategy-template.input'
 @InputType()
 export class WhereUniqueIpxeStrategy {
   @Field(() => String, { nullable: true })
-  @IsOptional()
   @IsAtLeaseOnePropertyDefined()
   @Length(1, 256)
   uid?: string;
 
   @Field(() => String, { nullable: true })
-  @IsOptional()
   @IsAtLeaseOnePropertyDefined()
+  @Length(1, 256)
+  name?: string;
+}
+
+@InputType()
+export class WhereUniqueIpxeStrategyNullable {
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  @Length(1, 256)
+  uid?: string;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @Length(1, 256)
   name?: string;
 }

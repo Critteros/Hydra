@@ -51,3 +51,15 @@ export const StrategyDataQuery = gql(`
     }
   }
 `);
+
+export const StrategyNamesQuery = gql(`
+  query StrategyNames {
+    ipxeStrategies {
+      __typename
+      ...on BasicBootStrategy {
+        uid
+        name
+      }
+    }
+  }
+`);
