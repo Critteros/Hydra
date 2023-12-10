@@ -38,3 +38,16 @@ export const BasicBootStrategyDefaultValuesQuery = gql(`
     }
   }
 `);
+
+export const StrategyDataQuery = gql(`
+  query StrategyDataQuery {
+    ipxeStrategyTemplates {
+      id
+      name
+    }
+    ipxeAssets {
+      uid
+      resourceId
+    }
+  }
+`);

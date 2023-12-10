@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 
-import { gql } from '$gql';
 import type { IpxeAsset, IpxeStrategyTemplate, IpxeStrategy } from '$gql/types';
 import { useQuery } from '@apollo/client';
 import type { IPXEStrategy } from '@hydra-ipxe/common/shared/ipxe/strategies.def';
