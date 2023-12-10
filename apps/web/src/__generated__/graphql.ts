@@ -54,6 +54,21 @@ export type BasicBootStrategy = {
   uid: Scalars['ID']['output'];
 };
 
+export type BasicBootStrategyCreateInput = {
+  /** Ipxe strategy description */
+  description: Scalars['String']['input'];
+  /** Relative path to a initamfs asset file */
+  initramfsPath: Scalars['String']['input'];
+  /** Kernel params passed to kernel commandline */
+  kernelParams?: InputMaybe<Scalars['String']['input']>;
+  /** Relative path to a kernel asset file */
+  kernelPath: Scalars['String']['input'];
+  /** Ipxe strategy name */
+  name: Scalars['String']['input'];
+  /** Ipxe strategy template selector */
+  template: WhereUniqueIpxeStrategyTemplate;
+};
+
 /** Represent a computer which participates in the network boot process */
 export type Computer = {
   __typename?: 'Computer';
@@ -203,6 +218,7 @@ export type Mutation = {
   changeComputerGroupViewOptions: ComputerGroupViewOptions;
   /** Change the view options of a computer */
   changeComputerViewOptions: ComputerViewOptions;
+  createBasicBootStrategy: BasicBootStrategy;
   /** Create a new computer */
   createComputer: Computer;
   /** Create a new computer group */
@@ -281,6 +297,11 @@ export type MutationChangeComputerGroupViewOptionsArgs = {
 export type MutationChangeComputerViewOptionsArgs = {
   data: ComputerViewOptionsUpdateInput;
   where: WhereUniqueComputerInput;
+};
+
+
+export type MutationCreateBasicBootStrategyArgs = {
+  input: BasicBootStrategyCreateInput;
 };
 
 
@@ -510,6 +531,13 @@ export type WhereUniqueIpxeAssetInput = {
   resourceId?: InputMaybe<Scalars['String']['input']>;
   /** Unique id of an asset */
   uid?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type WhereUniqueIpxeStrategyTemplate = {
+  /** Unique id of the ipxe strategy template */
+  id?: InputMaybe<Scalars['String']['input']>;
+  /** Template name */
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
