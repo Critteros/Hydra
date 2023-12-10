@@ -36,6 +36,7 @@ export class IpxeBootControler {
     },
   ])
   async boot(@Param('mac') mac: string, @Req() request: Request) {
+    console.log(mac);
     // For some unknown to me reason the regex validation in the @Get param does not work as expected and cuts off mac to something like cc:
     const res = z.string().regex(IpxeBootControler.macRegex).safeParse(mac);
     if (!res.success) {

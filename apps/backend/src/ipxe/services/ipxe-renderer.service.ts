@@ -85,7 +85,9 @@ export class IpxeRendererService {
 
   async renderForMacAdress(mac: string): Promise<string> {
     const strategyData = await this.strategySelectorService.resolveStrategyForComputer({
-      where: { mac },
+      where: {
+        mac,
+      },
     });
     if (!strategyData) {
       return new BaseRenderer(this.getRendererConfig()).defaultRenderForNoStrategy(mac);

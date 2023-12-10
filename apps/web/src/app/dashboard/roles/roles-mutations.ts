@@ -4,6 +4,7 @@ export const createRoleMutation = gql(`
   mutation CreateRole($input: CreateRoleInput!) {
     createRole(data: $input) {
       __typename
+      uid
     }
   }
 `);
