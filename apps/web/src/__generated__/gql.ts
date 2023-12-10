@@ -14,6 +14,12 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n": types.CurrentUserDocument,
+    "\n  mutation BasicBootStrategyCreate($input: BasicBootStrategyCreateInput!) {\n    createBasicBootStrategy(input: $input) {\n      uid\n    }\n  }\n": types.BasicBootStrategyCreateDocument,
+    "\n  mutation BasicBootStrategyUpdate($strategyUid: String!, $update: BasicBootStrategyUpdateInput!) {\n    updateBasicBootStrategy(where: {uid: $strategyUid}, update: $update) {\n      uid\n    }\n  }\n": types.BasicBootStrategyUpdateDocument,
+    "\n  query IpxeStrategyQuery {\n    ipxeStrategies {\n      __typename\n      ... on BasicBootStrategy {\n        uid\n        template {\n          id\n          name\n        }\n        name\n        description\n      }\n    }\n  }\n": types.IpxeStrategyQueryDocument,
+    "\n  query BasicBootStartegyDefaultValues($strategyUid: String!) {\n    basicBootStrategy(where: {uid: $strategyUid}) {\n     uid\n     name\n     description\n     kernelPath\n     initramfsPath\n     kernelParams \n     template {\n      id\n     }\n    }\n  }\n": types.BasicBootStartegyDefaultValuesDocument,
+    "\n  mutation DeleteStrategy($strategyUid: String!) {\n    deleteIpxeStrategy(where: {uid: $strategyUid}) {\n      __typename\n    }\n  }\n": types.DeleteStrategyDocument,
+    "\n  query EditStrategyDataQuery {\n    ipxeStrategyTemplates {\n      id\n      name\n    }\n    ipxeAssets {\n      uid\n      resourceId\n    }\n  }\n": types.EditStrategyDataQueryDocument,
     "\n  query IpxeTemplatesQuery {\n    ipxeStrategyTemplates {\n      id\n      name\n      description\n    }\n  }\n": types.IpxeTemplatesQueryDocument,
     "\n  mutation DeleteAssets($where: [WhereUniqueIpxeAssetInput!]!) {\n    removeAssets(where: $where)\n  }\n": types.DeleteAssetsDocument,
     "\n  mutation EditAsset($where: WhereUniqueIpxeAssetInput!, $data: UpdateIpxeAssetInput!) {\n    updateAssetMetadata(where: $where, data: $data) {\n      uid\n      resourceId\n      filename\n    }\n  }\n": types.EditAssetDocument,
@@ -63,6 +69,30 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"): (typeof documents)["\n  query CurrentUser {\n    me {\n      uid\n      email\n      name\n      accountType\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation BasicBootStrategyCreate($input: BasicBootStrategyCreateInput!) {\n    createBasicBootStrategy(input: $input) {\n      uid\n    }\n  }\n"): (typeof documents)["\n  mutation BasicBootStrategyCreate($input: BasicBootStrategyCreateInput!) {\n    createBasicBootStrategy(input: $input) {\n      uid\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation BasicBootStrategyUpdate($strategyUid: String!, $update: BasicBootStrategyUpdateInput!) {\n    updateBasicBootStrategy(where: {uid: $strategyUid}, update: $update) {\n      uid\n    }\n  }\n"): (typeof documents)["\n  mutation BasicBootStrategyUpdate($strategyUid: String!, $update: BasicBootStrategyUpdateInput!) {\n    updateBasicBootStrategy(where: {uid: $strategyUid}, update: $update) {\n      uid\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query IpxeStrategyQuery {\n    ipxeStrategies {\n      __typename\n      ... on BasicBootStrategy {\n        uid\n        template {\n          id\n          name\n        }\n        name\n        description\n      }\n    }\n  }\n"): (typeof documents)["\n  query IpxeStrategyQuery {\n    ipxeStrategies {\n      __typename\n      ... on BasicBootStrategy {\n        uid\n        template {\n          id\n          name\n        }\n        name\n        description\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query BasicBootStartegyDefaultValues($strategyUid: String!) {\n    basicBootStrategy(where: {uid: $strategyUid}) {\n     uid\n     name\n     description\n     kernelPath\n     initramfsPath\n     kernelParams \n     template {\n      id\n     }\n    }\n  }\n"): (typeof documents)["\n  query BasicBootStartegyDefaultValues($strategyUid: String!) {\n    basicBootStrategy(where: {uid: $strategyUid}) {\n     uid\n     name\n     description\n     kernelPath\n     initramfsPath\n     kernelParams \n     template {\n      id\n     }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteStrategy($strategyUid: String!) {\n    deleteIpxeStrategy(where: {uid: $strategyUid}) {\n      __typename\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteStrategy($strategyUid: String!) {\n    deleteIpxeStrategy(where: {uid: $strategyUid}) {\n      __typename\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query EditStrategyDataQuery {\n    ipxeStrategyTemplates {\n      id\n      name\n    }\n    ipxeAssets {\n      uid\n      resourceId\n    }\n  }\n"): (typeof documents)["\n  query EditStrategyDataQuery {\n    ipxeStrategyTemplates {\n      id\n      name\n    }\n    ipxeAssets {\n      uid\n      resourceId\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -438,6 +438,7 @@ export type Permission = {
 
 export type Query = {
   __typename?: 'Query';
+  basicBootStrategy: BasicBootStrategy;
   /** Get a single computer */
   computer?: Maybe<Computer>;
   /** Get a single computer group */
@@ -461,6 +462,11 @@ export type Query = {
   roles: Array<Role>;
   user?: Maybe<User>;
   users: Array<User>;
+};
+
+
+export type QueryBasicBootStrategyArgs = {
+  where: WhereUniqueIpxeStrategy;
 };
 
 
@@ -577,6 +583,45 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CurrentUserQuery = { __typename?: 'Query', me: { __typename?: 'User', uid: string, email: string, name?: string | null, accountType: AccountType } };
+
+export type BasicBootStrategyCreateMutationVariables = Exact<{
+  input: BasicBootStrategyCreateInput;
+}>;
+
+
+export type BasicBootStrategyCreateMutation = { __typename?: 'Mutation', createBasicBootStrategy: { __typename?: 'BasicBootStrategy', uid: string } };
+
+export type BasicBootStrategyUpdateMutationVariables = Exact<{
+  strategyUid: Scalars['String']['input'];
+  update: BasicBootStrategyUpdateInput;
+}>;
+
+
+export type BasicBootStrategyUpdateMutation = { __typename?: 'Mutation', updateBasicBootStrategy: { __typename?: 'BasicBootStrategy', uid: string } };
+
+export type IpxeStrategyQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IpxeStrategyQueryQuery = { __typename?: 'Query', ipxeStrategies: Array<{ __typename: 'BasicBootStrategy', uid: string, name: string, description: string, template: { __typename?: 'IpxeStrategyTemplate', id: string, name: string } }> };
+
+export type BasicBootStartegyDefaultValuesQueryVariables = Exact<{
+  strategyUid: Scalars['String']['input'];
+}>;
+
+
+export type BasicBootStartegyDefaultValuesQuery = { __typename?: 'Query', basicBootStrategy: { __typename?: 'BasicBootStrategy', uid: string, name: string, description: string, kernelPath: string, initramfsPath: string, kernelParams?: string | null, template: { __typename?: 'IpxeStrategyTemplate', id: string } } };
+
+export type DeleteStrategyMutationVariables = Exact<{
+  strategyUid: Scalars['String']['input'];
+}>;
+
+
+export type DeleteStrategyMutation = { __typename?: 'Mutation', deleteIpxeStrategy: { __typename: 'BasicBootStrategy' } };
+
+export type EditStrategyDataQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EditStrategyDataQueryQuery = { __typename?: 'Query', ipxeStrategyTemplates: Array<{ __typename?: 'IpxeStrategyTemplate', id: string, name: string }>, ipxeAssets: Array<{ __typename?: 'IpxeAsset', uid: string, resourceId: string }> };
 
 export type IpxeTemplatesQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -774,6 +819,12 @@ export type ServerClientBridgeQueryQuery = { __typename?: 'Query', me: { __typen
 
 
 export const CurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"accountType"}}]}}]}}]} as unknown as DocumentNode<CurrentUserQuery, CurrentUserQueryVariables>;
+export const BasicBootStrategyCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"BasicBootStrategyCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BasicBootStrategyCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createBasicBootStrategy"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]} as unknown as DocumentNode<BasicBootStrategyCreateMutation, BasicBootStrategyCreateMutationVariables>;
+export const BasicBootStrategyUpdateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"BasicBootStrategyUpdate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"strategyUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BasicBootStrategyUpdateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateBasicBootStrategy"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"strategyUid"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]} as unknown as DocumentNode<BasicBootStrategyUpdateMutation, BasicBootStrategyUpdateMutationVariables>;
+export const IpxeStrategyQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"IpxeStrategyQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ipxeStrategies"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BasicBootStrategy"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"template"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]}}]} as unknown as DocumentNode<IpxeStrategyQueryQuery, IpxeStrategyQueryQueryVariables>;
+export const BasicBootStartegyDefaultValuesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"BasicBootStartegyDefaultValues"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"strategyUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"basicBootStrategy"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"strategyUid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"kernelPath"}},{"kind":"Field","name":{"kind":"Name","value":"initramfsPath"}},{"kind":"Field","name":{"kind":"Name","value":"kernelParams"}},{"kind":"Field","name":{"kind":"Name","value":"template"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<BasicBootStartegyDefaultValuesQuery, BasicBootStartegyDefaultValuesQueryVariables>;
+export const DeleteStrategyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteStrategy"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"strategyUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteIpxeStrategy"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"strategyUid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]} as unknown as DocumentNode<DeleteStrategyMutation, DeleteStrategyMutationVariables>;
+export const EditStrategyDataQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"EditStrategyDataQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ipxeStrategyTemplates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"ipxeAssets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"resourceId"}}]}}]}}]} as unknown as DocumentNode<EditStrategyDataQueryQuery, EditStrategyDataQueryQueryVariables>;
 export const IpxeTemplatesQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"IpxeTemplatesQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ipxeStrategyTemplates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]} as unknown as DocumentNode<IpxeTemplatesQueryQuery, IpxeTemplatesQueryQueryVariables>;
 export const DeleteAssetsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteAssets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"WhereUniqueIpxeAssetInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removeAssets"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}]}]}}]} as unknown as DocumentNode<DeleteAssetsMutation, DeleteAssetsMutationVariables>;
 export const EditAssetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"EditAsset"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"WhereUniqueIpxeAssetInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateIpxeAssetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateAssetMetadata"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"resourceId"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}}]}}]}}]} as unknown as DocumentNode<EditAssetMutation, EditAssetMutationVariables>;

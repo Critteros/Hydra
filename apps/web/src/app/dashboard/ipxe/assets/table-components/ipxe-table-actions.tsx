@@ -6,10 +6,10 @@ import { useMutation, type ApolloError } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RESOURCE_ID_REGEX } from '@hydra-ipxe/common/shared/regex';
 import type { Row } from '@tanstack/react-table';
-import { Edit } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { EditButton } from '@/components/buttons/edit-button';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -110,9 +110,7 @@ export function IpxeTableActions({ row }: IpxeTableActionsProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="icon" variant="outline">
-          <Edit />
-        </Button>
+        <EditButton icon />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

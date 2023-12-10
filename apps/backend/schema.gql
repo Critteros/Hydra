@@ -226,6 +226,7 @@ type Query {
 
   """Get a single computer group"""
   computerGroup(where: WhereUniqueComputerGroupInput!): ComputerGroup
+  basicBootStrategy(where: WhereUniqueIpxeStrategy!): BasicBootStrategy!
 
   """Get all ipxe assets"""
   ipxeAssets: [IpxeAsset!]!
@@ -247,6 +248,11 @@ input WhereUniqueComputerGroupInput {
   uid: String
 
   """Name of the computer group"""
+  name: String
+}
+
+input WhereUniqueIpxeStrategy {
+  uid: String
   name: String
 }
 
@@ -488,11 +494,6 @@ input WhereUniqueIpxeStrategyTemplate {
   id: String
 
   """Template name"""
-  name: String
-}
-
-input WhereUniqueIpxeStrategy {
-  uid: String
   name: String
 }
 
