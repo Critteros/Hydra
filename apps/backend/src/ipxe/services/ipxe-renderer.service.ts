@@ -1,7 +1,11 @@
 import { Inject, Injectable, Scope } from '@nestjs/common';
 import { CONTEXT } from '@nestjs/graphql';
 
-import type { IPXEStrategy } from '@hydra-ipxe/common/shared/ipxe/strategies.def';
+import {
+  type IPXEStrategy,
+  BasicBootDataSchema,
+} from '@hydra-ipxe/common/shared/ipxe/strategies.def';
+import { IpxeStrategy } from '@prisma/client';
 import { Request } from 'express';
 
 import { MetadataService } from '@/metadata/metadata.service';
@@ -10,6 +14,9 @@ import { BaseRenderer, type RendererConfig } from '../boot/base-renderer';
 import { BasicBootRenderer } from '../boot/basic-boot-renderer';
 import { IpxeAssetController } from '../controllers/ipxe-asset.controler';
 import { IpxeBootControler } from '../controllers/ipxe-boot.controler';
+
+import { IpxeStrategySelectorService } from './ipxe-strategy-selector.service';
+import { IpxeStrategyService } from './ipxe-strategy.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class IpxeRendererService {
@@ -20,6 +27,8 @@ export class IpxeRendererService {
   constructor(
     @Inject(CONTEXT) ctx: Request | { req: Request },
     private readonly metdataService: MetadataService,
+    private readonly strategySelectorService: IpxeStrategySelectorService,
+    private readonly strategyService: IpxeStrategyService,
   ) {
     let request = ctx;
     if ('req' in request) request = request.req;
@@ -47,18 +56,21 @@ export class IpxeRendererService {
     };
   }
 
-  instantiateRenderer(rendererClass: ReturnType<typeof IpxeRendererService.prototype.getRenderer>) {
+  async instantiateRenderer({
+    rendererClass,
+    strategyUid,
+  }: {
+    rendererClass: ReturnType<typeof IpxeRendererService.prototype.getRenderer>;
+    strategyUid: IpxeStrategy['uid'];
+  }) {
     switch (rendererClass) {
-      case BasicBootRenderer:
+      case BasicBootRenderer: {
+        const strategyData = await this.strategyService.getStrategyData({ uid: strategyUid });
         return new BasicBootRenderer(
-          {
-            initramfsPath: '/initrd',
-            kernelPath: '/vmlinuz',
-            kernelParams:
-              'archisobasedir=sysresccd ${ipparam} archiso_http_srv=${media_url} initrd=initrd ${cmdline}',
-          },
+          await BasicBootDataSchema.parseAsync(strategyData),
           this.getRendererConfig(),
         );
+      }
       default:
         throw new Error(`Could not instantiate ${rendererClass.toString()}`);
     }
@@ -71,9 +83,19 @@ export class IpxeRendererService {
     }
   }
 
-  renderForMacAdress(mac: string): string {
-    const renderer = this.getRenderer('strategy.basicBoot');
-    const instance = this.instantiateRenderer(renderer);
+  async renderForMacAdress(mac: string): Promise<string> {
+    const strategyData = await this.strategySelectorService.resolveStrategyForComputer({
+      where: { mac },
+    });
+    if (!strategyData) {
+      return new BaseRenderer(this.getRendererConfig()).defaultRenderForNoStrategy(mac);
+    }
+
+    const renderer = this.getRenderer(strategyData.strategyTemplate.id as IPXEStrategy);
+    const instance = await this.instantiateRenderer({
+      rendererClass: renderer,
+      strategyUid: strategyData.uid,
+    });
 
     return instance.render();
   }

@@ -145,7 +145,15 @@ export class IpxeStrategySelectorService {
 
   async getGlobalStrategy(tx?: PrismaTransaction) {
     return await this.prismaService.transactional(tx, async (tx) => {
-      const globalEntry = await tx.globalIpxeStrategy.findFirst({ select: { strategy: true } });
+      const globalEntry = await tx.globalIpxeStrategy.findFirst({
+        select: {
+          strategy: {
+            include: {
+              strategyTemplate: true,
+            },
+          },
+        },
+      });
       return globalEntry?.strategy ?? null;
     });
   }
@@ -204,10 +212,18 @@ export class IpxeStrategySelectorService {
       const computerData = await tx.computer.findUnique({
         where,
         select: {
-          strategy: true,
+          strategy: {
+            include: {
+              strategyTemplate: true,
+            },
+          },
           computerGroup: {
             select: {
-              strategy: true,
+              strategy: {
+                include: {
+                  strategyTemplate: true,
+                },
+              },
             },
           },
         },

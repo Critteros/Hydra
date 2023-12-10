@@ -87,4 +87,20 @@ export class BaseRenderer {
       ),
     )(this.getTemplateData());
   }
+
+  defaultRenderForNoStrategy(mac: string): string {
+    return this.renderer.compile(
+      dedent(
+        `
+        {{> ipxe_setup}}
+
+        :boot
+        echo No configuration was found for this PC with mac {{{mac}}}
+        echo Computer will boot using second boot option after 5 seconds
+        sleep 5
+        exit
+        `,
+      ),
+    )({ ...this.getTemplateData(), mac });
+  }
 }
