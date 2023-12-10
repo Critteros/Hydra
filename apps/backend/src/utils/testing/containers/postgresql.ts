@@ -12,7 +12,7 @@ import type { PrismaCtx } from '@/utils/prisma/types';
 const execAsync = promisify(exec);
 
 async function createDBSchema(env: Record<string, string>) {
-  await execAsync('npx prisma db push --skip-generate', { env });
+  await execAsync('npx prisma migrate deploy', { env });
 }
 
 async function seedDB(client: PrismaClient) {
