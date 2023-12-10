@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
 import { makeCustomError } from '@hydra-ipxe/common/shared/errors';
-import type { BasicBootInfo } from '@hydra-ipxe/common/shared/ipxe/strategies.def';
+import type { BasicBootInfo, IPXEStrategy } from '@hydra-ipxe/common/shared/ipxe/strategies.def';
 import { Prisma } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import type { Merge } from 'type-fest';
 
 import { PrismaService } from '@/database/prisma.service';
 import { PrismaErrorCode, remapPrismaError } from '@/utils/prisma/errors';
@@ -34,6 +35,34 @@ export class IpxeStrategyService {
     orderBy?: Prisma.IpxeStrategyOrderByWithRelationInput;
   }) {
     return await this.prismaService.ipxeStrategy.findMany(params);
+  }
+
+  async findStrategy({
+    whereStrategy,
+    forTemplate,
+  }: {
+    whereStrategy: Prisma.IpxeStrategyWhereUniqueInput;
+    forTemplate?: Merge<Prisma.IpxeStrategyTemplateWhereUniqueInput, { id: IPXEStrategy }>;
+  }) {
+    const strategy = await this.prismaService.ipxeStrategy.findUnique({
+      where: whereStrategy,
+      include: { strategyTemplate: true },
+    });
+
+    if (!strategy) {
+      return null;
+    }
+
+    if (forTemplate) {
+      const requestedTemplate = await this.prismaService.ipxeStrategyTemplate.findUnique({
+        where: forTemplate,
+      });
+      if (!requestedTemplate || requestedTemplate.id !== strategy.strategyTemplateId) {
+        return null;
+      }
+    }
+
+    return strategy;
   }
 
   async createStrategy(

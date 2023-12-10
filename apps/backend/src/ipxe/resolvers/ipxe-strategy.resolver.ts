@@ -5,6 +5,7 @@ import { Prisma } from '@prisma/client';
 import { ZodError } from 'zod';
 
 import { MapErrors } from '@/errors/map-errors.decorator';
+import { RequirePermission } from '@/rbac/decorators/require-permissions.decorator';
 
 import { IpxeStrategyTemplate } from '../schemas/ipxe-strategy-template.object';
 import {
@@ -58,6 +59,7 @@ export class IpxeStrategyResolver {
   // ================================ Queries ================================
 
   @Query(() => [IpxeStrategy])
+  @RequirePermission('ipxeStrategy.read')
   async ipxeStrategies() {
     return await this.ipxeStrategyService.findMany();
   }
@@ -69,6 +71,7 @@ export class IpxeStrategyResolver {
     if: IpxeStrategyDoesNotExists,
     then: () => new BadRequestException('Ipxe strategy does not exists'),
   })
+  @RequirePermission('ipxeStrategy.delete')
   async deleteIpxeStrategy(
     @Args('where', { type: () => WhereUniqueIpxeStrategy }) where: WhereUniqueIpxeStrategy,
   ) {
@@ -80,6 +83,18 @@ export class IpxeStrategyResolver {
 
 @Resolver(() => BasicBootStrategy)
 export class BasicStrategyResolver extends StrategyBaseResolver {
+  // ================================ Queries ================================
+
+  @Query(() => BasicBootStrategy)
+  async basicBootStrategy(
+    @Args('where', { type: () => WhereUniqueIpxeStrategy }) where: WhereUniqueIpxeStrategy,
+  ) {
+    return await this.ipxeStrategyService.findStrategy({
+      whereStrategy: where as Prisma.IpxeStrategyWhereUniqueInput,
+      forTemplate: { id: 'strategy.basicBoot' },
+    });
+  }
+
   // ================================ Mutations ==============================
 
   @Mutation(() => BasicBootStrategy)
@@ -105,6 +120,7 @@ export class BasicStrategyResolver extends StrategyBaseResolver {
       then: () => new BadRequestException('Strategy with provided name already exists'),
     },
   ])
+  @RequirePermission('ipxeStrategy.create')
   async createBasicBootStrategy(
     @Args('input', { type: () => BasicBootStrategyCreateInput })
     { name, description, template, ...jsonData }: BasicBootStrategyCreateInput,
@@ -144,6 +160,7 @@ export class BasicStrategyResolver extends StrategyBaseResolver {
       then: () => new BadRequestException('Requested ipxe strategy does not exists'),
     },
   ])
+  @RequirePermission('ipxeStrategy.create')
   async updateBasicBootStrategy(
     @Args('where', { type: () => WhereUniqueIpxeStrategy }) where: WhereUniqueIpxeStrategy,
     @Args('update', { type: () => BasicBootStrategyUpdateInput })
