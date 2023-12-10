@@ -69,6 +69,21 @@ export type BasicBootStrategyCreateInput = {
   template: WhereUniqueIpxeStrategyTemplate;
 };
 
+export type BasicBootStrategyUpdateInput = {
+  /** Ipxe strategy description */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** Relative path to a initamfs asset file */
+  initramfsPath?: InputMaybe<Scalars['String']['input']>;
+  /** Kernel params passed to kernel commandline */
+  kernelParams?: InputMaybe<Scalars['String']['input']>;
+  /** Relative path to a kernel asset file */
+  kernelPath?: InputMaybe<Scalars['String']['input']>;
+  /** Ipxe strategy name */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Ipxe strategy template selector */
+  template?: InputMaybe<WhereUniqueIpxeStrategyTemplate>;
+};
+
 /** Represent a computer which participates in the network boot process */
 export type Computer = {
   __typename?: 'Computer';
@@ -231,6 +246,7 @@ export type Mutation = {
   deleteComputerGroups: Scalars['Int']['output'];
   /** Delete a computer */
   deleteComputers: Scalars['Int']['output'];
+  deleteIpxeStrategy: IpxeStrategy;
   /** Delete many roles */
   deleteMultipleRoles: Scalars['Int']['output'];
   /** Delete multiple users */
@@ -247,6 +263,7 @@ export type Mutation = {
   removeComputersFromGroup: ComputerGroup;
   /** Update asset metadata */
   updateAssetMetadata: IpxeAsset;
+  updateBasicBootStrategy: BasicBootStrategy;
   /** Updates current user password */
   updateCurrentUserPassword: Scalars['Boolean']['output'];
   /** Update resource id */
@@ -335,6 +352,11 @@ export type MutationDeleteComputersArgs = {
 };
 
 
+export type MutationDeleteIpxeStrategyArgs = {
+  where: WhereUniqueIpxeStrategy;
+};
+
+
 export type MutationDeleteMultipleRolesArgs = {
   uids: Array<Scalars['String']['input']>;
 };
@@ -382,6 +404,12 @@ export type MutationUpdateAssetMetadataArgs = {
 };
 
 
+export type MutationUpdateBasicBootStrategyArgs = {
+  update: BasicBootStrategyUpdateInput;
+  where: WhereUniqueIpxeStrategy;
+};
+
+
 export type MutationUpdateCurrentUserPasswordArgs = {
   currentPassword: Scalars['String']['input'];
   newPassword: Scalars['String']['input'];
@@ -420,6 +448,7 @@ export type Query = {
   computers: Array<Computer>;
   /** Get all ipxe assets */
   ipxeAssets: Array<IpxeAsset>;
+  ipxeStrategies: Array<IpxeStrategy>;
   /** Retrives ipxe strategy templates */
   ipxeStrategyTemplates: Array<IpxeStrategyTemplate>;
   /** Returns the current user */
@@ -430,7 +459,6 @@ export type Query = {
   role?: Maybe<Role>;
   /** Get all roles */
   roles: Array<Role>;
-  sample: IpxeStrategy;
   user?: Maybe<User>;
   users: Array<User>;
 };
@@ -530,6 +558,11 @@ export type WhereUniqueIpxeAssetInput = {
   /** Resource id of an asset */
   resourceId?: InputMaybe<Scalars['String']['input']>;
   /** Unique id of an asset */
+  uid?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type WhereUniqueIpxeStrategy = {
+  name?: InputMaybe<Scalars['String']['input']>;
   uid?: InputMaybe<Scalars['String']['input']>;
 };
 
