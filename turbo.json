@@ -1,23 +1,52 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
-  "globalDotEnv": [".env"],
-
-  "pipeline": {
+  "globalDependencies": [
+    "**/.env.*local",
+    ".env"
+  ],
+  "globalEnv": [
+    "DISABLE_ERD"
+  ],
+  "globalPassThroughEnv": [
+    "BACKEND_BASE_URL",
+    "COOKIE_SECRET",
+    "DATABASE_URL",
+    "DEBUG",
+    "REDIS_URL"
+  ],
+  "tasks": {
     "build": {
       "cache": false,
-      "dependsOn": ["db:generate", "^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "dependsOn": [
+        "db:generate",
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**"
+      ]
     },
     "lint": {
-      "dependsOn": ["db:generate", "^build"]
+      "dependsOn": [
+        "db:generate",
+        "^build"
+      ]
     },
     "test": {
-      "dependsOn": ["^build", "^test", "db:generate"],
-      "outputs": ["coverage/**"]
+      "dependsOn": [
+        "^build",
+        "^test",
+        "db:generate"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
     },
     "dev": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "cache": false,
       "persistent": true
     },
@@ -33,13 +62,5 @@
     "clean": {
       "cache": false
     }
-  },
-  "globalPassThroughEnv": [
-    "DATABASE_URL",
-    "DEBUG",
-    "COOKIE_SECRET",
-    "BACKEND_BASE_URL",
-    "REDIS_URL"
-  ],
-  "globalEnv": ["DISABLE_ERD"]
+  }
 }
