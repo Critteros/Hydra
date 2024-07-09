@@ -1,12 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "**/.env.*local",
-    ".env"
-  ],
-  "globalEnv": [
-    "DISABLE_ERD"
-  ],
+  "globalDependencies": ["**/.env.*local", ".env"],
+  "globalEnv": ["DISABLE_ERD"],
   "globalPassThroughEnv": [
     "BACKEND_BASE_URL",
     "COOKIE_SECRET",
@@ -17,50 +12,35 @@
   "tasks": {
     "build": {
       "cache": false,
-      "dependsOn": [
-        "db:generate",
-        "^build"
-      ],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "dist/**"
-      ]
+      "dependsOn": ["db:generate", "^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {
-      "dependsOn": [
-        "db:generate",
-        "^build"
-      ]
+      "dependsOn": ["db:generate", "^build"]
     },
     "test": {
-      "dependsOn": [
-        "^build",
-        "^test",
-        "db:generate"
-      ],
-      "outputs": [
-        "coverage/**"
-      ]
+      "dependsOn": ["^build", "^test", "db:generate"],
+      "outputs": ["coverage/**"]
     },
     "dev": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },
     "db:generate": {
+      "persistent": true,
       "cache": false
     },
     "db:push": {
       "cache": false
     },
     "db:migrate": {
+      "interactive": true,
       "cache": false
     },
     "clean": {
       "cache": false
     }
-  }
+  },
+  "ui": "tui"
 }
