@@ -25,7 +25,7 @@ export class AuthResolver {
     }
 
     await new Promise((resolve, reject) => {
-      request.logIn(exclude(user, ['password']), (err) => {
+      request.logIn(exclude(user, ['password']), (err: Error) => {
         if (err) {
           reject(err);
         }

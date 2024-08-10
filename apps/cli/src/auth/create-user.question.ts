@@ -19,7 +19,7 @@ export class CreateUserQuestion {
   validateEmail(email: string) {
     try {
       this.validator.validateEmail(email);
-    } catch (e) {
+    } catch {
       return 'Please enter a valid email address';
     }
     return true;

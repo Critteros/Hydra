@@ -15,24 +15,30 @@
   },
   "devDependencies": {
     "@hydra-ipxe/prettier-config": "workspace:*",
-    "@turbo/gen": "^1.10.16",
-    "@typescript-eslint/eslint-plugin": "^6.8.0",
-    "@typescript-eslint/parser": "^6.8.0",
-    "dotenv-cli": "^7.3.0",
-    "eslint": "^8.51.0",
-    "eslint-config-prettier": "^9.0.0",
+    "@turbo/gen": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^8.0.1",
+    "@typescript-eslint/parser": "^8.0.1",
+    "dotenv-cli": "^7.4.2",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-config-turbo": "^2.0.12",
-    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-turbo": "^2.0.12",
-    "eslint-plugin-unicorn": "^48.0.1",
-    "prettier": "^3.0.3",
-    "rimraf": "^5.0.5",
-    "sort-package-json": "^2.6.0",
-    "turbo": "^2.0.6"
+    "eslint-plugin-unicorn": "^55.0.0",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "sort-package-json": "^2.10.0",
+    "turbo": "^2.0.12"
   },
   "packageManager": "pnpm@8.15.8+sha512.d1a029e1a447ad90bc96cd58b0fad486d2993d531856396f7babf2d83eb1823bb83c5a3d0fc18f675b2d10321d49eb161fece36fe8134aa5823ecd215feed392",
   "prettier": "@hydra-ipxe/prettier-config",
   "prisma": {
     "schema": "packages/core/prisma/schema.prisma"
+  },
+  "pnpm": {
+    "overrides": {
+      "@typescript-eslint/utils": "^8.0.1",
+      "@typescript-eslint/parser": "^8.0.1"
+    }
   }
 }
