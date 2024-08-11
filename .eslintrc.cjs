@@ -49,6 +49,7 @@ module.exports = {
         'import/no-unresolved': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
         'import/no-named-as-default-member': 'off',
+        '@typescript-eslint/no-unused-vars': 'warn',
     },
     overrides: [
         {
