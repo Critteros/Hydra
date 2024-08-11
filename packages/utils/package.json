@@ -1,0 +1,68 @@
+{
+  "name": "@hydra-ipxe/common",
+  "version": "0.0.0",
+  "description": "Typescript utilities used in the Hydra project",
+  "license": "MIT",
+  "author": "Szymon Kozioł <contact@critteros.dev>",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "prettier": "@hydra-ipxe/prettier-config",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/*.d.ts",
+      "dev": "./src/index.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "dev": "./src/types/index.ts",
+      "require": "./dist/types/index.cjs",
+      "import": "./dist/types/index.js"
+    },
+    "./object": {
+      "types": "./dist/object.d.ts",
+      "dev": "./src/object.ts",
+      "require": "./dist/object.cjs",
+      "import": "./dist/object.js"
+    },
+    "./compare": {
+      "types": "./dist/compare.d.ts",
+      "dev": "./src/compare.ts",
+      "require": "./dist/compare.cjs",
+      "import": "./dist/compare.js"
+    },
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "dev": "./src/errors.ts",
+      "require": "./dist/errors.cjs",
+      "import": "./dist/errors.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*.d.ts",
+        "dist/*/index.d.ts"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@hydra-ipxe/eslint-config-hydra": "workspace:*",
+    "@hydra-ipxe/prettier-config": "workspace:*",
+    "@hydra-ipxe/tsconfig": "workspace:*",
+    "@vitest/coverage-v8": "^2.0.5",
+    "ts-toolbelt": "^9.6.0",
+    "tsup": "^8.2.4",
+    "type-fest": "^4.24.0",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  }
+}

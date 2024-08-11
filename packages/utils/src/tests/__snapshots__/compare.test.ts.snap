@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Compare utilities > sorting helper > is not supported for Symbol(test) 1`] = `[TypeError: Comparison is not supported between objects of symbol]`;
+
+exports[`Compare utilities > sorting helper > is not supported for Symbol(test) 2`] = `[TypeError: Comparison is not supported between objects of symbol]`;
+
+exports[`Compare utilities > sorting helper > is not supported for false 1`] = `[TypeError: Sorting not supported for boolean]`;
+
+exports[`Compare utilities > sorting helper > is not supported for false 2`] = `[TypeError: Sorting not supported for boolean]`;
+
+exports[`Compare utilities > sorting helper > is not supported for null 1`] = `[TypeError: Comparison is not supported between objects of null]`;
+
+exports[`Compare utilities > sorting helper > is not supported for null 2`] = `[TypeError: Comparison is not supported between objects of null]`;
+
+exports[`Compare utilities > sorting helper > is not supported for true 1`] = `[TypeError: Sorting not supported for boolean]`;
+
+exports[`Compare utilities > sorting helper > is not supported for true 2`] = `[TypeError: Sorting not supported for boolean]`;
