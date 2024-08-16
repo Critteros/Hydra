@@ -1,9 +1,10 @@
 {
-  "name": "@hydra-ipxe/common",
-  "version": "0.0.0",
+  "name": "@hydra-ipxe/utils",
+  "version": "1.0.0-alpha.0",
   "description": "Typescript utilities used in the Hydra project",
   "license": "MIT",
   "author": "Szymon Kozioł <contact@critteros.dev>",
+  "readme": "README.md",
   "type": "module",
   "scripts": {
     "build": "tsup",
@@ -11,16 +12,11 @@
   },
   "prettier": "@hydra-ipxe/prettier-config",
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "sideEffects": false,
   "exports": {
-    ".": {
-      "types": "./dist/*.d.ts",
-      "dev": "./src/index.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    },
     "./types": {
       "types": "./dist/types/index.d.ts",
       "dev": "./src/types/index.ts",
@@ -64,5 +60,8 @@
     "type-fest": "^4.24.0",
     "typescript": "^5.5.4",
     "vitest": "^2.0.5"
-  }
+  },
+  "keywords": [
+    "utility"
+  ]
 }

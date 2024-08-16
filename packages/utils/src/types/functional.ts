@@ -21,3 +21,5 @@ export type SimpleAsyncCallback = Callback<Promise<void>>;
 export type StandardFunction<Options extends AnyObject = EmptyObject, ReturnType = void> = (
   options?: Options,
 ) => ReturnType;
+
+export type { Callback as Func };

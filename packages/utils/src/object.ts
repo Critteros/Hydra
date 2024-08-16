@@ -102,7 +102,7 @@ export function isPrimitiveOrWrapper(x: unknown): x is Primitive | Number | Bool
  *   isPrimitiveWrapper(new Boolean(false));
  *
  * @example
- *   // return false
+ *   // returns false
  *   isPrimitiveWrapper(Number(123));
  *   isPrimitiveWrapper(String(''));
  *   isPrimitiveWrapper(Boolean(false));
@@ -179,6 +179,19 @@ export function isArray(x: unknown): x is typeof x extends Array<infer Item> ? I
   return Array.isArray(x);
 }
 
+/**
+ * Type guard if the passed element is an Object that is not an Array
+ *
+ * @example
+ *   // returns true
+ *   isObject({});
+ *
+ * @example
+ *   // returns false
+ *   isObject([]);
+ *
+ * @param x
+ */
 export function isObject(
   x: unknown,
 ): x is typeof x extends Record<infer Keys, infer Values>

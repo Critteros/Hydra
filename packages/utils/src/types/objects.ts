@@ -63,8 +63,10 @@ export type Leaves<T, D extends number = 10> = [D] extends [never]
     ? { [K in keyof T]-?: Join<K, Leaves<T[K], _Prev[D]>> }[keyof T]
     : '';
 
+/** Represent all primitive types */
 export type Primitive = string | number | boolean | bigint | symbol | null | undefined;
 
+/** Extract a type of value from a object using key path */
 export type SelectIn<T, P extends TypeFestPaths<T>> = P extends `${infer K}.${infer Rest}`
   ? K extends keyof T
     ? // @ts-expect-error FIXME: Rest conflicts with string type
