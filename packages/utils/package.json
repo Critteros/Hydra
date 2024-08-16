@@ -1,6 +1,6 @@
 {
   "name": "@hydra-ipxe/utils",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Typescript utilities used in the Hydra project",
   "license": "MIT",
   "author": "Szymon Kozioł <contact@critteros.dev>",

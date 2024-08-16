@@ -1,4 +1,4 @@
-# @hydra-ipxe/common
+# @hydra-ipxe/utils
 
 Package containing various Typescript utilities
 
