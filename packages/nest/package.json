@@ -1,0 +1,44 @@
+{
+  "name": "@hydra-ipxe/nest",
+  "version": "0.0.0",
+  "description": "Custom Nest.js modules used in the Hydra project",
+  "license": "MIT",
+  "author": "Szymon Kozioł <contact@critteros.dev>",
+  "readme": "README.md",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "prettier": "@hydra-ipxe/prettier-config",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "exports": {
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*.d.ts",
+        "dist/*/index.d.ts"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@hydra-ipxe/eslint-config-hydra": "workspace:*",
+    "@hydra-ipxe/prettier-config": "workspace:*",
+    "@hydra-ipxe/tsconfig": "workspace:*",
+    "@vitest/coverage-v8": "^2.0.5",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "keywords": [
+    "nest"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
