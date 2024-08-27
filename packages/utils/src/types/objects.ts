@@ -1,3 +1,4 @@
+import type { O } from 'ts-toolbelt';
 import type {
   Paths as TypeFestPaths,
   PartialDeep as TypeFestDeepPartial,
@@ -79,5 +80,18 @@ export type SelectIn<T, P extends TypeFestPaths<T>> = P extends `${infer K}.${in
   : P extends keyof T
     ? T[P]
     : never;
+
+/** Excludes keys from object O1 that are in O * */
+export type ExcludeKeys<
+  Target extends object,
+  Source extends object,
+  MatchType extends
+    | 'default'
+    | 'contains->'
+    | 'extends->'
+    | '<-contains'
+    | '<-extends'
+    | 'equals' = 'default',
+> = O.Exclude<Target, Source, MatchType>;
 
 export type { TypeFestPaths as Paths, TypeFestDeepPartial as DeepPartial };
