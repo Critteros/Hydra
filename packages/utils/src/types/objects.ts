@@ -1,10 +1,14 @@
-import type { Paths as TypeFestPaths, PartialDeep as TypeFestDeepPartial } from 'type-fest';
+import type {
+  Paths as TypeFestPaths,
+  PartialDeep as TypeFestDeepPartial,
+  EmptyObject as TypeFestEmptyObject,
+} from 'type-fest';
 
 // Type representing any plain TS object that is not array
 export type AnyObject = Record<PropertyKey, unknown>;
 
 // Type representing "{}", note: {} as a type allows any non nullish value including literals like `0` and `""`
-export type EmptyObject = Record<PropertyKey, never>;
+export type EmptyObject = TypeFestEmptyObject;
 
 // General object type that can be Inverted
 export type InvertibleObject = Record<PropertyKey, PropertyKey>;
