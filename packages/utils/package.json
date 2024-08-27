@@ -40,6 +40,12 @@
       "dev": "./src/errors.ts",
       "require": "./dist/errors.cjs",
       "import": "./dist/errors.js"
+    },
+    "./async": {
+      "types": "./dist/async.d.ts",
+      "dev": "./src/async.ts",
+      "require": "./dist/async.cjs",
+      "import": "./dist/async.js"
     }
   },
   "typesVersions": {
