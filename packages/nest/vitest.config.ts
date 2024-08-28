@@ -1,4 +1,6 @@
 /// <reference types="vitest" />
+import { fileURLToPath } from 'node:url';
+
 import { defineConfig, coverageConfigDefaults } from 'vitest/config';
 
 export default defineConfig({
@@ -6,7 +8,7 @@ export default defineConfig({
     pool: 'threads',
     environment: 'node',
     alias: {
-      '@/': new URL('./src/', import.meta.url).pathname,
+      '@/': fileURLToPath(new URL('./src/', import.meta.url)),
     },
     typecheck: {
       checker: 'tsc',
@@ -15,6 +17,7 @@ export default defineConfig({
     coverage: {
       exclude: ['**/index.ts', ...coverageConfigDefaults.exclude],
     },
+    setupFiles: [fileURLToPath(new URL('./setupTests.ts', import.meta.url))],
     sequence: {
       concurrent: true,
       shuffle: true,

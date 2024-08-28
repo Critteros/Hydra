@@ -9,6 +9,6 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "experimentalDecorators": true,
-    "types": ["vitest/globals"]
+    "types": ["reflect-metadata"]
   }
 }
