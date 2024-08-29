@@ -2,7 +2,17 @@ import { beforeEach, describe, expect, test } from 'vitest';
 
 import { setMetadata, type MetadataTarget, getMetadata, insertMetadata } from '../core';
 
+declare module 'vitest' {
+  export interface TestContext {
+    TargetClass: any;
+    KEY: symbol;
+  }
+}
+
 describe.concurrent('Metadata core logic', () => {
+  let TargetClass: any;
+  let KEY: symbol;
+
   beforeEach((context) => {
     context.TargetClass = class {
       static staticProperty = 123;
